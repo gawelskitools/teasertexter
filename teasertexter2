@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatGPT Textverarbeitung mit weiteren Prompts</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        label, input, button, textarea {
+            display: block;
+            margin: 10px 0;
+            width: 100%;
+        }
+        textarea {
+            height: 200px;
+        }
+        .prompt-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .result-textarea {
+            height: 150px;
+        }
+        .editable {
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        .edit-icon {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>ChatGPT Textverarbeitung</h1>
+    <label for="userText">Fügen Sie Ihren Text ein:</label>
+    <textarea id="userText" placeholder="Text hier einfügen..."></textarea>
+
+    <button id="sendButton">Senden</button>
+
+    <h2>Antwort von ChatGPT:</h2>
+    <textarea id="responseField" readonly></textarea>
+
+    <div class="prompt-buttons">
+        <button id="button1">Prompt 1</button><span class="edit-icon" onclick="editPrompt(0)">✏️</span>
+        <button id="button2">Prompt 2</button><span class="edit-icon" onclick="editPrompt(1)">✏️</span>
+        <button id="button3">Prompt 3</button><span class="edit-icon" onclick="editPrompt(2)">✏️</span>
+        <button id="button4">Prompt 4</button><span class="edit-icon" onclick="editPrompt(3)">✏️</span>
+        <button id="button5">Prompt 5</button><span class="edit-icon" onclick="editPrompt(4)">✏️</span>
+    </div>
+
+    <h3>Textausgabe Prompt 1:</h3>
+    <textarea id="result1" class="result-textarea" readonly></textarea>
+
+    <h3>Textausgabe Prompt 2:</h3>
+    <textarea id="result2" class="result-textarea" readonly></textarea>
+
+    <h3>Textausgabe Prompt 3:</h3>
+    <textarea id="result3" class="result-textarea" readonly></textarea>
+
+    <h3>Textausgabe Prompt 4:</h3>
+    <textarea id="result4" class="result-textarea" readonly></textarea>
+
+    <h3>Textausgabe Prompt 5:</h3>
+    <textarea id="result5" class="result-textarea" readonly></textarea>
+
+    <script>
+        const apiKey = 'dein-echter-api-key';  // Achte darauf, dass hier der korrekte API-Schlüssel eingefügt wird
+
+        // Definiere hier den festgelegten Prompt
+        const predefinedPrompt = "Bitte fasse den Text in maximal 200 Zeichen zusammen: ";
+
+        // Definiere die weiteren festen Prompts für die Buttons
+        let additionalPrompts = [
+            "Schreibe den Text wie ein Journalist:",
+            "Schreibe den Text in Comic-Sprache:",
+            "Schreibe den Text wie ein Literat:",
+            "Fasse die Antwort für ein fünfjähriges Kind zusammen:",
+            "Biete mir drei Überschriften an (max. 60 Zeichen pro Überschrift):"
+        ];
+
+        // Eventlistener für den Haupt-Button
+        document.getElementById('sendButton').addEventListener('click', async () => {
+            const userText = document.getElementById('userText').value;
+            const responseField = document.getElementById('responseField');
+
+            if (!userText) {
+                responseField.value = "Bitte fügen Sie einen Text ein.";
+                return;
+            }
+
+            const prompt = predefinedPrompt + userText;
+
+            try {
+                const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${apiKey}`
+                    },
+                    body: JSON.stringify({
+                        model: "gpt-3.5-turbo",
+                        messages: [{ role: "user", content: prompt }],
+                        max_tokens: 150
+                    })
+                });
+
+                const data = await response.json();
+                
+                // Logge die gesamte API-Antwort zur Fehleranalyse
+                console.log("API Antwort:", data);
+
+                // Fehlerbehandlung: Überprüfe, ob `choices` vorhanden ist
+                if (data.choices && data.choices.length > 0) {
+                    responseField.value = data.choices[0].message.content;
+                } else {
+                    responseField.value = "Keine gültige Antwort erhalten. Überprüfen Sie Ihre Anfrage.";
+                }
+            } catch (error) {
+                responseField.value = "Es gab ein Problem mit der Anfrage: " + error.message;
+                console.error("Fehlerdetails:", error);
+            }
+        });
+
+        // Funktion für die weiteren Prompts
+        async function applyAdditionalPrompt(promptIndex) {
+            const previousResponse = document.getElementById('responseField').value;
+            const resultField = document.getElementById(`result${promptIndex + 1}`);
+
+            if (!previousResponse) {
+                resultField.value = "Bitte zuerst eine Antwort generieren.";
+                return;
+            }
+
+            const additionalPrompt = additionalPrompts[promptIndex] + " " + previousResponse;
+
+            try {
+                const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${apiKey}`
+                    },
+                    body: JSON.stringify({
+                        model: "gpt-3.5-turbo",
+                        messages: [{ role: "user", content: additionalPrompt }],
+                        max_tokens: 150
+                    })
+                });
+
+                const data = await response.json();
+                
+                // Logge die gesamte API-Antwort zur Fehleranalyse
+                console.log("API Antwort für Prompt " + (promptIndex + 1) + ":", data);
+
+                // Fehlerbehandlung: Überprüfe, ob `choices` vorhanden ist
+                if (data.choices && data.choices.length > 0) {
+                    resultField.value = data.choices[0].message.content;
+                } else {
+                    resultField.value = "Keine gültige Antwort erhalten. Überprüfen Sie Ihre Anfrage.";
+                }
+            } catch (error) {
+                resultField.value = "Es gab ein Problem mit der Anfrage: " + error.message;
+                console.error("Fehlerdetails für Prompt " + (promptIndex + 1) + ":", error);
+            }
+        }
+
+        // Funktion zum Bearbeiten der Prompts
+        function editPrompt(promptIndex) {
+            const newPrompt = prompt("Bearbeiten Sie den Prompt:", additionalPrompts[promptIndex]);
+            if (newPrompt !== null) {
+                additionalPrompts[promptIndex] = newPrompt;
+                alert(`Prompt ${promptIndex + 1} wurde geändert!`);
+            }
+        }
+
+        // Eventlistener für die weiteren Buttons
+        document.getElementById('button1').addEventListener('click', () => applyAdditionalPrompt(0));
+        document.getElementById('button2').addEventListener('click', () => applyAdditionalPrompt(1));
+        document.getElementById('button3').addEventListener('click', () => applyAdditionalPrompt(2));
+        document.getElementById('button4').addEventListener('click', () => applyAdditionalPrompt
