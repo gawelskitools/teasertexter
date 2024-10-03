@@ -94,7 +94,7 @@
             template1Active = true;
             template2Active = false;
 
-            // Hintergrund
+            // Hintergrund: sich wiederholender linearer Farbverlauf
             function animateBackground1() {
                 if (!template1Active) return;
                 var gradient = backgroundCanvas.createLinearGradient(0, 0, 500, 500);
@@ -106,7 +106,7 @@
                 requestAnimationFrame(animateBackground1);
             }
 
-            // Charakter (bewegendes Quadrat mit Buchstaben)
+            // Charakter: bewegendes Quadrat mit Buchstaben
             function animateCharacter1() {
                 if (!template1Active) return;
                 characterCanvas.clearRect(0, 0, 500, 500);
@@ -123,7 +123,7 @@
                 charAnimation = requestAnimationFrame(animateCharacter1);
             }
 
-            // Effekt (blinkender Kreis)
+            // Effekt: blinkender gelber Kreis
             function animateEffect1() {
                 if (!template1Active) return;
                 effectCanvas.clearRect(0, 0, 500, 500);
@@ -148,7 +148,7 @@
             template1Active = false;
             template2Active = true;
 
-            // Hintergrund
+            // Hintergrund: linearer Farbverlauf mit grünen und blauen Farbtönen
             function animateBackground2() {
                 if (!template2Active) return;
                 var gradient = backgroundCanvas.createLinearGradient(0, 0, 500, 500);
@@ -160,7 +160,7 @@
                 requestAnimationFrame(animateBackground2);
             }
 
-            // Charakter (bewegendes Dreieck mit Buchstaben)
+            // Charakter: bewegendes Dreieck mit Buchstaben
             function animateCharacter2() {
                 if (!template2Active) return;
                 characterCanvas.clearRect(0, 0, 500, 500);
@@ -181,7 +181,7 @@
                 charAnimation = requestAnimationFrame(animateCharacter2);
             }
 
-            // Effekt (rotierende Linie)
+            // Effekt: rotierende Linie
             var angle = 0;
             function animateEffect2() {
                 if (!template2Active) return;
