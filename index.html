@@ -89,42 +89,116 @@
         var char3 = 'c';
         var char4 = 'd';
 
-        // Template 1: Charakter-Animation mit Buchstaben
-        function animateCharacter1() {
-            if (!template1Active) return;
-            characterCanvas.clearRect(0, 0, 500, 500);
+        // Template 1: Rechteck und blinkender Kreis
+        function template1() {
+            template1Active = true;
+            template2Active = false;
 
-            characterCanvas.font = "50px Arial";
-            characterCanvas.fillStyle = "green";
-            
-            // Zeichne die Buchstaben in Positionen
-            characterCanvas.fillText(char1, charX, 200);
-            characterCanvas.fillText(char2, charX + 60, 200);
-            characterCanvas.fillText(char3, charX + 120, 200);
-            characterCanvas.fillText(char4, charX + 180, 200);
+            // Hintergrund
+            function animateBackground1() {
+                if (!template1Active) return;
+                var gradient = backgroundCanvas.createLinearGradient(0, 0, 500, 500);
+                gradient.addColorStop(0, "rgba(255, 0, 0, 0.5)");
+                gradient.addColorStop(1, "rgba(0, 0, 255, 0.5)");
+                backgroundCanvas.clearRect(0, 0, 500, 500);
+                backgroundCanvas.fillStyle = gradient;
+                backgroundCanvas.fillRect(0, 0, 500, 500);
+                requestAnimationFrame(animateBackground1);
+            }
 
-            charX += speed;
-            if (charX > 500) charX = 0;
-            charAnimation = requestAnimationFrame(animateCharacter1);
+            // Charakter (bewegendes Quadrat mit Buchstaben)
+            function animateCharacter1() {
+                if (!template1Active) return;
+                characterCanvas.clearRect(0, 0, 500, 500);
+                characterCanvas.fillStyle = "green";
+                characterCanvas.fillRect(charX, 200, 50, 50);
+
+                // Zeichne den Buchstaben
+                characterCanvas.font = "30px Arial";
+                characterCanvas.fillStyle = "white";
+                characterCanvas.fillText(char1, charX + 15, 235);
+
+                charX += speed;
+                if (charX > 500) charX = 0;
+                charAnimation = requestAnimationFrame(animateCharacter1);
+            }
+
+            // Effekt (blinkender Kreis)
+            function animateEffect1() {
+                if (!template1Active) return;
+                effectCanvas.clearRect(0, 0, 500, 500);
+                if (effectVisible) {
+                    effectCanvas.fillStyle = "yellow";
+                    effectCanvas.beginPath();
+                    effectCanvas.arc(250, 250, 30, 0, Math.PI * 2);
+                    effectCanvas.fill();
+                }
+                effectVisible = !effectVisible;
+                if (effectRunning) setTimeout(animateEffect1, 500);
+            }
+
+            // Animationen starten
+            animateBackground1();
+            animateCharacter1();
+            animateEffect1();
         }
 
-        // Template 2: Charakter-Animation mit Buchstaben
-        function animateCharacter2() {
-            if (!template2Active) return;
-            characterCanvas.clearRect(0, 0, 500, 500);
+        // Template 2: Kreis und bewegendes Dreieck
+        function template2() {
+            template1Active = false;
+            template2Active = true;
 
-            characterCanvas.font = "50px Arial";
-            characterCanvas.fillStyle = "blue";
+            // Hintergrund
+            function animateBackground2() {
+                if (!template2Active) return;
+                var gradient = backgroundCanvas.createLinearGradient(0, 0, 500, 500);
+                gradient.addColorStop(0, "rgba(0, 255, 0, 0.5)");
+                gradient.addColorStop(1, "rgba(0, 0, 255, 0.5)");
+                backgroundCanvas.clearRect(0, 0, 500, 500);
+                backgroundCanvas.fillStyle = gradient;
+                backgroundCanvas.fillRect(0, 0, 500, 500);
+                requestAnimationFrame(animateBackground2);
+            }
 
-            // Zeichne die Buchstaben in einer anderen Position
-            characterCanvas.fillText(char1, charX, 250);
-            characterCanvas.fillText(char2, charX + 60, 250);
-            characterCanvas.fillText(char3, charX + 120, 250);
-            characterCanvas.fillText(char4, charX + 180, 250);
+            // Charakter (bewegendes Dreieck mit Buchstaben)
+            function animateCharacter2() {
+                if (!template2Active) return;
+                characterCanvas.clearRect(0, 0, 500, 500);
+                characterCanvas.fillStyle = "blue";
+                characterCanvas.beginPath();
+                characterCanvas.moveTo(charX, 250);
+                characterCanvas.lineTo(charX + 50, 200);
+                characterCanvas.lineTo(charX + 50, 300);
+                characterCanvas.fill();
 
-            charX += speed;
-            if (charX > 500) charX = 0;
-            charAnimation = requestAnimationFrame(animateCharacter2);
+                // Zeichne den Buchstaben
+                characterCanvas.font = "30px Arial";
+                characterCanvas.fillStyle = "white";
+                characterCanvas.fillText(char2, charX + 15, 240);
+
+                charX += speed;
+                if (charX > 500) charX = 0;
+                charAnimation = requestAnimationFrame(animateCharacter2);
+            }
+
+            // Effekt (rotierende Linie)
+            var angle = 0;
+            function animateEffect2() {
+                if (!template2Active) return;
+                effectCanvas.clearRect(0, 0, 500, 500);
+                effectCanvas.strokeStyle = "white";
+                effectCanvas.beginPath();
+                effectCanvas.moveTo(250, 250);
+                effectCanvas.lineTo(250 + 100 * Math.cos(angle), 250 + 100 * Math.sin(angle));
+                effectCanvas.stroke();
+                angle += 0.1;
+                if (effectRunning) requestAnimationFrame(animateEffect2);
+            }
+
+            // Animationen starten
+            animateBackground2();
+            animateCharacter2();
+            animateEffect2();
         }
 
         // Event-Listener für die Buchstaben-Textfelder
@@ -144,22 +218,17 @@
             char4 = this.value || 'd';
         });
 
-        // Template 1 starten
+        // Funktionen zum Starten und Stoppen der Templates
         function startTemplate1() {
             cancelAnimationFrame(charAnimation); // Stoppt die laufende Animation
             charX = 0; // Charakter-Position zurücksetzen
-            template1Active = true;
-            template2Active = false;
-            animateCharacter1();
+            template1(); // Template 1 starten
         }
 
-        // Template 2 starten
         function startTemplate2() {
             cancelAnimationFrame(charAnimation); // Stoppt die laufende Animation
             charX = 0; // Charakter-Position zurücksetzen
-            template1Active = false;
-            template2Active = true;
-            animateCharacter2();
+            template2(); // Template 2 starten
         }
 
         // Eventlistener für das Dropdown-Menü
