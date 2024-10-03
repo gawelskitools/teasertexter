@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas Layer mit Steuerungsmöglichkeiten</title>
+    <style>
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .controls {
+            position: relative;
+            margin-top: 520px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Layer 1: Hintergrund -->
+    <canvas id="background-layer" width="500" height="500"></canvas>
+    
+    <!-- Layer 2: Charakter -->
+    <canvas id="character-layer" width="500" height="500"></canvas>
+
+    <!-- Layer 3: Effekte -->
+    <canvas id="effect-layer" width="500" height="500"></canvas>
+
+    <!-- Steuerungselemente -->
+    <div class="controls">
+        <!-- Steuerung mit Buttons -->
+        <button id="startCharacter">Start Character</button>
+        <button id="stopCharacter">Stop Character</button>
+        <button id="toggleEffect">Toggle Effect</button>
+        
+        <!-- Steuerung mit Slider -->
+        <label for="speedSlider">Charakter-Geschwindigkeit: </label>
+        <input type="range" id="speedSlider" min="1" max="10" value="2">
+
+        <!-- Steuerung mit Checkboxen -->
+        <label>
+            <input type="checkbox" id="toggleBackground" checked>
+            Hintergrund anzeigen
+        </label>
+        <label>
+            <input type="checkbox" id="toggleCharacter" checked>
+            Charakter anzeigen
+        </label>
+    </div>
+
+    <script>
+        // Holen der Canvas-Kontexte
+        var backgroundCanvas = document.getElementById('background-layer').getContext('2d');
+        var characterCanvas = document.getElementById('character-layer').getContext('2d');
+        var effectCanvas = document.getElementById('effect-layer').getContext('2d');
+
+        // Hintergrund Animation
+        function animateBackground() {
+            var gradient = backgroundCanvas.createLinearGradient(0, 0, 500, 500);
+            gradient.addColorStop(0, "rgba(255, 0, 0, 0.5)");
+            gradient.addColorStop(1, "rgba(0, 0, 255, 0.5)");
+
+            backgroundCanvas.clearRect(0, 0, 500, 500);
+            backgroundCanvas.fillStyle = gradient;
+            backgroundCanvas.fillRect(0, 0, 500, 500);
+            requestAnimationFrame(animateBackground);
+        }
+
+        // Charakter Animation (bewegendes Quadrat)
+        var charX = 0;
+        var speed = 2; // Standardgeschwindigkeit
+        var charAnimation;
+        function animateCharacter() {
+            characterCanvas.clearRect(0, 0, 500, 500);
+            characterCanvas.fillStyle = "green";
+            characterCanvas.fillRect(charX, 200, 50, 50);
+
+            charX += speed;
+            if (charX > 500) {
+                charX = 0;
+            }
+            charAnimation = requestAnimationFrame(animateCharacter);
+        }
+
+        // Effekte: Blinken
+        var effectVisible = true;
+        var effectRunning = true;
+        function animateEffect() {
+            effectCanvas.clearRect(0, 0, 500, 500);
+            if (effectVisible) {
+                effectCanvas.fillStyle = "yellow";
+                effectCanvas.beginPath();
+                effectCanvas.arc(250, 250, 30, 0, Math.PI * 2);
+                effectCanvas.fill();
+            }
+            effectVisible = !effectVisible;
+            if (effectRunning) {
+                setTimeout(animateEffect, 500); // Alle 500ms blinken
+            }
+        }
+
+        // Animationen starten
+        animateBackground();
+        animateCharacter();
+        animateEffect();
+
+        // Steuerungsfunktionen
+
+        // Buttons: Charakter starten und stoppen
+        document.getElementById("startCharacter").addEventListener("click", function() {
+            if (!charAnimation) {
+                animateCharacter(); // Startet die Charakter-Animation
+            }
+        });
+
+        document.getElementById("stopCharacter").addEventListener("click", function() {
+            cancelAnimationFrame(charAnimation); // Stoppt die Charakter-Animation
+            charAnimation = null; // Verhindert, dass sie erneut startet, wenn stopCharacter zweimal gedrückt wird
+        });
+
+        // Buttons: Effekt ein- und ausschalten
+        document.getElementById("toggleEffect").addEventListener("click", function() {
+            effectRunning = !effectRunning; // Effekt ein- oder ausschalten
+            if (effectRunning) {
+                animateEffect();
+            }
+        });
+
+        // Slider: Geschwindigkeit des Charakters anpassen
+        document.getElementById("speedSlider").addEventListener("input", function() {
+            speed = parseInt(this.value); // Aktualisiert die Geschwindigkeit basierend auf dem Slider-Wert
+        });
+
+        // Checkbox: Hintergrund-Layer ein- oder ausschalten
+        document.getElementById("toggleBackground").addEventListener("change", function() {
+            document.getElementById("background-layer").style.display = this.checked ? 'block' : 'none';
+        });
+
+        // Checkbox: Charakter-Layer ein- oder ausschalten
+        document.getElementById("toggleCharacter").addEventListener("change", function() {
+            document.getElementById("character-layer").style.display = this.checked ? 'block' : 'none';
+        });
+
+    </script>
+</body>
+</html>
