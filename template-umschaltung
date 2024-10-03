@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Canvas Layer mit Templates und Steuerung</title>
+    <title>Canvas Layer mit editierbarem Charakter</title>
     <style>
         canvas {
             position: absolute;
@@ -55,6 +55,12 @@
                 <option value="template2">Template 2</option>
             </select>
         </div>
+
+        <!-- Textfeld für den Buchstaben der Animationen -->
+        <div style="margin-top: 20px;">
+            <label for="charInput">Buchstabe: </label>
+            <input type="text" id="charInput" maxlength="1" value="A">
+        </div>
     </div>
 
     <script>
@@ -70,13 +76,14 @@
         var effectRunning = true;
         var template1Active = true;
         var template2Active = false;
+        var characterLetter = 'A';  // Buchstabe für beide Templates
 
         // Template 1: Rechteck und blinkender Kreis
         function template1() {
             template1Active = true;
             template2Active = false;
 
-            // Hintergrund
+            // Hintergrund: sich wiederholender linearer Farbverlauf
             function animateBackground1() {
                 if (!template1Active) return;
                 var gradient = backgroundCanvas.createLinearGradient(0, 0, 500, 500);
@@ -88,19 +95,24 @@
                 requestAnimationFrame(animateBackground1);
             }
 
-            // Charakter (bewegendes Quadrat)
+            // Charakter: bewegendes Quadrat mit Buchstaben
             function animateCharacter1() {
                 if (!template1Active) return;
                 characterCanvas.clearRect(0, 0, 500, 500);
                 characterCanvas.fillStyle = "green";
                 characterCanvas.fillRect(charX, 200, 50, 50);
 
+                // Zeichne den Buchstaben
+                characterCanvas.font = "30px Arial";
+                characterCanvas.fillStyle = "white";
+                characterCanvas.fillText(characterLetter, charX + 15, 235);
+
                 charX += speed;
                 if (charX > 500) charX = 0;
                 charAnimation = requestAnimationFrame(animateCharacter1);
             }
 
-            // Effekt (blinkender Kreis)
+            // Effekt: blinkender gelber Kreis
             function animateEffect1() {
                 if (!template1Active) return;
                 effectCanvas.clearRect(0, 0, 500, 500);
@@ -125,7 +137,7 @@
             template1Active = false;
             template2Active = true;
 
-            // Hintergrund
+            // Hintergrund: linearer Farbverlauf mit grünen und blauen Farbtönen
             function animateBackground2() {
                 if (!template2Active) return;
                 var gradient = backgroundCanvas.createLinearGradient(0, 0, 500, 500);
@@ -137,7 +149,7 @@
                 requestAnimationFrame(animateBackground2);
             }
 
-            // Charakter (bewegendes Dreieck)
+            // Charakter: bewegendes Dreieck mit Buchstaben
             function animateCharacter2() {
                 if (!template2Active) return;
                 characterCanvas.clearRect(0, 0, 500, 500);
@@ -148,12 +160,17 @@
                 characterCanvas.lineTo(charX + 50, 300);
                 characterCanvas.fill();
 
+                // Zeichne den Buchstaben
+                characterCanvas.font = "30px Arial";
+                characterCanvas.fillStyle = "white";
+                characterCanvas.fillText(characterLetter, charX + 15, 240);
+
                 charX += speed;
                 if (charX > 500) charX = 0;
                 charAnimation = requestAnimationFrame(animateCharacter2);
             }
 
-            // Effekt (rotierende Linie)
+            // Effekt: rotierende Linie
             var angle = 0;
             function animateEffect2() {
                 if (!template2Active) return;
@@ -172,6 +189,11 @@
             animateCharacter2();
             animateEffect2();
         }
+
+        // Event-Listener für das Buchstaben-Textfeld
+        document.getElementById("charInput").addEventListener("input", function() {
+            characterLetter = this.value || 'A';
+        });
 
         // Funktionen zum Starten und Stoppen der Templates
         function startTemplate1() {
@@ -206,7 +228,6 @@
 
         document.getElementById("stopCharacter").addEventListener("click", function() {
             cancelAnimationFrame(charAnimation); // Stoppt die aktuelle Animation
-            charAnimation = null;
         });
 
         // Buttons: Effekt ein- oder ausschalten
