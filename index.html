@@ -56,16 +56,10 @@
             </select>
         </div>
 
-        <!-- Textfelder für die Buchstaben der Animationen -->
+        <!-- Textfeld für den Buchstaben der Animationen -->
         <div style="margin-top: 20px;">
-            <label for="char1">Buchstabe 1: </label>
-            <input type="text" id="char1" maxlength="1" value="a">
-            <label for="char2">Buchstabe 2: </label>
-            <input type="text" id="char2" maxlength="1" value="b">
-            <label for="char3">Buchstabe 3: </label>
-            <input type="text" id="char3" maxlength="1" value="c">
-            <label for="char4">Buchstabe 4: </label>
-            <input type="text" id="char4" maxlength="1" value="d">
+            <label for="charInput">Buchstabe: </label>
+            <input type="text" id="charInput" maxlength="1" value="A">
         </div>
     </div>
 
@@ -82,12 +76,7 @@
         var effectRunning = true;
         var template1Active = true;
         var template2Active = false;
-
-        // Buchstaben, die für den Charakter verwendet werden
-        var char1 = 'a';
-        var char2 = 'b';
-        var char3 = 'c';
-        var char4 = 'd';
+        var characterLetter = 'A';  // Buchstabe für beide Templates
 
         // Template 1: Rechteck und blinkender Kreis
         function template1() {
@@ -116,7 +105,7 @@
                 // Zeichne den Buchstaben
                 characterCanvas.font = "30px Arial";
                 characterCanvas.fillStyle = "white";
-                characterCanvas.fillText(char1, charX + 15, 235);
+                characterCanvas.fillText(characterLetter, charX + 15, 235);
 
                 charX += speed;
                 if (charX > 500) charX = 0;
@@ -174,7 +163,7 @@
                 // Zeichne den Buchstaben
                 characterCanvas.font = "30px Arial";
                 characterCanvas.fillStyle = "white";
-                characterCanvas.fillText(char2, charX + 15, 240);
+                characterCanvas.fillText(characterLetter, charX + 15, 240);
 
                 charX += speed;
                 if (charX > 500) charX = 0;
@@ -201,21 +190,9 @@
             animateEffect2();
         }
 
-        // Event-Listener für die Buchstaben-Textfelder
-        document.getElementById("char1").addEventListener("input", function() {
-            char1 = this.value || 'a';
-        });
-
-        document.getElementById("char2").addEventListener("input", function() {
-            char2 = this.value || 'b';
-        });
-
-        document.getElementById("char3").addEventListener("input", function() {
-            char3 = this.value || 'c';
-        });
-
-        document.getElementById("char4").addEventListener("input", function() {
-            char4 = this.value || 'd';
+        // Event-Listener für das Buchstaben-Textfeld
+        document.getElementById("charInput").addEventListener("input", function() {
+            characterLetter = this.value || 'A';
         });
 
         // Funktionen zum Starten und Stoppen der Templates
