@@ -19,12 +19,12 @@
             overflow: hidden;
         }
 
-        /* Hintergrundlayer */
+        /* Grauer Hintergrund mit Transparenz */
         .background-layer {
             position: absolute;
             width: 720px;
             height: 405px;
-            background-color: rgba(50, 50, 50, 1);
+            background-color: rgba(50, 50, 50, 1); /* Graue Farbe */
             z-index: 0;
             top: 0;
             left: 0;
@@ -163,6 +163,7 @@
         const toggleInsert = document.getElementById('toggleInsert');
         const logoLetterInput = document.getElementById('logoLetter');
 
+        // Logo sichtbar/unsichtbar schalten
         toggleLogoBtn.addEventListener('click', function() {
             if (logo.classList.contains('hidden')) {
                 logo.classList.remove('hidden');
@@ -173,6 +174,7 @@
             }
         });
 
+        // Text sichtbar/unsichtbar schalten
         toggleTextBtn.addEventListener('click', function() {
             if (text.style.display === 'none') {
                 text.style.display = 'flex';
@@ -183,10 +185,12 @@
             }
         });
 
+        // Hintergrund-Transparenz steuern
         bgOpacity.addEventListener('input', function() {
             background.style.backgroundColor = `rgba(50, 50, 50, ${this.value / 100})`;
         });
 
+        // Insert mit Ein-/Ausblendeffekt
         toggleInsert.addEventListener('click', function() {
             insert.style.opacity = '0';
             setTimeout(() => {
@@ -194,6 +198,7 @@
             }, 5000);
         });
 
+        // Buchstabe im Logo ändern
         logoLetterInput.addEventListener('input', function() {
             const letter = logoLetterInput.value.toUpperCase(); // Großbuchstaben erzwingen
             logo.innerHTML = `<div style="position: absolute; color: white; font-size: 30px; font-family: Arial, sans-serif; font-weight: bold;">${letter}</div>`;
