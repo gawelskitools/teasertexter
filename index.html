@@ -13,8 +13,8 @@
             width: 1920px;
             height: 1080px;
             display: flex;
-            justify-content: center;
-            align-items: center;
+            justify-content: flex-start;
+            align-items: flex-end;
             position: relative;
         }
 
@@ -28,6 +28,7 @@
             padding-left: 50px;
             opacity: 1;
             transition: opacity 0.5s ease;
+            z-index: 2;
         }
 
         #logo {
@@ -55,6 +56,8 @@
             font-size: 24px;
             display: flex;
             flex-direction: column;
+            position: relative;
+            left: 0;
         }
 
         .editable {
@@ -67,13 +70,14 @@
             margin: 5px 0;
         }
 
-        #controls {
+        .background-layer {
             position: absolute;
-            bottom: 20px;
-            left: 50px;
-            width: 100%;
-            display: flex;
-            justify-content: center;
+            width: 1920px;
+            height: 1080px;
+            background-color: rgba(25, 25, 25, 1);
+            z-index: 0;
+            top: 0;
+            left: 0;
         }
 
         .transparent-bg {
@@ -84,11 +88,36 @@
             height: 1080px;
             width: 1920px;
             position: absolute;
-            z-index: -1;
+            z-index: 1;
+        }
+
+        #controls {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 20px;
+            z-index: 3;
+        }
+
+        button {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button.active {
+            background-color: green;
         }
     </style>
 </head>
 <body>
+    <div class="background-layer"></div>
     <div class="transparent-bg"></div>
     <div id="insert">
         <div id="logo"></div>
@@ -99,9 +128,9 @@
     </div>
 
     <div id="controls">
-        <label><input type="checkbox" id="toggleLogo" checked> Logo sichtbar</label><br>
-        <label><input type="checkbox" id="toggleText" checked> Text sichtbar</label><br>
-        <label>Hintergrund Transparenz: <input type="range" id="bgOpacity" min="0" max="100" value="100">%</label><br>
+        <button id="toggleLogo" class="active">Logo sichtbar</button>
+        <button id="toggleText" class="active">Text sichtbar</button>
+        <label>Hintergrund Transparenz: <input type="range" id="bgOpacity" min="0" max="100" value="100">%</label>
         <button id="toggleInsert">Insert ein-/ausblenden</button>
     </div>
 
@@ -109,27 +138,40 @@
         const logo = document.getElementById('logo');
         const text = document.getElementById('text');
         const insert = document.getElementById('insert');
-        const toggleLogo = document.getElementById('toggleLogo');
-        const toggleText = document.getElementById('toggleText');
+        const toggleLogoBtn = document.getElementById('toggleLogo');
+        const toggleTextBtn = document.getElementById('toggleText');
         const bgOpacity = document.getElementById('bgOpacity');
         const toggleInsert = document.getElementById('toggleInsert');
-        const line1 = document.getElementById('line1');
-        const line2 = document.getElementById('line2');
 
-        toggleLogo.addEventListener('change', function() {
-            logo.style.display = this.checked ? 'block' : 'none';
+        toggleLogoBtn.addEventListener('click', function() {
+            if (logo.style.display === 'none') {
+                logo.style.display = 'block';
+                toggleLogoBtn.classList.add('active');
+            } else {
+                logo.style.display = 'none';
+                toggleLogoBtn.classList.remove('active');
+            }
         });
 
-        toggleText.addEventListener('change', function() {
-            text.style.display = this.checked ? 'flex' : 'none';
+        toggleTextBtn.addEventListener('click', function() {
+            if (text.style.display === 'none') {
+                text.style.display = 'flex';
+                toggleTextBtn.classList.add('active');
+            } else {
+                text.style.display = 'none';
+                toggleTextBtn.classList.remove('active');
+            }
         });
 
         bgOpacity.addEventListener('input', function() {
-            insert.style.backgroundColor = `rgba(50, 50, 50, ${this.value / 100})`;
+            document.querySelector('.background-layer').style.backgroundColor = `rgba(25, 25, 25, ${this.value / 100})`;
         });
 
         toggleInsert.addEventListener('click', function() {
-            insert.style.opacity = insert.style.opacity == '1' ? '0' : '1';
+            insert.style.opacity = '0';
+            setTimeout(() => {
+                insert.style.opacity = '1';
+            }, 5000);
         });
     </script>
 </body>
