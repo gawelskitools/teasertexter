@@ -18,58 +18,7 @@
             position: relative;
         }
 
-        #insert {
-            position: relative;
-            width: 1920px;
-            height: 405px;
-            background-color: rgba(50, 50, 50, 1);
-            display: flex;
-            align-items: center;
-            padding-left: 50px;
-            opacity: 1;
-            transition: opacity 0.5s ease;
-            z-index: 2;
-        }
-
-        #logo {
-            width: 100px;
-            height: 100px;
-            margin-right: 50px;
-            position: relative;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #333, #777);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        #logo::before {
-            content: 'I';
-            color: white;
-            font-size: 50px;
-            font-family: Arial, sans-serif;
-            font-weight: bold;
-        }
-
-        #text {
-            color: white;
-            font-size: 24px;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            left: 0;
-        }
-
-        .editable {
-            background-color: rgba(255, 255, 255, 0.1);
-            border: 1px solid white;
-            padding: 5px;
-            color: white;
-            font-size: 24px;
-            width: 400px;
-            margin: 5px 0;
-        }
-
+        /* Hintergrundlayer */
         .background-layer {
             position: absolute;
             width: 1920px;
@@ -89,6 +38,60 @@
             width: 1920px;
             position: absolute;
             z-index: 1;
+        }
+
+        #insert {
+            position: relative;
+            width: 1920px;
+            height: 405px;
+            background-color: rgba(50, 50, 50, 1);
+            display: flex;
+            align-items: center;
+            padding-left: 50px;
+            opacity: 1;
+            transition: opacity 0.5s ease;
+            z-index: 2;
+        }
+
+        #logo {
+            width: 100px;
+            height: 100px;
+            margin-right: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #333, #777);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s;
+        }
+
+        #logo::before {
+            content: 'I';
+            color: white;
+            font-size: 50px;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            position: absolute;
+        }
+
+        #text {
+            color: white;
+            font-size: 24px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            left: 0;
+            min-width: 400px;
+        }
+
+        .editable {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid white;
+            padding: 5px;
+            color: white;
+            font-size: 24px;
+            width: 400px;
+            margin: 5px 0;
         }
 
         #controls {
