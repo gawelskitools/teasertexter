@@ -64,8 +64,12 @@
             justify-content: center;
             align-items: center;
             position: relative;
-            transition: opacity 0.5s, width 0s, height 0s, margin-right 0s;
             flex-shrink: 0;
+            visibility: visible; /* Logo bleibt unsichtbar, aber beansprucht Platz */
+        }
+
+        #logo.hidden {
+            visibility: hidden;
         }
 
         #logo::before {
@@ -83,9 +87,7 @@
             display: flex;
             flex-direction: column;
             position: relative;
-            left: 0;
-            min-width: 400px;
-            flex-shrink: 0;
+            min-width: 300px;
         }
 
         .editable {
@@ -100,7 +102,7 @@
 
         #controls {
             position: absolute;
-            bottom: -100px; /* Außerhalb des sichtbaren Bereichs */
+            bottom: -200px; /* Außerhalb des sichtbaren Bereichs */
             left: 0;
             display: flex;
             flex-direction: column;
@@ -151,11 +153,11 @@
         const toggleInsert = document.getElementById('toggleInsert');
 
         toggleLogoBtn.addEventListener('click', function() {
-            if (logo.style.display === 'none') {
-                logo.style.display = 'block';
+            if (logo.classList.contains('hidden')) {
+                logo.classList.remove('hidden');
                 toggleLogoBtn.classList.add('active');
             } else {
-                logo.style.display = 'none';
+                logo.classList.add('hidden');
                 toggleLogoBtn.classList.remove('active');
             }
         });
