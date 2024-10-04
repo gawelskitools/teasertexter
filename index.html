@@ -24,10 +24,11 @@
             position: absolute;
             width: 720px;
             height: 405px;
-            background-color: rgba(25, 25, 25, 1);
+            background-color: rgba(50, 50, 50, 1);
             z-index: 0;
             top: 0;
             left: 0;
+            transition: background-color 0.3s ease;
         }
 
         .transparent-bg {
@@ -65,7 +66,7 @@
             align-items: center;
             position: relative;
             flex-shrink: 0;
-            visibility: visible; /* Logo bleibt unsichtbar, aber beansprucht Platz */
+            visibility: visible;
         }
 
         #logo.hidden {
@@ -73,7 +74,7 @@
         }
 
         #logo::before {
-            content: 'I';
+            content: 'I'; /* Standardbuchstabe */
             color: white;
             font-size: 30px;
             font-family: Arial, sans-serif;
@@ -123,10 +124,17 @@
         button.active {
             background-color: green;
         }
+
+        input[type="text"] {
+            width: 50px;
+            padding: 5px;
+            font-size: 18px;
+            text-transform: uppercase; /* Automatisch Großbuchstaben */
+        }
     </style>
 </head>
 <body>
-    <div class="background-layer"></div>
+    <div class="background-layer" id="background"></div>
     <div class="transparent-bg"></div>
     <div id="insert">
         <div id="logo"></div>
@@ -141,16 +149,19 @@
         <button id="toggleText" class="active">Text sichtbar</button>
         <label>Hintergrund Transparenz: <input type="range" id="bgOpacity" min="0" max="100" value="100">%</label>
         <button id="toggleInsert">Insert ein-/ausblenden</button>
+        <label>Buchstabe im Logo: <input type="text" id="logoLetter" maxlength="1" value="I"></label>
     </div>
 
     <script>
         const logo = document.getElementById('logo');
         const text = document.getElementById('text');
         const insert = document.getElementById('insert');
+        const background = document.getElementById('background');
         const toggleLogoBtn = document.getElementById('toggleLogo');
         const toggleTextBtn = document.getElementById('toggleText');
         const bgOpacity = document.getElementById('bgOpacity');
         const toggleInsert = document.getElementById('toggleInsert');
+        const logoLetterInput = document.getElementById('logoLetter');
 
         toggleLogoBtn.addEventListener('click', function() {
             if (logo.classList.contains('hidden')) {
@@ -173,7 +184,7 @@
         });
 
         bgOpacity.addEventListener('input', function() {
-            document.querySelector('.background-layer').style.backgroundColor = `rgba(25, 25, 25, ${this.value / 100})`;
+            background.style.backgroundColor = `rgba(50, 50, 50, ${this.value / 100})`;
         });
 
         toggleInsert.addEventListener('click', function() {
@@ -181,6 +192,11 @@
             setTimeout(() => {
                 insert.style.opacity = '1';
             }, 5000);
+        });
+
+        logoLetterInput.addEventListener('input', function() {
+            const letter = logoLetterInput.value.toUpperCase(); // Großbuchstaben erzwingen
+            logo.innerHTML = `<div style="position: absolute; color: white; font-size: 30px; font-family: Arial, sans-serif; font-weight: bold;">${letter}</div>`;
         });
     </script>
 </body>
