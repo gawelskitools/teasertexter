@@ -3,255 +3,134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Canvas Layer mit editierbarem Charakter</title>
+    <title>Insert Template mit Logo aus Code</title>
     <style>
-        canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-        .controls {
+        body {
+            margin: 0;
+            padding: 0;
+            background-image: url('https://via.placeholder.com/10/ccc/fff?text=+');
+            background-size: 20px 20px;
+            width: 1920px;
+            height: 1080px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             position: relative;
-            margin-top: 520px;
+        }
+
+        #insert {
+            position: relative;
+            width: 1920px;
+            height: 405px;
+            background-color: rgba(50, 50, 50, 1);
+            display: flex;
+            align-items: center;
+            padding-left: 50px;
+            opacity: 1;
+            transition: opacity 0.5s ease;
+        }
+
+        #logo {
+            width: 100px;
+            height: 100px;
+            margin-right: 50px;
+            position: relative;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #333, #777);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #logo::before {
+            content: 'I';
+            color: white;
+            font-size: 50px;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+        }
+
+        #text {
+            color: white;
+            font-size: 24px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .editable {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid white;
+            padding: 5px;
+            color: white;
+            font-size: 24px;
+            width: 400px;
+            margin: 5px 0;
+        }
+
+        #controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .transparent-bg {
+            background: linear-gradient(45deg, #e0e0e0 25%, transparent 25%), linear-gradient(135deg, #e0e0e0 25%, transparent 25%);
+            background-color: white;
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            height: 1080px;
+            width: 1920px;
+            position: absolute;
+            z-index: -1;
         }
     </style>
 </head>
 <body>
-    <!-- Layer 1: Hintergrund -->
-    <canvas id="background-layer" width="500" height="500"></canvas>
-    
-    <!-- Layer 2: Charakter -->
-    <canvas id="character-layer" width="500" height="500"></canvas>
-
-    <!-- Layer 3: Effekte -->
-    <canvas id="effect-layer" width="500" height="500"></canvas>
-
-    <!-- Steuerungselemente -->
-    <div class="controls">
-        <!-- Steuerung mit Buttons -->
-        <button id="startCharacter">Start Character</button>
-        <button id="stopCharacter">Stop Character</button>
-        <button id="toggleEffect">Toggle Effect</button>
-        
-        <!-- Steuerung mit Slider -->
-        <label for="speedSlider">Charakter-Geschwindigkeit: </label>
-        <input type="range" id="speedSlider" min="1" max="10" value="2">
-
-        <!-- Steuerung mit Checkboxen -->
-        <label>
-            <input type="checkbox" id="toggleBackground" checked>
-            Hintergrund anzeigen
-        </label>
-        <label>
-            <input type="checkbox" id="toggleCharacter" checked>
-            Charakter anzeigen
-        </label>
-
-        <!-- Dropdown Menü zum Wechseln der Templates -->
-        <div style="margin-top: 20px;">
-            <label for="templateSelector">Wähle ein Template: </label>
-            <select id="templateSelector">
-                <option value="template1">Template 1</option>
-                <option value="template2">Template 2</option>
-            </select>
-        </div>
-
-        <!-- Textfeld für den Buchstaben der Animationen -->
-        <div style="margin-top: 20px;">
-            <label for="charInput">Buchstabe: </label>
-            <input type="text" id="charInput" maxlength="1" value="A">
+    <div class="transparent-bg"></div>
+    <div id="insert">
+        <div id="logo"></div>
+        <div id="text">
+            <textarea class="editable" id="line1" rows="1">Zeile 1 des Textes</textarea>
+            <textarea class="editable" id="line2" rows="1">Zeile 2 des Textes</textarea>
         </div>
     </div>
 
+    <div id="controls">
+        <label><input type="checkbox" id="toggleLogo" checked> Logo sichtbar</label><br>
+        <label><input type="checkbox" id="toggleText" checked> Text sichtbar</label><br>
+        <label>Hintergrund Transparenz: <input type="range" id="bgOpacity" min="0" max="100" value="100">%</label><br>
+        <button id="toggleInsert">Insert ein-/ausblenden</button>
+    </div>
+
     <script>
-        var backgroundCanvas = document.getElementById('background-layer').getContext('2d');
-        var characterCanvas = document.getElementById('character-layer').getContext('2d');
-        var effectCanvas = document.getElementById('effect-layer').getContext('2d');
+        const logo = document.getElementById('logo');
+        const text = document.getElementById('text');
+        const insert = document.getElementById('insert');
+        const toggleLogo = document.getElementById('toggleLogo');
+        const toggleText = document.getElementById('toggleText');
+        const bgOpacity = document.getElementById('bgOpacity');
+        const toggleInsert = document.getElementById('toggleInsert');
+        const line1 = document.getElementById('line1');
+        const line2 = document.getElementById('line2');
 
-        // Globale Variablen für die Animationen und Effekte
-        var charX = 0;
-        var charAnimation;
-        var speed = 2;
-        var effectVisible = true;
-        var effectRunning = true;
-        var template1Active = true;
-        var template2Active = false;
-        var characterLetter = 'A';  // Buchstabe für beide Templates
-
-        // Template 1: Rechteck und blinkender Kreis
-        function template1() {
-            template1Active = true;
-            template2Active = false;
-
-            // Hintergrund: sich wiederholender linearer Farbverlauf
-            function animateBackground1() {
-                if (!template1Active) return;
-                var gradient = backgroundCanvas.createLinearGradient(0, 0, 500, 500);
-                gradient.addColorStop(0, "rgba(255, 0, 0, 0.5)");
-                gradient.addColorStop(1, "rgba(0, 0, 255, 0.5)");
-                backgroundCanvas.clearRect(0, 0, 500, 500);
-                backgroundCanvas.fillStyle = gradient;
-                backgroundCanvas.fillRect(0, 0, 500, 500);
-                requestAnimationFrame(animateBackground1);
-            }
-
-            // Charakter: bewegendes Quadrat mit Buchstaben
-            function animateCharacter1() {
-                if (!template1Active) return;
-                characterCanvas.clearRect(0, 0, 500, 500);
-                characterCanvas.fillStyle = "green";
-                characterCanvas.fillRect(charX, 200, 50, 50);
-
-                // Zeichne den Buchstaben
-                characterCanvas.font = "30px Arial";
-                characterCanvas.fillStyle = "white";
-                characterCanvas.fillText(characterLetter, charX + 15, 235);
-
-                charX += speed;
-                if (charX > 500) charX = 0;
-                charAnimation = requestAnimationFrame(animateCharacter1);
-            }
-
-            // Effekt: blinkender gelber Kreis
-            function animateEffect1() {
-                if (!template1Active) return;
-                effectCanvas.clearRect(0, 0, 500, 500);
-                if (effectVisible) {
-                    effectCanvas.fillStyle = "yellow";
-                    effectCanvas.beginPath();
-                    effectCanvas.arc(250, 250, 30, 0, Math.PI * 2);
-                    effectCanvas.fill();
-                }
-                effectVisible = !effectVisible;
-                if (effectRunning) setTimeout(animateEffect1, 500);
-            }
-
-            // Animationen starten
-            animateBackground1();
-            animateCharacter1();
-            animateEffect1();
-        }
-
-        // Template 2: Kreis und bewegendes Dreieck
-        function template2() {
-            template1Active = false;
-            template2Active = true;
-
-            // Hintergrund: linearer Farbverlauf mit grünen und blauen Farbtönen
-            function animateBackground2() {
-                if (!template2Active) return;
-                var gradient = backgroundCanvas.createLinearGradient(0, 0, 500, 500);
-                gradient.addColorStop(0, "rgba(0, 255, 0, 0.5)");
-                gradient.addColorStop(1, "rgba(0, 0, 255, 0.5)");
-                backgroundCanvas.clearRect(0, 0, 500, 500);
-                backgroundCanvas.fillStyle = gradient;
-                backgroundCanvas.fillRect(0, 0, 500, 500);
-                requestAnimationFrame(animateBackground2);
-            }
-
-            // Charakter: bewegendes Dreieck mit Buchstaben
-            function animateCharacter2() {
-                if (!template2Active) return;
-                characterCanvas.clearRect(0, 0, 500, 500);
-                characterCanvas.fillStyle = "blue";
-                characterCanvas.beginPath();
-                characterCanvas.moveTo(charX, 250);
-                characterCanvas.lineTo(charX + 50, 200);
-                characterCanvas.lineTo(charX + 50, 300);
-                characterCanvas.fill();
-
-                // Zeichne den Buchstaben
-                characterCanvas.font = "30px Arial";
-                characterCanvas.fillStyle = "white";
-                characterCanvas.fillText(characterLetter, charX + 15, 240);
-
-                charX += speed;
-                if (charX > 500) charX = 0;
-                charAnimation = requestAnimationFrame(animateCharacter2);
-            }
-
-            // Effekt: rotierende Linie
-            var angle = 0;
-            function animateEffect2() {
-                if (!template2Active) return;
-                effectCanvas.clearRect(0, 0, 500, 500);
-                effectCanvas.strokeStyle = "white";
-                effectCanvas.beginPath();
-                effectCanvas.moveTo(250, 250);
-                effectCanvas.lineTo(250 + 100 * Math.cos(angle), 250 + 100 * Math.sin(angle));
-                effectCanvas.stroke();
-                angle += 0.1;
-                if (effectRunning) requestAnimationFrame(animateEffect2);
-            }
-
-            // Animationen starten
-            animateBackground2();
-            animateCharacter2();
-            animateEffect2();
-        }
-
-        // Event-Listener für das Buchstaben-Textfeld
-        document.getElementById("charInput").addEventListener("input", function() {
-            characterLetter = this.value || 'A';
+        toggleLogo.addEventListener('change', function() {
+            logo.style.display = this.checked ? 'block' : 'none';
         });
 
-        // Funktionen zum Starten und Stoppen der Templates
-        function startTemplate1() {
-            cancelAnimationFrame(charAnimation); // Stoppt die laufende Animation
-            charX = 0; // Charakter-Position zurücksetzen
-            template1(); // Template 1 starten
-        }
-
-        function startTemplate2() {
-            cancelAnimationFrame(charAnimation); // Stoppt die laufende Animation
-            charX = 0; // Charakter-Position zurücksetzen
-            template2(); // Template 2 starten
-        }
-
-        // Eventlistener für das Dropdown-Menü
-        document.getElementById("templateSelector").addEventListener("change", function(event) {
-            if (event.target.value === "template1") {
-                startTemplate1();
-            } else if (event.target.value === "template2") {
-                startTemplate2();
-            }
+        toggleText.addEventListener('change', function() {
+            text.style.display = this.checked ? 'flex' : 'none';
         });
 
-        // Buttons: Charakter starten und stoppen
-        document.getElementById("startCharacter").addEventListener("click", function() {
-            if (template1Active) {
-                startTemplate1();
-            } else if (template2Active) {
-                startTemplate2();
-            }
+        bgOpacity.addEventListener('input', function() {
+            insert.style.backgroundColor = `rgba(50, 50, 50, ${this.value / 100})`;
         });
 
-        document.getElementById("stopCharacter").addEventListener("click", function() {
-            cancelAnimationFrame(charAnimation); // Stoppt die aktuelle Animation
+        toggleInsert.addEventListener('click', function() {
+            insert.style.opacity = insert.style.opacity == '1' ? '0' : '1';
         });
-
-        // Buttons: Effekt ein- oder ausschalten
-        document.getElementById("toggleEffect").addEventListener("click", function() {
-            effectRunning = !effectRunning;
-        });
-
-        // Slider: Geschwindigkeit des Charakters anpassen
-        document.getElementById("speedSlider").addEventListener("input", function() {
-            speed = parseInt(this.value);
-        });
-
-        // Checkbox: Hintergrund-Layer ein- oder ausschalten
-        document.getElementById("toggleBackground").addEventListener("change", function() {
-            document.getElementById("background-layer").style.display = this.checked ? 'block' : 'none';
-        });
-
-        // Checkbox: Charakter-Layer ein- oder ausschalten
-        document.getElementById("toggleCharacter").addEventListener("change", function() {
-            document.getElementById("character-layer").style.display = this.checked ? 'block' : 'none';
-        });
-
-        // Starte das erste Template standardmäßig
-        startTemplate1();
     </script>
 </body>
 </html>
