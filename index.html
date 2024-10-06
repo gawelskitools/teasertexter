@@ -77,36 +77,47 @@
 
     <!-- Vorschaufenster für die Textausgabe -->
     <h1>Vorschaufenster</h1>
-    <div class="preview-section" id="preview-headlines-container">
-        <!-- Hier kommen die Vorschaufenster für die einzelnen Überschriften hin -->
+
+    <div class="preview-section" id="preview-headlines">
+        <!-- Drei Vorschaufenster für die Überschriften -->
+        <div class="preview-box">
+            <h4>Überschrift 1</h4>
+            <div id="headline1"></div>
+            <button class="copy-button" onclick="copyToClipboard('headline1')">In die Zwischenablage kopieren</button>
+        </div>
+        <div class="preview-box">
+            <h4>Überschrift 2</h4>
+            <div id="headline2"></div>
+            <button class="copy-button" onclick="copyToClipboard('headline2')">In die Zwischenablage kopieren</button>
+        </div>
+        <div class="preview-box">
+            <h4>Überschrift 3</h4>
+            <div id="headline3"></div>
+            <button class="copy-button" onclick="copyToClipboard('headline3')">In die Zwischenablage kopieren</button>
+        </div>
+    </div>
+
+    <div class="preview-section">
+        <!-- Vorschaufenster für die Textzusammenfassung -->
+        <div class="preview-box">
+            <h4>Textzusammenfassung</h4>
+            <div id="preview-summary"></div>
+            <button class="copy-button" onclick="copyToClipboard('preview-summary')">In die Zwischenablage kopieren</button>
+        </div>
+        <!-- Vorschaufenster für die Stichworte -->
+        <div class="preview-box">
+            <h4>Stichworte</h4>
+            <div id="preview-keywords"></div>
+            <button class="copy-button" onclick="copyToClipboard('preview-keywords')">In die Zwischenablage kopieren</button>
+        </div>
     </div>
 
     <script>
-        // Funktion zum Kopieren des Texts und des Prompts in die Zwischenablage
-        function copyToClipboard() {
-            const text = document.getElementById('quelltext').value;
-            const prompt = `
-T1.0 Fasse den Text nach folgenden Vorgaben zusammen.
-T1.1 - Schreibe wie ein Journalist
-T1.2 - Verwende einfache Sätze
-T1.3 - Verwende maximal 120 Zeichen.
-T1.4 - Korrigiere den Text anhand der Regeln für die deutsche Grammatik.
-T2.0 - Erstelle eine Liste mit maximal 15 Stichwörtern.
-T2.1 - Die Stichwörter sollen durch Kommas getrennt werden.
-T2.2 - Stichwörter sollen passende Themen sein, die sich aus dem Inhalt des Textes ergeben.
-T2.3 - Die Stichwörter sollen SEO-optimiert sein.
-T3.0 - Erstelle drei Überschriften.
-T3.1 - Die Überschriften sollen eine maximale Länge von 60 Zeichen haben.
-T3.2 - Die Überschriften sollen die Kernpunkte des Textes aus dem Textfeld beinhalten.
-T3.3 - Die Überschriften sollen zum Weiterlesen animieren.
-T4.0 - Gebe die Rückmeldungen zu T1.0, T2.0 und T3.0 getrennt aus.
-T4.1 - Unterteile die Antworten mit Überschriften:
-T4.1.1 - "Textzusammenfassung" für T1.0
-T4.1.2 - "Stichworte" für T2.0
-T4.1.3 - "Überschriften" für T3.0`;
-            const fullText = text + '\n\n' + prompt;
-            navigator.clipboard.writeText(fullText).then(() => {
-                alert("Text und Prompt wurden in die Zwischenablage kopiert.");
+        // Funktion zum Kopieren des Texts aus den Vorschaufenstern in die Zwischenablage
+        function copyToClipboard(elementId) {
+            const text = document.getElementById(elementId).textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                alert("Text wurde in die Zwischenablage kopiert.");
             }, () => {
                 alert("Fehler beim Kopieren in die Zwischenablage.");
             });
@@ -176,8 +187,22 @@ T4.1.3 - "Überschriften" für T3.0`;
 
             // Extrahieren der Textabschnitte anhand der festgelegten Überschriften
             const headlineMatch = responseText.match(/### Überschriften([^#]*)/);
+            const summaryMatch = responseText.match(/### Textzusammenfassung([^#]*)/);
+            const keywordsMatch = responseText.match(/### Stichworte([^#]*)/);
+
             if (headlineMatch) {
-                displayHeadlines(formatHeadlines(headlineMatch[1].trim()));
+                const headlines = formatHeadlines(headlineMatch[1].trim());
+                document.getElementById('headline1').textContent = headlines[0] || '';
+                document.getElementById('headline2').textContent = headlines[1] || '';
+                document.getElementById('headline3').textContent = headlines[2] || '';
+            }
+
+            if (summaryMatch) {
+                document.getElementById('preview-summary').textContent = summaryMatch[1].trim();
+            }
+
+            if (keywordsMatch) {
+                document.getElementById('preview-keywords').textContent = keywordsMatch[1].trim();
             }
         }
 
@@ -187,39 +212,6 @@ T4.1.3 - "Überschriften" für T3.0`;
                 .split('\n')
                 .map(line => line.replace(/^\d+\.\s*/, "").replace(/\*\*/g, "").trim()) // Entfernt die Nummerierung und "**"
                 .filter(line => line); // Entfernt leere Zeilen
-        }
-
-        // Funktion zum Anzeigen der formatierten Überschriften
-        function displayHeadlines(headlines) {
-            const container = document.getElementById('preview-headlines-container');
-            container.innerHTML = ''; // Löscht den bisherigen Inhalt
-
-            headlines.forEach((headline, index) => {
-                // Erstellt ein neues Vorschaufenster für jede Überschrift
-                const previewBox = document.createElement('div');
-                previewBox.classList.add('preview-box');
-
-                const headlineText = document.createElement('div');
-                headlineText.textContent = headline;
-
-                const copyButton = document.createElement('button');
-                copyButton.textContent = 'In die Zwischenablage kopieren';
-                copyButton.classList.add('copy-button');
-                copyButton.onclick = () => copyTextToClipboard(headline);
-
-                previewBox.appendChild(headlineText);
-                previewBox.appendChild(copyButton);
-                container.appendChild(previewBox);
-            });
-        }
-
-        // Funktion zum Kopieren eines Textes in die Zwischenablage
-        function copyTextToClipboard(text) {
-            navigator.clipboard.writeText(text).then(() => {
-                alert("Text wurde in die Zwischenablage kopiert.");
-            }, () => {
-                alert("Fehler beim Kopieren in die Zwischenablage.");
-            });
         }
 
         // Immer wenn der Text im Textfeld geändert wird, soll die Vorschau aktualisiert werden
