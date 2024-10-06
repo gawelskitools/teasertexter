@@ -21,6 +21,18 @@
         button {
             margin: 0 10px;
         }
+        .output {
+            text-align: left;
+            margin: 20px auto;
+            width: 80%;
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+        .output h3 {
+            text-align: left;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -42,6 +54,16 @@
     <h1 id="response-title">Chat-GPT-Rückgabe</h1>
     <button onclick="editTitle('response-title')">...</button>
     <textarea id="chat-response" placeholder="Hier wird die Rückgabe von Chat GPT angezeigt und kann bearbeitet werden..."></textarea>
+
+    <!-- Ausgabe des Textes -->
+    <div class="output" id="output-display">
+        <h3>Überschriften</h3>
+        <div id="headlines"></div>
+        <h3>Textzusammenfassung</h3>
+        <div id="summary"></div>
+        <h3>Stichworte</h3>
+        <div id="keywords"></div>
+    </div>
 
     <script>
         // Funktion zum Kopieren des Texts und des Prompts in die Zwischenablage
@@ -86,7 +108,26 @@ T4.1.3 - "Überschriften" für T3.0`;
         function promptPassword() {
             const password = prompt("Bitte geben Sie das Kennwort ein:");
             if (password === "admin") {
-                const newPrompt = prompt("Bearbeiten Sie den Prompt:");
+                const currentPrompt = `
+T1.0 Fasse den Text nach folgenden Vorgaben zusammen.
+T1.1 - Schreibe wie ein Journalist
+T1.2 - Verwende einfache Sätze
+T1.3 - Verwende maximal 500 Zeichen.
+T1.4 - Korrigiere den Text anhand der Regeln für die deutsche Grammatik.
+T2.0 - Erstelle eine Liste mit maximal 15 Stichwörtern.
+T2.1 - Die Stichwörter sollen durch Kommas getrennt werden.
+T2.2 - Stichwörter sollen passende Themen sein, die sich aus dem Inhalt des Textes ergeben.
+T2.3 - Die Stichwörter sollen SEO-optimiert sein.
+T3.0 - Erstelle drei Überschriften.
+T3.1 - Die Überschriften sollen eine maximale Länge von 60 Zeichen haben.
+T3.2 - Die Überschriften sollen die Kernpunkte des Textes aus dem Textfeld beinhalten.
+T3.3 - Die Überschriften sollen zum Weiterlesen animieren.
+T4.0 - Gebe die Rückmeldungen zu T1.0, T2.0 und T3.0 getrennt aus.
+T4.1 - Unterteile die Antworten mit Überschriften:
+T4.1.1 - "Textzusammenfassung" für T1.0
+T4.1.2 - "Stichworte" für T2.0
+T4.1.3 - "Überschriften" für T3.0`;
+                const newPrompt = prompt("Bearbeiten Sie den Prompt:", currentPrompt);
                 if (newPrompt) {
                     alert("Neuer Prompt: " + newPrompt);
                 }
@@ -94,6 +135,19 @@ T4.1.3 - "Überschriften" für T3.0`;
                 alert("Falsches Kennwort!");
             }
         }
+
+        // Funktion zum Anzeigen der Ausgabe
+        function displayOutput() {
+            const responseText = document.getElementById('chat-response').value;
+            
+            // Hier kannst du die Rückgabe in Abschnitte unterteilen, z.B. T3.0 für Überschriften, T1.0 für Zusammenfassung etc.
+            document.getElementById('headlines').textContent = "Beispielüberschrift 1, Beispielüberschrift 2, Beispielüberschrift 3";
+            document.getElementById('summary').textContent = "Dies ist eine kurze Textzusammenfassung.";
+            document.getElementById('keywords').textContent = "Keyword1, Keyword2, Keyword3, ...";
+        }
+
+        // Immer wenn der Text im Textfeld geändert wird, soll die Ausgabe aktualisiert werden
+        document.getElementById('chat-response').addEventListener('input', displayOutput);
     </script>
 
 </body>
