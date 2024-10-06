@@ -200,13 +200,13 @@ T4.1.3 - "Überschriften" für T3.0`;
             }
         }
 
-        // Funktion zum Formatieren der Überschriften, entfernt die "**"-Zeichen und Nummerierungen
+        // Funktion zum Formatieren der Überschriften, entfernt die "**"-Zeichen und nummeriert die Überschriften nicht
         function formatHeadlines(text) {
             const lines = text.split('\n').map(line => line.trim());
             return lines
-                .filter(line => line)
-                .map(line => line.replace(/\d+\.\s*/, "").replace(/\*\*/g, "")) // Entfernt die Nummerierung und "**"
-                .join('<br>');
+                .filter(line => line) // Entfernt leere Zeilen
+                .map(line => line.replace(/^\d+\.\s*/, "").replace(/\*\*/g, "")) // Entfernt die Nummerierung und "**"
+                .join('<br>'); // Fügt Zeilenumbrüche ein
         }
 
         // Immer wenn der Text im Textfeld geändert wird, soll die Vorschau aktualisiert werden
