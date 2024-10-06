@@ -33,6 +33,21 @@
             font-weight: bold;
             margin-bottom: 10px;
         }
+        .preview-section {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .preview-box {
+            width: 30%;
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+        .preview-box h4 {
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -55,14 +70,21 @@
     <button onclick="editTitle('response-title')">...</button>
     <textarea id="chat-response" placeholder="Hier wird die Rückgabe von Chat GPT angezeigt und kann bearbeitet werden..."></textarea>
 
-    <!-- Ausgabe des Textes -->
-    <div class="output" id="output-display">
-        <h3>Überschriften</h3>
-        <div id="headlines"></div>
-        <h3>Textzusammenfassung</h3>
-        <div id="summary"></div>
-        <h3>Stichworte</h3>
-        <div id="keywords"></div>
+    <!-- Vorschaufenster für die Textausgabe -->
+    <h1>Vorschaufenster</h1>
+    <div class="preview-section">
+        <div class="preview-box">
+            <h4>Überschriften</h4>
+            <div id="preview-headlines"></div>
+        </div>
+        <div class="preview-box">
+            <h4>Textzusammenfassung</h4>
+            <div id="preview-summary"></div>
+        </div>
+        <div class="preview-box">
+            <h4>Stichworte</h4>
+            <div id="preview-keywords"></div>
+        </div>
     </div>
 
     <script>
@@ -73,7 +95,7 @@
 T1.0 Fasse den Text nach folgenden Vorgaben zusammen.
 T1.1 - Schreibe wie ein Journalist
 T1.2 - Verwende einfache Sätze
-T1.3 - Verwende maximal 500 Zeichen.
+T1.3 - Verwende maximal 120 Zeichen.
 T1.4 - Korrigiere den Text anhand der Regeln für die deutsche Grammatik.
 T2.0 - Erstelle eine Liste mit maximal 15 Stichwörtern.
 T2.1 - Die Stichwörter sollen durch Kommas getrennt werden.
@@ -112,7 +134,7 @@ T4.1.3 - "Überschriften" für T3.0`;
 T1.0 Fasse den Text nach folgenden Vorgaben zusammen.
 T1.1 - Schreibe wie ein Journalist
 T1.2 - Verwende einfache Sätze
-T1.3 - Verwende maximal 500 Zeichen.
+T1.3 - Verwende maximal 120 Zeichen.
 T1.4 - Korrigiere den Text anhand der Regeln für die deutsche Grammatik.
 T2.0 - Erstelle eine Liste mit maximal 15 Stichwörtern.
 T2.1 - Die Stichwörter sollen durch Kommas getrennt werden.
@@ -127,7 +149,7 @@ T4.1 - Unterteile die Antworten mit Überschriften:
 T4.1.1 - "Textzusammenfassung" für T1.0
 T4.1.2 - "Stichworte" für T2.0
 T4.1.3 - "Überschriften" für T3.0`;
-                
+
                 // Hier wird das große, erweiterbare Textfeld im neuen Popup erstellt
                 const editorWindow = window.open("", "", "width=800,height=600");
                 editorWindow.document.write(`
@@ -154,19 +176,32 @@ T4.1.3 - "Überschriften" für T3.0`;
             }
         }
 
-        // Funktion zum Anzeigen der Ausgabe
-        function displayOutput() {
+        // Funktion zum Anzeigen der Vorschau
+        function displayPreview() {
             const responseText = document.getElementById('chat-response').value;
-            
-            // Hier kannst du die Rückgabe in Abschnitte unterteilen, z.B. T3.0 für Überschriften, T1.0 für Zusammenfassung etc.
-            document.getElementById('headlines').textContent = "Beispielüberschrift 1, Beispielüberschrift 2, Beispielüberschrift 3";
-            document.getElementById('summary').textContent = "Dies ist eine kurze Textzusammenfassung.";
-            document.getElementById('keywords').textContent = "Keyword1, Keyword2, Keyword3, ...";
+
+            // Extrahieren der Textabschnitte anhand der festgelegten Überschriften
+            const headlineMatch = responseText.match(/### Überschriften(.*)### Textzusammenfassung/s);
+            const summaryMatch = responseText.match(/### Textzusammenfassung(.*)### Stichworte/s);
+            const keywordsMatch = responseText.match(/### Stichworte(.*)/s);
+
+            if (headlineMatch) {
+                document.getElementById('preview-headlines').innerHTML = headlineMatch[1].trim().replace(/\*\*/g, "").replace(/\d\./g, "").trim();
+            }
+
+            if (summaryMatch) {
+                document.getElementById('preview-summary').innerHTML = summaryMatch[1].trim();
+            }
+
+            if (keywordsMatch) {
+                document.getElementById('preview-keywords').innerHTML = keywordsMatch[1].trim();
+            }
         }
 
-        // Immer wenn der Text im Textfeld geändert wird, soll die Ausgabe aktualisiert werden
-        document.getElementById('chat-response').addEventListener('input', displayOutput);
+        // Immer wenn der Text im Textfeld geändert wird, soll die Vorschau aktualisiert werden
+        document.getElementById('chat-response').addEventListener('input', displayPreview);
     </script>
 
 </body>
 </html>
+
