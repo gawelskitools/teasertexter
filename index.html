@@ -183,9 +183,9 @@ T4.1.3 - "Überschriften" für T3.0`;
             const responseText = document.getElementById('chat-response').value;
 
             // Extrahieren der Textabschnitte anhand der festgelegten Überschriften
-            const headlineMatch = responseText.match(/### Überschriften(.*)### Textzusammenfassung/s);
-            const summaryMatch = responseText.match(/### Textzusammenfassung(.*)### Stichworte/s);
-            const keywordsMatch = responseText.match(/### Stichworte(.*)/s);
+            const headlineMatch = responseText.match(/### Überschriften([^#]*)/);
+            const summaryMatch = responseText.match(/### Textzusammenfassung([^#]*)/);
+            const keywordsMatch = responseText.match(/### Stichworte([^#]*)/);
 
             if (headlineMatch) {
                 document.getElementById('preview-headlines').innerHTML = formatHeadlines(headlineMatch[1].trim());
@@ -202,8 +202,11 @@ T4.1.3 - "Überschriften" für T3.0`;
 
         // Funktion zum Formatieren der Überschriften ohne Nummerierung und "**"
         function formatHeadlines(text) {
-            const lines = text.split('\n');
-            return lines.map(line => line.replace(/^\d+\.\s\*\*/, "").replace(/\*\*$/, "")).join('<br>');
+            const lines = text.split('\n').map(line => line.trim());
+            return lines
+                .filter(line => line)
+                .map((line, index) => `${index + 1}. ${line.replace(/\*\*/g, "")}`)
+                .join('<br>');
         }
 
         // Immer wenn der Text im Textfeld geändert wird, soll die Vorschau aktualisiert werden
