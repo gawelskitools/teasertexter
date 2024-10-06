@@ -128,18 +128,27 @@ T4.1.1 - "Textzusammenfassung" für T1.0
 T4.1.2 - "Stichworte" für T2.0
 T4.1.3 - "Überschriften" für T3.0`;
                 
-                const newPrompt = prompt("Bearbeiten Sie den Prompt:", currentPrompt);
-                const promptEditor = document.createElement("textarea");
-
-                // Prompt-Editor anpassen
-                promptEditor.style.width = "80%";
-                promptEditor.style.height = "400px";
-                promptEditor.value = newPrompt;
-
+                // Hier wird das große, erweiterbare Textfeld im neuen Popup erstellt
                 const editorWindow = window.open("", "", "width=800,height=600");
-                editorWindow.document.write("<html><head><title>Prompt bearbeiten</title></head><body>");
-                editorWindow.document.write("<textarea style='width: 100%; height: 90%;'>" + newPrompt + "</textarea>");
-                editorWindow.document.write("</body></html>");
+                editorWindow.document.write(`
+                    <html>
+                    <head>
+                        <title>Prompt bearbeiten</title>
+                        <style>
+                            textarea {
+                                width: 100%;
+                                height: 90%;
+                                font-family: Arial, sans-serif;
+                                font-size: 14px;
+                                resize: both;
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <textarea>${currentPrompt}</textarea>
+                    </body>
+                    </html>
+                `);
             } else {
                 alert("Falsches Kennwort!");
             }
