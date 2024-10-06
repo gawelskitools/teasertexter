@@ -1,1 +1,100 @@
-text
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Textfeld und Prompt</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        textarea {
+            width: 80%;
+            height: 200px;
+            margin: 10px 0;
+        }
+        .button-group {
+            margin: 20px 0;
+        }
+        button {
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Textfeld 1.0 - Quelltext -->
+    <h1 id="quelltext-title">Quelltext</h1>
+    <button onclick="editTitle('quelltext-title')">...</button>
+    <textarea id="quelltext" placeholder="Geben Sie hier Ihren Text ein..."></textarea>
+
+    <div class="button-group">
+        <!-- Button 1 - In die Zwischenablage kopieren -->
+        <button onclick="copyToClipboard()">In die Zwischenablage kopieren</button>
+
+        <!-- Button 2 - Zum Bearbeiten des Promptbefehls -->
+        <button onclick="promptPassword()">...</button>
+    </div>
+
+    <!-- Textfeld 1.4 - Chat GPT Rückgabe -->
+    <h1 id="response-title">Chat-GPT-Rückgabe</h1>
+    <button onclick="editTitle('response-title')">...</button>
+    <textarea id="chat-response" placeholder="Hier wird die Rückgabe von Chat GPT angezeigt und kann bearbeitet werden..."></textarea>
+
+    <script>
+        // Funktion zum Kopieren des Texts und des Prompts in die Zwischenablage
+        function copyToClipboard() {
+            const text = document.getElementById('quelltext').value;
+            const prompt = `
+T1.0 Fasse den Text nach folgenden Vorgaben in numerierter Auflistung zusammen.
+T1.1 - Schreibe wie ein Journalist
+T1.2 - Verwende einfache Sätze
+T1.3 - Verwende maximal 500 Zeichen.
+T1.4 - Korrigiere den Text anhand der Regeln für die deutsche Grammatik.
+T2.0 - Erstelle eine Liste mit maximal 15 Stichwörtern.
+T2.1 - Die Stichwörter sollen durch Kommas getrennt werden.
+T2.2 - Stichwörter sollen passende Themen sein, die sich aus dem Inhalt des Textes ergeben.
+T2.3 - Die Stichwörter sollen SEO-optimiert sein.
+T3.0 - Erstelle drei Überschriften.
+T3.1 - Die Überschriften sollen eine maximale Länge von 60 Zeichen haben.
+T3.2 - Die Überschriften sollen die Kernpunkte des Textes aus dem Textfeld beinhalten.
+T3.3 - Die Überschriften sollen zum Weiterlesen animieren.
+T4.0 - Gebe die Rückmeldungen zu T1.0, T2.0 und T3.0 getrennt aus.
+T4.1 - Unterteile die Antworten mit Überschriften:
+T4.1.1 - "Textzusammenfassung" für T1.0
+T4.1.2 - "Stichworte" für T2.0
+T4.1.3 - "Überschriften" für T3.0`;
+            const fullText = text + '\n\n' + prompt;
+            navigator.clipboard.writeText(fullText).then(() => {
+                alert("Text und Prompt wurden in die Zwischenablage kopiert.");
+            }, () => {
+                alert("Fehler beim Kopieren in die Zwischenablage.");
+            });
+        }
+
+        // Funktion zum Bearbeiten der Überschrift
+        function editTitle(titleId) {
+            const newTitle = prompt("Geben Sie den neuen Titel ein:");
+            if (newTitle) {
+                document.getElementById(titleId).textContent = newTitle;
+            }
+        }
+
+        // Funktion zum Passwortschutz für die Promptbearbeitung
+        function promptPassword() {
+            const password = prompt("Bitte geben Sie das Kennwort ein:");
+            if (password === "admin") {
+                const newPrompt = prompt("Bearbeiten Sie den Prompt:");
+                if (newPrompt) {
+                    alert("Neuer Prompt: " + newPrompt);
+                }
+            } else {
+                alert("Falsches Kennwort!");
+            }
+        }
+    </script>
+
+</body>
+</html>
