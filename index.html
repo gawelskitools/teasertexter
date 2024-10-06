@@ -135,7 +135,7 @@
         function promptPassword() {
             const password = prompt("Bitte geben Sie das Kennwort ein:");
             if (password === "admin") {
-                const currentPrompt = `
+                const currentPrompt = 
 T1.0 Fasse den Text nach folgenden Vorgaben zusammen.
 T1.1 - Schreibe wie ein Journalist
 T1.2 - Verwende einfache Sätze
@@ -153,11 +153,11 @@ T4.0 - Gebe die Rückmeldungen zu T1.0, T2.0 und T3.0 getrennt aus.
 T4.1 - Unterteile die Antworten mit Überschriften:
 T4.1.1 - "Textzusammenfassung" für T1.0
 T4.1.2 - "Stichworte" für T2.0
-T4.1.3 - "Überschriften" für T3.0`;
+T4.1.3 - "Überschriften" für T3.0;
 
                 // Hier wird das große, erweiterbare Textfeld im neuen Popup erstellt
                 const editorWindow = window.open("", "", "width=800,height=600");
-                editorWindow.document.write(`
+                editorWindow.document.write(
                     <html>
                     <head>
                         <title>Prompt bearbeiten</title>
@@ -175,7 +175,7 @@ T4.1.3 - "Überschriften" für T3.0`;
                         <textarea>${currentPrompt}</textarea>
                     </body>
                     </html>
-                `);
+                );
             } else {
                 alert("Falsches Kennwort!");
             }
