@@ -3,275 +3,294 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kombinierte Textarea mit Buttons</title>
+    <title>Textvorschau</title>
     <style>
         body {
-            font-family: Verdana, sans-serif;
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-            flex-direction: column;
-            min-height: 120vh; /* Erhöht die Höhe des Body für mehr Platz */
-            margin: 0;
-            padding-top: 40px; /* Platz über dem Header */
-            padding-bottom: 120px; /* Mehr Platz unter dem Slider */
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f0f0f0;
         }
-
-        header, footer {
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        label {
+            font-weight: bold;
+        }
+        textarea {
             width: 100%;
-            height: 5px;
-            background-color: black;
+            height: 150px;
             margin-bottom: 20px;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
         }
-
-        .textarea-container-1 {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-bottom: 20px;
+        .output {
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
         }
-
-        .char-counter {
-            font-family: Verdana, sans-serif;
+        .output-section {
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            color: white;
+            position: relative;
+        }
+        .output-section h2 {
+            font-size: 18px;
+            margin-top: 0;
+        }
+        .counter {
+            font-size: 12px;
+            color: white;
+            text-align: right;
             margin-bottom: 10px;
         }
-
-        .textarea-1 {
-            width: 600px;
-            height: 400px;
-            border: 1px solid black;
-            font-family: Verdana, sans-serif;
-            resize: none;
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .buttons button {
+            flex-grow: 1;
+            margin-right: 5px;
             padding: 10px;
-            box-sizing: border-box;
-            overflow: auto;
-            word-wrap: break-word;
-        }
-
-        .textarea-1::placeholder {
-            color: rgba(0, 0, 0, 0.4); /* 40% Transparenz */
-        }
-
-        .textarea-1:focus::placeholder {
-            color: transparent;
-        }
-
-        .button-container-1 {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .button-1 {
-            width: 250px;
-            height: 30px;
-            font-size: 12px;
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.5s;
         }
-
-        .button-container-lower {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 10px;
+        .buttons button:last-child {
+            margin-right: 0;
         }
-
-        .button-2 {
-            width: 300px;
-            height: 30px;
-            margin: 10px;
-            font-size: 12px;
+        .buttons button:hover {
+            background-color: #555;
+        }
+        .copy-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 5px 10px;
             cursor: pointer;
-            transition: background-color 0.5s;
+            border-radius: 5px;
         }
-
-        .textarea-container-2 {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.5s ease-in-out;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
+        .copy-button:hover {
+            background-color: #0056b3;
+        }
+        /* Hintergrundfarben mit unterschiedlichen Transparenzen */
+        .title-section {
+            background-color: rgba(33, 33, 33, 0.7);
+        }
+        .summary-section {
+            background-color: rgba(33, 33, 33, 0.3);
+        }
+        .keywords-section {
+            background-color: rgba(33, 33, 33, 0.2);
+        }
+        /* Rot für Überschreitung des Zeichenlimits */
+        .warning {
+            background-color: rgba(255, 0, 0, 0.5);
+        }
+        /* Neuer Button unter den Textfeldern */
+        .open-new-tab-button {
             width: 100%;
-            margin-top: 10px; /* 10px Abstand zu den Buttons */
-        }
-
-        .textarea-2 {
-            width: 600px;
-            height: 400px;
-            border: 1px solid black;
-            font-family: Verdana, sans-serif;
-            resize: none;
             padding: 10px;
-            box-sizing: border-box;
-            overflow: auto;
-            word-wrap: break-word;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
         }
-
-        .save-button-container {
-            display: none; /* Button versteckt */
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            margin-top: 20px;
+        .open-new-tab-button:hover {
+            background-color: #218838;
         }
     </style>
 </head>
 <body>
 
-<!-- Header-Trennlinie -->
-<header></header>
+<div class="container">
+    <label for="inputText">Geben Sie hier Ihren Text ein:</label>
+    <textarea id="inputText" placeholder="Text eingeben oder einfügen..."></textarea>
+    <div class="counter" id="inputCounter">0 Zeichen</div>
 
-<!-- Textarea und Buttons aus Code 1 -->
-<div class="textarea-container-1">
-    <div class="char-counter" id="charCounter">Zeichen: 0</div>
-    <textarea class="textarea-1" id="textarea1" placeholder="Bitte hier alle Textquellen hineinkopieren"></textarea>
+    <div class="buttons">
+        <button id="button1">Überschrift 1</button>
+        <button id="button2">Überschrift 2</button>
+        <button id="button3">Überschrift 3</button>
+    </div>
+
+    <div class="output">
+        <div class="output-section title-section" id="titleSection">
+            <h2>Überschrift</h2>
+            <p id="outputTitle">[Ihre Überschrift erscheint hier]</p>
+            <button class="copy-button" onclick="copyToClipboard('outputTitle')">In die Zwischenablage kopieren</button>
+            <div class="counter" id="outputTitleCounter">0 Zeichen</div>
+        </div>
+
+        <div class="output-section summary-section" id="summarySection">
+            <h2>Textzusammenfassung</h2>
+            <p id="outputSummary">[Ihre Textzusammenfassung erscheint hier]</p>
+            <button class="copy-button" onclick="copyToClipboard('outputSummary')">In die Zwischenablage kopieren</button>
+            <div class="counter" id="outputSummaryCounter">0 Zeichen</div>
+        </div>
+
+        <div class="output-section keywords-section" id="keywordsSection">
+            <h2>Stichworte</h2>
+            <p id="outputKeywords">[Ihre Stichworte erscheinen hier]</p>
+            <button class="copy-button" onclick="copyToClipboard('outputKeywords')">In die Zwischenablage kopieren</button>
+            <div class="counter" id="outputKeywordsCounter">0 Zeichen</div>
+        </div>
+
+        <!-- Neuer Button: Text im neuen Tab öffnen -->
+        <button class="open-new-tab-button" onclick="openNewTab()">Text im neuen Tab öffnen</button>
+    </div>
 </div>
-
-<!-- Button "Text mit Prompt kopieren" und "Textfeld leeren" nebeneinander -->
-<div class="button-container-1">
-    <button id="copyButton" class="button-1">Text mit Prompt kopieren</button>
-    <button id="clearButton" class="button-1">Textfeld leeren</button>
-</div>
-
-<!-- Button "Prompt-Text editieren" unterhalb -->
-<div class="button-container-lower">
-    <button id="editButton" class="button-2">Prompt-Text editieren</button>
-</div>
-
-<!-- Textarea im Slider -->
-<div class="textarea-container-2" id="textareaContainer">
-    <textarea id="textarea" class="textarea-2"></textarea>
-</div>
-
-<!-- Speicher-Button unter der Slider-Textarea -->
-<div class="save-button-container" id="saveButtonContainer">
-    <button id="saveButton" class="button-2">Neuen Prompt-Text speichern</button>
-</div>
-
-<!-- Footer-Trennlinie -->
-<footer></footer>
 
 <script>
-    // Default Prompt-Text festlegen
-    const defaultPromptText = `T1.0 Fasse den Text nach folgenden Vorgaben zusammen.\n
-T1.1 - Schreibe wie ein Journalist\n
-T1.2 - Verwende einfache Sätze\n
-T1.3 - Verwende maximal 120 Zeichen.\n
-T1.4 - Korrigiere den Text anhand der Regeln für die deutsche Grammatik.\n
-T2.0 - Erstelle eine Liste mit maximal 15 Stichwörtern.\n
-T2.1 - Die Stichwörter sollen durch Kommas getrennt werden.\n
-T2.2 - Stichwörter sollen passende Themen sein, die sich aus dem Inhalt des Textes ergeben.\n
-T2.3 - Die Stichwörter sollen SEO-optimiert sein.\n
-T3.0 - Erstelle drei Überschriften.\n
-T3.1 - Die Überschriften sollen eine maximale Länge von 60 Zeichen haben.\n
-T3.2 - Die Überschriften sollen die Kernpunkte des Textes aus dem Textfeld beinhalten.\n
-T3.3 - Die Überschriften sollen zum Weiterlesen animieren.\n
-T4.0 - Gebe die Rückmeldungen zu T1.0, T2.0 und T3.0 getrennt aus.\n
-T4.1 - Unterteile die Antworten mit Überschriften:\n
-T4.1.1 - "Textzusammenfassung" für T1.0\n
-T4.1.2 - "Stichworte" für T2.0\n
-T4.1.3 - "Überschriften" für T3.0`;
+    const inputText = document.getElementById('inputText');
+    const inputCounter = document.getElementById('inputCounter');
+    const outputTitle = document.getElementById('outputTitle');
+    const outputTitleCounter = document.getElementById('outputTitleCounter');
+    const outputSummary = document.getElementById('outputSummary');
+    const outputSummaryCounter = document.getElementById('outputSummaryCounter');
+    const outputKeywords = document.getElementById('outputKeywords');
+    const outputKeywordsCounter = document.getElementById('outputKeywordsCounter');
 
-    let promptText = defaultPromptText; // Standard-Text für den Slider
+    const titleSection = document.getElementById('titleSection');
+    const summarySection = document.getElementById('summarySection');
+    const keywordsSection = document.getElementById('keywordsSection');
 
-    // Zeichen-Zähler ohne maximale Anzahl an Zeichen
-    const textarea1 = document.getElementById('textarea1');
-    const charCounter = document.getElementById('charCounter');
+    const button1 = document.getElementById('button1');
+    const button2 = document.getElementById('button2');
+    const button3 = document.getElementById('button3');
 
-    textarea1.addEventListener('input', function() {
-        const textLength = textarea1.value.length;
-        charCounter.textContent = `Zeichen: ${textLength}`;
-    });
+    let titleList = ["", "", ""];
 
-    // Funktion für den "Text mit Prompt kopieren" Button
-    document.getElementById("copyButton").addEventListener("click", function() {
-        const button = this;
-        const textareaContent = document.getElementById("textarea1").value;
-        const sliderText = document.getElementById("textarea").value || promptText; // Slider-Text oder Default-Prompt
-        const combinedText = `${textareaContent}\n\nPrompt-Text:\n${sliderText}`;
-
-        navigator.clipboard.writeText(combinedText).then(() => {
-            button.style.backgroundColor = "#228b22"; // Farbe auf #228b22 ändern
-            setTimeout(function() {
-                button.style.backgroundColor = ""; // Nach 0,25 Sekunden zurücksetzen
-            }, 250);
-        });
-    });
-
-    // Funktion für den "Textfeld leeren" Button mit Farbgebung
-    document.getElementById("clearButton").addEventListener("click", function() {
-        const textarea1 = document.getElementById("textarea1");
-        textarea1.value = "";
-        charCounter.textContent = `Zeichen: 0`;
-
-        const button = this;
-        button.style.backgroundColor = "#FF0000"; // Farbe auf Rot ändern
-        setTimeout(function() {
-            button.style.backgroundColor = ""; // Nach 0.25 Sekunden zurücksetzen
-        }, 250);
-    });
-
-    // Funktion für den "Prompt-Text editieren" Button mit Passwortabfrage und Slider
-    document.getElementById("editButton").addEventListener("click", function() {
-        const button = this;
-        button.style.backgroundColor = "#FF0000"; // Farbe auf #FF0000 ändern
-        setTimeout(function() {
-            button.style.backgroundColor = ""; // Nach 0.25 Sekunden zurücksetzen
-        }, 250);
-
-        // Kennwort-Popup
-        let password = prompt("Bitte geben Sie das Kennwort ein:");
-        if (password === "admin") {
-            alert("Kennwort korrekt. Sie können den Prompt-Text nun bearbeiten.");
-            
-            // Textarea einblenden (Slider-Effekt)
-            const textareaContainer = document.getElementById("textareaContainer");
-            textareaContainer.style.maxHeight = "500px"; // Die Höhe für das Einblenden festlegen
-
-            // Editierbarer Text in der Textarea
-            const textarea = document.getElementById("textarea");
-            textarea.value = promptText; // Den gespeicherten Prompt-Text anzeigen
-
-            // "Neuen Prompt-Text speichern" Button anzeigen
-            const saveButtonContainer = document.getElementById("saveButtonContainer");
-            saveButtonContainer.style.display = "flex";
+    // Funktion zum Zählen der Zeichen und zur Anpassung des Hintergrunds bei Überschreitung des Limits
+    function updateCounter(textElement, counterElement, sectionElement, limit) {
+        const textLength = textElement.textContent.length;
+        counterElement.textContent = textLength + " Zeichen";
+        
+        if (textLength > limit) {
+            sectionElement.classList.add('warning');
         } else {
-            alert("Falsches Kennwort!");
+            sectionElement.classList.remove('warning');
         }
-    });
+    }
 
-    // Funktion für den "Neuen Prompt-Text speichern" Button
-    document.getElementById("saveButton").addEventListener("click", function() {
-        const button = this;
-        const originalColor = button.style.backgroundColor; // Ursprüngliche Farbe speichern
-        button.style.backgroundColor = "#228b22"; // Farbe auf #228b22 ändern
-        setTimeout(function() {
-            button.style.backgroundColor = originalColor; // Nach 2 Sekunden in den ursprünglichen Zustand zurückkehren
-        }, 500);
+    // Funktion zur Aufteilung des Textes in Überschriften, Zusammenfassung und Stichworte
+    function processText(text) {
+        const summaryRegex = /###\s*Textzusammenfassung\s*([\s\S]*?)\n###/;
+        const keywordsRegex = /###\s*Stichworte\s*([\s\S]*?)\n###/;
+        const titleRegex = /###\s*Überschriften\s*([\s\S]*)/;
 
-        // Slider-Text speichern, oder Standard-Prompt-Text, falls der Slider-Text leer ist
-        const textarea = document.getElementById("textarea");
-        if (textarea.value.trim() === "") {
-            promptText = defaultPromptText; // Falls leer, Standard-Text speichern
-            alert("Das Textfeld war leer. Der Standard-Prompt-Text wurde gespeichert.");
+        const summaryMatch = text.match(summaryRegex);
+        const keywordsMatch = text.match(keywordsRegex);
+        const titleMatch = text.match(titleRegex);
+
+        if (summaryMatch) {
+            const summaryText = summaryMatch[1].trim();
+            outputSummary.textContent = summaryText;
         } else {
-            promptText = textarea.value; // Ansonsten den eingegebenen Text speichern
-            alert("Neuer Prompt-Text wurde gespeichert: " + promptText);
+            outputSummary.textContent = ''; // Leeren, wenn kein Text vorhanden
         }
 
-        // Slider zuklappen (Textarea ausblenden)
-        const textareaContainer = document.getElementById("textareaContainer");
-        textareaContainer.style.maxHeight = "0"; // Textarea wieder zuklappen
+        if (keywordsMatch) {
+            const keywordsText = keywordsMatch[1].trim();
+            outputKeywords.textContent = keywordsText;
+        } else {
+            outputKeywords.textContent = ''; // Leeren, wenn kein Text vorhanden
+        }
 
-        // "Neuen Prompt-Text speichern" Button ausblenden
-        const saveButtonContainer = document.getElementById("saveButtonContainer");
-        saveButtonContainer.style.display = "none";
+        if (titleMatch) {
+            const titles = titleMatch[1].split('\n').filter(line => line.trim() !== '').map(title => title.replace(/^\d+\.\s*/, ''));
+            titleList[0] = titles[0] || '';
+            titleList[1] = titles[1] || '';
+            titleList[2] = titles[2] || '';
+            outputTitle.textContent = titleList[0]; // Standard erste Überschrift anzeigen
+        } else {
+            outputTitle.textContent = ''; // Leeren, wenn kein Text vorhanden
+        }
+
+        // Zähler aktualisieren und Hintergrundfarbe anpassen
+        updateCounter(outputTitle, outputTitleCounter, titleSection, 60);
+        updateCounter(outputSummary, outputSummaryCounter, summarySection, 120);
+        updateCounter(outputKeywords, outputKeywordsCounter, keywordsSection, 200);
+    }
+
+    // Sofortige Textänderung und Aufteilung bei Texteingabe oder Einfügen
+    inputText.addEventListener('input', function() {
+        const text = inputText.value;
+
+        // Aufteilung und Zuweisung der Inhalte
+        processText(text);
+
+        // Zähler für das Eingabefeld aktualisieren
+        inputCounter.textContent = text.length + " Zeichen";
     });
 
+    // Überschrift Buttons
+    button1.addEventListener('click', function() {
+        outputTitle.textContent = titleList[0];
+        updateCounter(outputTitle, outputTitleCounter, titleSection, 60);
+    });
+
+    button2.addEventListener('click', function() {
+        outputTitle.textContent = titleList[1];
+        updateCounter(outputTitle, outputTitleCounter, titleSection, 60);
+    });
+
+    button3.addEventListener('click', function() {
+        outputTitle.textContent = titleList[2];
+        updateCounter(outputTitle, outputTitleCounter, titleSection, 60);
+    });
+
+    // Funktion zum Kopieren des Textes in die Zwischenablage
+    function copyToClipboard(elementId) {
+        const textToCopy = document.getElementById(elementId).textContent;
+        const tempTextArea = document.createElement('textarea');
+        tempTextArea.value = textToCopy;
+        document.body.appendChild(tempTextArea);
+        tempTextArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(tempTextArea);
+        alert("Text in die Zwischenablage kopiert: " + textToCopy);
+    }
+
+    // Funktion zum Öffnen eines neuen Tabs und Ausgabe der Texte aus den Bereichen
+    function openNewTab() {
+        const newTabTitle = outputTitle.textContent || "Neuer Tab"; // Tab-Titel basierend auf Überschrift
+        const newTab = window.open("", "_blank", "width=600,height=400");
+        const combinedText = `Überschrift:\n${outputTitle.textContent}\n\nTextzusammenfassung:\n${outputSummary.textContent}\n\nStichworte:\n${outputKeywords.textContent}`;
+        
+        newTab.document.write(`
+            <html>
+            <head>
+                <title>${newTabTitle}</title>
+                <style>
+                    textarea {
+                        width: 100%;
+                        height: 100%;
+                        padding: 10px;
+                        font-size: 14px;
+                    }
+                </style>
+            </head>
+            <body>
+                <textarea readonly>${combinedText}</textarea>
+            </body>
+            </html>
+        `);
+        newTab.document.close();
+    }
 </script>
 
 </body>
