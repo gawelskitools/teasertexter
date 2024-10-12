@@ -190,7 +190,7 @@
         }
 
         if (titleMatch) {
-            const titles = titleMatch[1].split('\n').filter(line => line.trim() !== '');
+            const titles = titleMatch[1].split('\n').filter(line => line.trim() !== '').map(title => title.replace(/^\d+\.\s*/, ''));
             titleList[0] = titles[0] || '';
             titleList[1] = titles[1] || '';
             titleList[2] = titles[2] || '';
