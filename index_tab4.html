@@ -42,6 +42,12 @@
             font-size: 18px;
             margin-top: 0;
         }
+        .counter {
+            font-size: 12px;
+            color: #666;
+            text-align: right;
+            margin-bottom: 10px;
+        }
         .buttons {
             display: flex;
             justify-content: space-between;
@@ -79,7 +85,8 @@
 
 <div class="container">
     <label for="inputText">Geben Sie hier Ihren Text ein:</label>
-    <textarea id="inputText" placeholder="Text eingeben..."></textarea>
+    <textarea id="inputText" placeholder="Text eingeben oder einfügen..."></textarea>
+    <div class="counter" id="inputCounter">0 Zeichen</div>
 
     <div class="buttons">
         <button id="button1">Überschrift 1</button>
@@ -91,52 +98,102 @@
         <div class="output-section title-section">
             <h2>Überschrift</h2>
             <p id="outputTitle">[Ihre Überschrift erscheint hier]</p>
+            <div class="counter" id="outputTitleCounter">0 Zeichen</div>
         </div>
 
         <div class="output-section summary-section">
             <h2>Textzusammenfassung</h2>
             <p id="outputSummary">[Ihre Textzusammenfassung erscheint hier]</p>
+            <div class="counter" id="outputSummaryCounter">0 Zeichen</div>
         </div>
 
         <div class="output-section keywords-section">
             <h2>Stichworte</h2>
             <p id="outputKeywords">[Ihre Stichworte erscheinen hier]</p>
+            <div class="counter" id="outputKeywordsCounter">0 Zeichen</div>
         </div>
     </div>
 </div>
 
 <script>
     const inputText = document.getElementById('inputText');
+    const inputCounter = document.getElementById('inputCounter');
     const outputTitle = document.getElementById('outputTitle');
+    const outputTitleCounter = document.getElementById('outputTitleCounter');
     const outputSummary = document.getElementById('outputSummary');
+    const outputSummaryCounter = document.getElementById('outputSummaryCounter');
     const outputKeywords = document.getElementById('outputKeywords');
-    
+    const outputKeywordsCounter = document.getElementById('outputKeywordsCounter');
+
     const button1 = document.getElementById('button1');
     const button2 = document.getElementById('button2');
     const button3 = document.getElementById('button3');
 
+    let titleList = ["", "", ""];
+
+    // Funktion zum Zählen der Zeichen
+    function updateCounter(textElement, counterElement) {
+        const textLength = textElement.textContent.length;
+        counterElement.textContent = textLength + " Zeichen";
+    }
+
+    // Funktion zur Aufteilung des Textes in Überschriften, Zusammenfassung und Stichworte
+    function processText(text) {
+        const lines = text.split('###');
+        let titleText = '';
+        let summaryText = '';
+        let keywordsText = '';
+
+        // Abschnitte analysieren
+        lines.forEach(section => {
+            if (section.startsWith('Überschrift')) {
+                const titles = section.split('\n').filter(line => line.trim() !== '');
+                titleList[0] = titles[1] || '';
+                titleList[1] = titles[2] || '';
+                titleList[2] = titles[3] || '';
+                outputTitle.textContent = titleList[0]; // Standard erste Überschrift anzeigen
+            }
+            if (section.startsWith('Textzusammenfassung')) {
+                summaryText = section.replace('Textzusammenfassung', '').trim();
+                outputSummary.textContent = summaryText;
+            }
+            if (section.startsWith('Stichworte')) {
+                keywordsText = section.replace('Stichworte', '').trim();
+                outputKeywords.textContent = keywordsText;
+            }
+        });
+
+        // Zähler aktualisieren
+        updateCounter(outputTitle, outputTitleCounter);
+        updateCounter(outputSummary, outputSummaryCounter);
+        updateCounter(outputKeywords, outputKeywordsCounter);
+    }
+
+    // Sofortige Textänderung und Aufteilung bei Texteingabe oder Einfügen
     inputText.addEventListener('input', function() {
         const text = inputText.value;
 
-        // Beispieltexte einfügen (diese können durch Analyse des Textes ersetzt werden)
-        outputSummary.textContent = "Der Öltanker 'Annika' geriet vor der Küste Mecklenburg-Vorpommerns in Brand und wurde sicher nach Rostock geschleppt.";
-        
-        const keywords = ["Öltanker", "Brand", "Rostock", "Mecklenburg-Vorpommern", "Schweröl", "Verpuffung", "Kühlungsborn", "Heiligendamm", "Schleppverband", "Überseehafen", "Feuerwehr", "Notschlepper", "Wasserschutzpolizei", "Umweltverschmutzung", "Bergungsfirma"];
-        
-        outputKeywords.textContent = keywords.join(", ");
+        // Aufteilung und Zuweisung der Inhalte
+        processText(text);
+
+        // Zähler für das Eingabefeld aktualisieren
+        inputCounter.textContent = text.length + " Zeichen";
     });
 
     // Überschrift Buttons
     button1.addEventListener('click', function() {
-        outputTitle.textContent = "Öltankerbrand vor Rostock gelöscht: Ursache bleibt unklar";
+        outputTitle.textContent = titleList[0];
+        updateCounter(outputTitle, outputTitleCounter);
     });
 
     button2.addEventListener('click', function() {
-        outputTitle.textContent = "Schweröl-Tanker „Annika“ nach Brand sicher im Hafen";
+        outputTitle.textContent = titleList[1];
+        updateCounter(outputTitle, outputTitleCounter);
     });
 
     button3.addEventListener('click', function() {
-        outputTitle.textContent = "Schleppverband rettet brennenden Tanker in Rostock";
+        outputTitle.textContent = titleList[2];
+        updateCounter(outputTitle, outputTitleCounter);
     });
 </script>
 
