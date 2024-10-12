@@ -139,21 +139,13 @@
 
     // Funktion zur Aufteilung des Textes in Überschriften, Zusammenfassung und Stichworte
     function processText(text) {
-        const titleRegex = /###Überschrift\s([\s\S]*?)###/;
-        const summaryRegex = /###Textzusammenfassung\s([\s\S]*?)###/;
-        const keywordsRegex = /###Stichworte\s([\s\S]*)/;
+        const summaryRegex = /###\s*Textzusammenfassung\s*([\s\S]*?)\n###/;
+        const keywordsRegex = /###\s*Stichworte\s*([\s\S]*?)\n###/;
+        const titleRegex = /###\s*Überschriften\s*([\s\S]*)/;
 
-        const titleMatch = text.match(titleRegex);
         const summaryMatch = text.match(summaryRegex);
         const keywordsMatch = text.match(keywordsRegex);
-
-        if (titleMatch) {
-            const titles = titleMatch[1].split('\n').filter(line => line.trim() !== '');
-            titleList[0] = titles[0] || '';
-            titleList[1] = titles[1] || '';
-            titleList[2] = titles[2] || '';
-            outputTitle.textContent = titleList[0]; // Standard erste Überschrift anzeigen
-        }
+        const titleMatch = text.match(titleRegex);
 
         if (summaryMatch) {
             const summaryText = summaryMatch[1].trim();
@@ -163,6 +155,14 @@
         if (keywordsMatch) {
             const keywordsText = keywordsMatch[1].trim();
             outputKeywords.textContent = keywordsText;
+        }
+
+        if (titleMatch) {
+            const titles = titleMatch[1].split('\n').filter(line => line.trim() !== '');
+            titleList[0] = titles[0] || '';
+            titleList[1] = titles[1] || '';
+            titleList[2] = titles[2] || '';
+            outputTitle.textContent = titleList[0]; // Standard erste Überschrift anzeigen
         }
 
         // Zähler aktualisieren
