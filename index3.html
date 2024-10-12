@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Textfeld und Prompt</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        textarea {
+            width: 80%;
+            height: 200px;
+            margin: 10px 0;
+        }
+        .button-group {
+            margin: 20px 0;
+        }
+        button {
+            margin: 0 10px;
+        }
+        .output {
+            text-align: left;
+            margin: 20px auto;
+            width: 80%;
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+        .output h3 {
+            text-align: left;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .preview-section {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 80%;
+            margin: 20px auto;
+        }
+        .preview-box {
+            width: 100%;
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+            margin-bottom: 10px;
+            position: relative;
+        }
+        .copy-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Textfeld 1.0 - Quelltext -->
+    <h1 id="quelltext-title">Quelltext</h1>
+    <button onclick="editTitle('quelltext-title')">...</button>
+    <textarea id="quelltext" placeholder="Geben Sie hier Ihren Text ein..."></textarea>
+
+    <div class="button-group">
+        <!-- Button 1 - In die Zwischenablage kopieren -->
+        <button onclick="copyToClipboard()">In die Zwischenablage kopieren</button>
+
+        <!-- Button 2 - Zum Bearbeiten des Promptbefehls -->
+        <button onclick="promptPassword()">...</button>
+    </div>
+
+    <!-- Textfeld 1.4 - Chat GPT Rückgabe -->
+    <h1 id="response-title">Chat-GPT-Rückgabe</h1>
+    <button onclick="editTitle('response-title')">...</button>
+    <textarea id="chat-response" placeholder="Hier wird die Rückgabe von Chat GPT angezeigt und kann bearbeitet werden..."></textarea>
+
+    <!-- Vorschaufenster für die Textausgabe -->
+    <h1>Vorschaufenster</h1>
+
+    <div class="preview-section" id="preview-headlines">
+        <!-- Drei Vorschaufenster für die Überschriften -->
+        <div class="preview-box">
+            <h4>Überschrift 1</h4>
+            <div id="headline1"></div>
+            <button class="copy-button" onclick="copyToClipboard('headline1')">In die Zwischenablage kopieren</button>
+        </div>
+        <div class="preview-box">
+            <h4>Überschrift 2</h4>
+            <div id="headline2"></div>
+            <button class="copy-button" onclick="copyToClipboard('headline2')">In die Zwischenablage kopieren</button>
+        </div>
+        <div class="preview-box">
+            <h4>Überschrift 3</h4>
+            <div id="headline3"></div>
+            <button class="copy-button" onclick="copyToClipboard('headline3')">In die Zwischenablage kopieren</button>
+        </div>
+    </div>
+
+    <div class="preview-section">
+        <!-- Vorschaufenster für die Textzusammenfassung -->
+        <div class="preview-box">
+            <h4>Textzusammenfassung</h4>
+            <div id="preview-summary"></div>
+            <button class="copy-button" onclick="copyToClipboard('preview-summary')">In die Zwischenablage kopieren</button>
+        </div>
+        <!-- Vorschaufenster für die Stichworte -->
+        <div class="preview-box">
+            <h4>Stichworte</h4>
+            <div id="preview-keywords"></div>
+            <button class="copy-button" onclick="copyToClipboard('preview-keywords')">In die Zwischenablage kopieren</button>
+        </div>
+    </div>
+
+    <script>
+        // Funktion zum Kopieren des Texts aus den Vorschaufenstern in die Zwischenablage
+        function copyToClipboard(elementId) {
+            const text = document.getElementById(elementId).textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                alert("Text wurde in die Zwischenablage kopiert.");
+            }, () => {
+                alert("Fehler beim Kopieren in die Zwischenablage.");
+            });
+        }
+
+        // Funktion zum Bearbeiten der Überschrift
+        function editTitle(titleId) {
+            const newTitle = prompt("Geben Sie den neuen Titel ein:");
+            if (newTitle) {
+                document.getElementById(titleId).textContent = newTitle;
+            }
+        }
+
+        // Funktion zum Passwortschutz für die Promptbearbeitung
+        function promptPassword() {
+            const password = prompt("Bitte geben Sie das Kennwort ein:");
+            if (password === "admin") {
+                const currentPrompt = 
+T1.0 Fasse den Text nach folgenden Vorgaben zusammen.
+T1.1 - Schreibe wie ein Journalist
+T1.2 - Verwende einfache Sätze
+T1.3 - Verwende maximal 120 Zeichen.
+T1.4 - Korrigiere den Text anhand der Regeln für die deutsche Grammatik.
+T2.0 - Erstelle eine Liste mit maximal 15 Stichwörtern.
+T2.1 - Die Stichwörter sollen durch Kommas getrennt werden.
+T2.2 - Stichwörter sollen passende Themen sein, die sich aus dem Inhalt des Textes ergeben.
+T2.3 - Die Stichwörter sollen SEO-optimiert sein.
+T3.0 - Erstelle drei Überschriften.
+T3.1 - Die Überschriften sollen eine maximale Länge von 60 Zeichen haben.
+T3.2 - Die Überschriften sollen die Kernpunkte des Textes aus dem Textfeld beinhalten.
+T3.3 - Die Überschriften sollen zum Weiterlesen animieren.
+T4.0 - Gebe die Rückmeldungen zu T1.0, T2.0 und T3.0 getrennt aus.
+T4.1 - Unterteile die Antworten mit Überschriften:
+T4.1.1 - "Textzusammenfassung" für T1.0
+T4.1.2 - "Stichworte" für T2.0
+T4.1.3 - "Überschriften" für T3.0;
+
+                // Hier wird das große, erweiterbare Textfeld im neuen Popup erstellt
+                const editorWindow = window.open("", "", "width=800,height=600");
+                editorWindow.document.write(
+                    <html>
+                    <head>
+                        <title>Prompt bearbeiten</title>
+                        <style>
+                            textarea {
+                                width: 100%;
+                                height: 90%;
+                                font-family: Arial, sans-serif;
+                                font-size: 14px;
+                                resize: both;
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <textarea>${currentPrompt}</textarea>
+                    </body>
+                    </html>
+                );
+            } else {
+                alert("Falsches Kennwort!");
+            }
+        }
+
+        // Funktion zum Anzeigen der Vorschau
+        function displayPreview() {
+            const responseText = document.getElementById('chat-response').value;
+
+            // Extrahieren der Textabschnitte anhand der festgelegten Überschriften
+            const headlineMatch = responseText.match(/### Überschriften([^#]*)/);
+            const summaryMatch = responseText.match(/### Textzusammenfassung([^#]*)/);
+            const keywordsMatch = responseText.match(/### Stichworte([^#]*)/);
+
+            if (headlineMatch) {
+                const headlines = formatHeadlines(headlineMatch[1].trim());
+                document.getElementById('headline1').textContent = headlines[0] || '';
+                document.getElementById('headline2').textContent = headlines[1] || '';
+                document.getElementById('headline3').textContent = headlines[2] || '';
+            }
+
+            if (summaryMatch) {
+                document.getElementById('preview-summary').textContent = summaryMatch[1].trim();
+            }
+
+            if (keywordsMatch) {
+                document.getElementById('preview-keywords').textContent = keywordsMatch[1].trim();
+            }
+        }
+
+        // Funktion zum Formatieren der Überschriften, entfernt die "**"-Zeichen und nummeriert die Überschriften nicht
+        function formatHeadlines(text) {
+            return text
+                .split('\n')
+                .map(line => line.replace(/^\d+\.\s*/, "").replace(/\*\*/g, "").trim()) // Entfernt die Nummerierung und "**"
+                .filter(line => line); // Entfernt leere Zeilen
+        }
+
+        // Immer wenn der Text im Textfeld geändert wird, soll die Vorschau aktualisiert werden
+        document.getElementById('chat-response').addEventListener('input', displayPreview);
+    </script>
+
+</body>
+</html>
