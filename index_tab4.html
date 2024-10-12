@@ -3,119 +3,142 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tab Navigation Beispiel</title>
+    <title>Textvorschau</title>
     <style>
-        html, body {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            font-family: Arial, sans-serif;
-        }
-
         body {
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f0f0f0;
         }
-
-        h1 {
-            margin: 0;
-            padding: 20px;
-            background-color: #f1f1f1;
-            text-align: center;
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
         }
-
-        .tabs {
-            display: flex;
-            cursor: pointer;
-            background-color: #f1f1f1;
-            padding: 10px;
-            justify-content: center;
-            margin-bottom: 0;
-        }
-
-        .tab {
-            padding: 10px 20px;
-            background-color: #f1f1f1;
-            border: 1px solid #ccc;
-            border-bottom: none;
-            transition: background-color 0.3s ease;
-        }
-
-        .tab:hover {
-            background-color: #ddd;
-        }
-
-        .tab.active {
-            background-color: white;
+        label {
             font-weight: bold;
-            border-bottom: 1px solid white;
         }
-
-        .tab-content {
-            flex: 1;
-            border: 1px solid #ccc;
-            display: none;
-            height: 100%;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        iframe {
+        textarea {
             width: 100%;
-            height: 100vh;
+            height: 150px;
+            margin-bottom: 20px;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .output {
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .output-section {
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            color: white;
+        }
+        .output-section h2 {
+            font-size: 18px;
+            margin-top: 0;
+        }
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .buttons button {
+            flex-grow: 1;
+            margin-right: 5px;
+            padding: 10px;
+            background-color: #333;
+            color: white;
             border: none;
-            display: block;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .buttons button:last-child {
+            margin-right: 0;
+        }
+        .buttons button:hover {
+            background-color: #555;
+        }
+        /* Hintergrundfarben mit unterschiedlichen Transparenzen */
+        .title-section {
+            background-color: rgba(33, 33, 33, 0.7);
+        }
+        .summary-section {
+            background-color: rgba(33, 33, 33, 0.3);
+        }
+        .keywords-section {
+            background-color: rgba(33, 33, 33, 0.2);
         }
     </style>
 </head>
 <body>
 
-    <h1>Meine Tabs Ansicht</h1>
+<div class="container">
+    <label for="inputText">Geben Sie hier Ihren Text ein:</label>
+    <textarea id="inputText" placeholder="Text eingeben..."></textarea>
 
-    <div class="tabs">
-        <div class="tab active" onclick="openTab(event, 'tab1')">Tab 1</div>
-        <div class="tab" onclick="openTab(event, 'tab2')">Tab 2</div>
-        <div class="tab" onclick="openTab(event, 'tab3')">Tab 3</div>
-        <div class="tab" onclick="openTab(event, 'tab4')">Tab 4</div>
+    <div class="buttons">
+        <button id="button1">Überschrift 1</button>
+        <button id="button2">Überschrift 2</button>
+        <button id="button3">Überschrift 3</button>
     </div>
 
-    <div id="tab1" class="tab-content active">
-        <iframe src="index_tab1.html" title="Tab 1 Inhalt"></iframe>
+    <div class="output">
+        <div class="output-section title-section">
+            <h2>Überschrift</h2>
+            <p id="outputTitle">[Ihre Überschrift erscheint hier]</p>
+        </div>
+
+        <div class="output-section summary-section">
+            <h2>Textzusammenfassung</h2>
+            <p id="outputSummary">[Ihre Textzusammenfassung erscheint hier]</p>
+        </div>
+
+        <div class="output-section keywords-section">
+            <h2>Stichworte</h2>
+            <p id="outputKeywords">[Ihre Stichworte erscheinen hier]</p>
+        </div>
     </div>
+</div>
 
-    <div id="tab2" class="tab-content">
-        <iframe src="index_tab2.html" title="Tab 2 Inhalt"></iframe>
-    </div>
+<script>
+    const inputText = document.getElementById('inputText');
+    const outputTitle = document.getElementById('outputTitle');
+    const outputSummary = document.getElementById('outputSummary');
+    const outputKeywords = document.getElementById('outputKeywords');
+    
+    const button1 = document.getElementById('button1');
+    const button2 = document.getElementById('button2');
+    const button3 = document.getElementById('button3');
 
-    <div id="tab3" class="tab-content">
-        <iframe src="index_tab3.html" title="Tab 3 Inhalt"></iframe>
-    </div>
+    inputText.addEventListener('input', function() {
+        const text = inputText.value;
 
-    <div id="tab4" class="tab-content">
-        <iframe src="index_tab4.html" title="Tab 4 Inhalt"></iframe>
-    </div>
+        // Beispieltexte einfügen (diese können durch Analyse des Textes ersetzt werden)
+        outputSummary.textContent = "Der Öltanker 'Annika' geriet vor der Küste Mecklenburg-Vorpommerns in Brand und wurde sicher nach Rostock geschleppt.";
+        
+        const keywords = ["Öltanker", "Brand", "Rostock", "Mecklenburg-Vorpommern", "Schweröl", "Verpuffung", "Kühlungsborn", "Heiligendamm", "Schleppverband", "Überseehafen", "Feuerwehr", "Notschlepper", "Wasserschutzpolizei", "Umweltverschmutzung", "Bergungsfirma"];
+        
+        outputKeywords.textContent = keywords.join(", ");
+    });
 
-    <script>
-        function openTab(event, tabId) {
-            // Alle Tabs und Inhalte deaktivieren
-            var tabs = document.getElementsByClassName("tab");
-            var contents = document.getElementsByClassName("tab-content");
+    // Überschrift Buttons
+    button1.addEventListener('click', function() {
+        outputTitle.textContent = "Öltankerbrand vor Rostock gelöscht: Ursache bleibt unklar";
+    });
 
-            for (var i = 0; i < tabs.length; i++) {
-                tabs[i].classList.remove("active");
-            }
-            for (var i = 0; i < contents.length; i++) {
-                contents[i].classList.remove("active");
-            }
+    button2.addEventListener('click', function() {
+        outputTitle.textContent = "Schweröl-Tanker „Annika“ nach Brand sicher im Hafen";
+    });
 
-            // Den angeklickten Tab und den zugehörigen Inhalt aktivieren
-            event.currentTarget.classList.add("active");
-            document.getElementById(tabId).classList.add("active");
-        }
-    </script>
+    button3.addEventListener('click', function() {
+        outputTitle.textContent = "Schleppverband rettet brennenden Tanker in Rostock";
+    });
+</script>
 
 </body>
 </html>
