@@ -37,6 +37,7 @@
             margin-bottom: 15px;
             border-radius: 5px;
             color: white;
+            position: relative;
         }
         .output-section h2 {
             font-size: 18px;
@@ -44,7 +45,7 @@
         }
         .counter {
             font-size: 12px;
-            color: #666;
+            color: white;
             text-align: right;
             margin-bottom: 10px;
         }
@@ -69,6 +70,20 @@
         .buttons button:hover {
             background-color: #555;
         }
+        .copy-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .copy-button:hover {
+            background-color: #0056b3;
+        }
         /* Hintergrundfarben mit unterschiedlichen Transparenzen */
         .title-section {
             background-color: rgba(33, 33, 33, 0.7);
@@ -78,6 +93,10 @@
         }
         .keywords-section {
             background-color: rgba(33, 33, 33, 0.2);
+        }
+        /* Rot für Überschreitung des Zeichenlimits */
+        .warning {
+            background-color: rgba(255, 0, 0, 0.5);
         }
     </style>
 </head>
@@ -95,21 +114,24 @@
     </div>
 
     <div class="output">
-        <div class="output-section title-section">
+        <div class="output-section title-section" id="titleSection">
             <h2>Überschrift</h2>
             <p id="outputTitle">[Ihre Überschrift erscheint hier]</p>
+            <button class="copy-button" onclick="copyToClipboard('outputTitle')">In die Zwischenablage kopieren</button>
             <div class="counter" id="outputTitleCounter">0 Zeichen</div>
         </div>
 
-        <div class="output-section summary-section">
+        <div class="output-section summary-section" id="summarySection">
             <h2>Textzusammenfassung</h2>
             <p id="outputSummary">[Ihre Textzusammenfassung erscheint hier]</p>
+            <button class="copy-button" onclick="copyToClipboard('outputSummary')">In die Zwischenablage kopieren</button>
             <div class="counter" id="outputSummaryCounter">0 Zeichen</div>
         </div>
 
-        <div class="output-section keywords-section">
+        <div class="output-section keywords-section" id="keywordsSection">
             <h2>Stichworte</h2>
             <p id="outputKeywords">[Ihre Stichworte erscheinen hier]</p>
+            <button class="copy-button" onclick="copyToClipboard('outputKeywords')">In die Zwischenablage kopieren</button>
             <div class="counter" id="outputKeywordsCounter">0 Zeichen</div>
         </div>
     </div>
@@ -125,16 +147,26 @@
     const outputKeywords = document.getElementById('outputKeywords');
     const outputKeywordsCounter = document.getElementById('outputKeywordsCounter');
 
+    const titleSection = document.getElementById('titleSection');
+    const summarySection = document.getElementById('summarySection');
+    const keywordsSection = document.getElementById('keywordsSection');
+
     const button1 = document.getElementById('button1');
     const button2 = document.getElementById('button2');
     const button3 = document.getElementById('button3');
 
     let titleList = ["", "", ""];
 
-    // Funktion zum Zählen der Zeichen
-    function updateCounter(textElement, counterElement) {
+    // Funktion zum Zählen der Zeichen und zur Anpassung des Hintergrunds bei Überschreitung des Limits
+    function updateCounter(textElement, counterElement, sectionElement, limit) {
         const textLength = textElement.textContent.length;
         counterElement.textContent = textLength + " Zeichen";
+        
+        if (textLength > limit) {
+            sectionElement.classList.add('warning');
+        } else {
+            sectionElement.classList.remove('warning');
+        }
     }
 
     // Funktion zur Aufteilung des Textes in Überschriften, Zusammenfassung und Stichworte
@@ -165,10 +197,10 @@
             outputTitle.textContent = titleList[0]; // Standard erste Überschrift anzeigen
         }
 
-        // Zähler aktualisieren
-        updateCounter(outputTitle, outputTitleCounter);
-        updateCounter(outputSummary, outputSummaryCounter);
-        updateCounter(outputKeywords, outputKeywordsCounter);
+        // Zähler aktualisieren und Hintergrundfarbe anpassen
+        updateCounter(outputTitle, outputTitleCounter, titleSection, 60);
+        updateCounter(outputSummary, outputSummaryCounter, summarySection, 120);
+        updateCounter(outputKeywords, outputKeywordsCounter, keywordsSection, 200);
     }
 
     // Sofortige Textänderung und Aufteilung bei Texteingabe oder Einfügen
@@ -185,18 +217,30 @@
     // Überschrift Buttons
     button1.addEventListener('click', function() {
         outputTitle.textContent = titleList[0];
-        updateCounter(outputTitle, outputTitleCounter);
+        updateCounter(outputTitle, outputTitleCounter, titleSection, 60);
     });
 
     button2.addEventListener('click', function() {
         outputTitle.textContent = titleList[1];
-        updateCounter(outputTitle, outputTitleCounter);
+        updateCounter(outputTitle, outputTitleCounter, titleSection, 60);
     });
 
     button3.addEventListener('click', function() {
         outputTitle.textContent = titleList[2];
-        updateCounter(outputTitle, outputTitleCounter);
+        updateCounter(outputTitle, outputTitleCounter, titleSection, 60);
     });
+
+    // Funktion zum Kopieren des Textes in die Zwischenablage
+    function copyToClipboard(elementId) {
+        const textToCopy = document.getElementById(elementId).textContent;
+        const tempTextArea = document.createElement('textarea');
+        tempTextArea.value = textToCopy;
+        document.body.appendChild(tempTextArea);
+        tempTextArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(tempTextArea);
+        alert("Text in die Zwischenablage kopiert: " + textToCopy);
+    }
 </script>
 
 </body>
