@@ -139,29 +139,31 @@
 
     // Funktion zur Aufteilung des Textes in Überschriften, Zusammenfassung und Stichworte
     function processText(text) {
-        const lines = text.split('###');
-        let titleText = '';
-        let summaryText = '';
-        let keywordsText = '';
+        const titleRegex = /###Überschrift\s([\s\S]*?)###/;
+        const summaryRegex = /###Textzusammenfassung\s([\s\S]*?)###/;
+        const keywordsRegex = /###Stichworte\s([\s\S]*)/;
 
-        // Abschnitte analysieren
-        lines.forEach(section => {
-            if (section.startsWith('Überschrift')) {
-                const titles = section.split('\n').filter(line => line.trim() !== '');
-                titleList[0] = titles[1] || '';
-                titleList[1] = titles[2] || '';
-                titleList[2] = titles[3] || '';
-                outputTitle.textContent = titleList[0]; // Standard erste Überschrift anzeigen
-            }
-            if (section.startsWith('Textzusammenfassung')) {
-                summaryText = section.replace('Textzusammenfassung', '').trim();
-                outputSummary.textContent = summaryText;
-            }
-            if (section.startsWith('Stichworte')) {
-                keywordsText = section.replace('Stichworte', '').trim();
-                outputKeywords.textContent = keywordsText;
-            }
-        });
+        const titleMatch = text.match(titleRegex);
+        const summaryMatch = text.match(summaryRegex);
+        const keywordsMatch = text.match(keywordsRegex);
+
+        if (titleMatch) {
+            const titles = titleMatch[1].split('\n').filter(line => line.trim() !== '');
+            titleList[0] = titles[0] || '';
+            titleList[1] = titles[1] || '';
+            titleList[2] = titles[2] || '';
+            outputTitle.textContent = titleList[0]; // Standard erste Überschrift anzeigen
+        }
+
+        if (summaryMatch) {
+            const summaryText = summaryMatch[1].trim();
+            outputSummary.textContent = summaryText;
+        }
+
+        if (keywordsMatch) {
+            const keywordsText = keywordsMatch[1].trim();
+            outputKeywords.textContent = keywordsText;
+        }
 
         // Zähler aktualisieren
         updateCounter(outputTitle, outputTitleCounter);
