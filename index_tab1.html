@@ -3,220 +3,253 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Textfeld und Prompt</title>
+    <title>Kombinierte Textarea mit Buttons</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 20px;
+            font-family: Verdana, sans-serif;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            flex-direction: column;
+            min-height: 120vh; /* Erhöht die Höhe des Body für mehr Platz */
+            margin: 0;
+            padding-top: 40px; /* Platz über dem Header */
+            padding-bottom: 120px; /* Mehr Platz unter dem Slider */
         }
-        textarea {
-            width: 80%;
-            height: 200px;
-            margin: 10px 0;
+
+        header, footer {
+            width: 100%;
+            height: 5px;
+            background-color: black;
+            margin-bottom: 20px;
         }
-        .button-group {
-            margin: 20px 0;
-        }
-        button {
-            margin: 0 10px;
-        }
-        .output {
-            text-align: left;
-            margin: 20px auto;
-            width: 80%;
-            border: 1px solid #ccc;
-            padding: 10px;
-        }
-        .output h3 {
-            text-align: left;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-        .preview-section {
+
+        .textarea-container-1 {
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-            width: 80%;
-            margin: 20px auto;
+            align-items: center;
+            margin-bottom: 20px;
         }
-        .preview-box {
-            width: 100%;
-            border: 1px solid #ccc;
-            padding: 10px;
-            text-align: left;
+
+        .char-counter {
+            font-family: Verdana, sans-serif;
             margin-bottom: 10px;
-            position: relative;
         }
-        .copy-button {
-            position: absolute;
-            top: 10px;
-            right: 10px;
+
+        .textarea-1 {
+            width: 600px;
+            height: 400px;
+            border: 1px solid black;
+            font-family: Verdana, sans-serif;
+            resize: none;
+            padding: 10px;
+            box-sizing: border-box;
+            overflow: auto;
+            word-wrap: break-word;
+        }
+
+        .textarea-1::placeholder {
+            color: rgba(0, 0, 0, 0.4); /* 40% Transparenz */
+        }
+
+        .textarea-1:focus::placeholder {
+            color: transparent;
+        }
+
+        .button-container-1 {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .button-1 {
+            width: 250px;
+            height: 30px;
+	    font-size: 12px;
+            cursor: pointer;
+            transition: background-color 0.5s;
+        }
+
+        .button-container-lower {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .button-2 {
+            width: 300px;
+            height: 30px;
+            margin: 10px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: background-color 0.5s;
+        }
+
+        .textarea-container-2 {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            width: 100%;
+            margin-top: 10px; /* 10px Abstand zu den Buttons */
+        }
+
+        .textarea-2 {
+            width: 600px;
+            height: 400px;
+            border: 1px solid black;
+            font-family: Verdana, sans-serif;
+            resize: none;
+            padding: 10px;
+            box-sizing: border-box;
+            overflow: auto;
+            word-wrap: break-word;
+        }
+
+        .save-button-container {
+            display: none; /* Button versteckt */
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
 
-    <!-- Textfeld 1.0 - Quelltext -->
-    <h1 id="quelltext-title">Quelltext</h1>
-    <button onclick="editTitle('quelltext-title')">...</button>
-    <textarea id="quelltext" placeholder="Geben Sie hier Ihren Text ein..."></textarea>
+<!-- Header-Trennlinie -->
+<header></header>
 
-    <div class="button-group">
-        <!-- Button 1 - In die Zwischenablage kopieren -->
-        <button onclick="copyToClipboard()">In die Zwischenablage kopieren</button>
+<!-- Textarea und Buttons aus Code 1 -->
+<div class="textarea-container-1">
+    <div class="char-counter" id="charCounter">Zeichen: 0</div>
+    <textarea class="textarea-1" id="textarea1" placeholder="Bitte hier alle Textquellen hineinkopieren"></textarea>
+</div>
 
-        <!-- Button 2 - Zum Bearbeiten des Promptbefehls -->
-        <button onclick="promptPassword()">...</button>
-    </div>
+<!-- Button "Text mit Prompt kopieren" und "Textfeld leeren" nebeneinander -->
+<div class="button-container-1">
+    <button id="copyButton" class="button-1">Text mit Prompt kopieren</button>
+    <button id="clearButton" class="button-1">Textfeld leeren</button>
+</div>
 
-    <!-- Textfeld 1.4 - Chat GPT Rückgabe -->
-    <h1 id="response-title">Chat-GPT-Rückgabe</h1>
-    <button onclick="editTitle('response-title')">...</button>
-    <textarea id="chat-response" placeholder="Hier wird die Rückgabe von Chat GPT angezeigt und kann bearbeitet werden..."></textarea>
+<!-- Button "Prompt-Text editieren" unterhalb -->
+<div class="button-container-lower">
+    <button id="editButton" class="button-2">Prompt-Text editieren</button>
+</div>
 
-    <!-- Vorschaufenster für die Textausgabe -->
-    <h1>Vorschaufenster</h1>
+<!-- Textarea im Slider -->
+<div class="textarea-container-2" id="textareaContainer">
+    <textarea id="textarea" class="textarea-2"></textarea>
+</div>
 
-    <div class="preview-section" id="preview-headlines">
-        <!-- Drei Vorschaufenster für die Überschriften -->
-        <div class="preview-box">
-            <h4>Überschrift 1</h4>
-            <div id="headline1"></div>
-            <button class="copy-button" onclick="copyToClipboard('headline1')">In die Zwischenablage kopieren</button>
-        </div>
-        <div class="preview-box">
-            <h4>Überschrift 2</h4>
-            <div id="headline2"></div>
-            <button class="copy-button" onclick="copyToClipboard('headline2')">In die Zwischenablage kopieren</button>
-        </div>
-        <div class="preview-box">
-            <h4>Überschrift 3</h4>
-            <div id="headline3"></div>
-            <button class="copy-button" onclick="copyToClipboard('headline3')">In die Zwischenablage kopieren</button>
-        </div>
-    </div>
+<!-- Speicher-Button unter der Slider-Textarea -->
+<div class="save-button-container" id="saveButtonContainer">
+    <button id="saveButton" class="button-2">Neuen Prompt-Text speichern</button>
+</div>
 
-    <div class="preview-section">
-        <!-- Vorschaufenster für die Textzusammenfassung -->
-        <div class="preview-box">
-            <h4>Textzusammenfassung</h4>
-            <div id="preview-summary"></div>
-            <button class="copy-button" onclick="copyToClipboard('preview-summary')">In die Zwischenablage kopieren</button>
-        </div>
-        <!-- Vorschaufenster für die Stichworte -->
-        <div class="preview-box">
-            <h4>Stichworte</h4>
-            <div id="preview-keywords"></div>
-            <button class="copy-button" onclick="copyToClipboard('preview-keywords')">In die Zwischenablage kopieren</button>
-        </div>
-    </div>
+<!-- Footer-Trennlinie -->
+<footer></footer>
 
-    <script>
-        // Funktion zum Kopieren des Texts aus den Vorschaufenstern in die Zwischenablage
-        function copyToClipboard(elementId) {
-            const text = document.getElementById(elementId).textContent;
-            navigator.clipboard.writeText(text).then(() => {
-                alert("Text wurde in die Zwischenablage kopiert.");
-            }, () => {
-                alert("Fehler beim Kopieren in die Zwischenablage.");
-            });
+<script>
+    // Variable für den Standard-Text im Slider
+    let promptText = "Fasse den Text in maximal 120 Zeichen zusammen. Gebe mir drei Überschriften. Gebe mir 15 Stichwörter hintereinander mit Kommas getrennt. Zeige zuerst die Überschriften an, dann den Text, darunter die Stichwörter. Gebe den drei Teilen eigene Überschriften: ###Überschrift, ###Text, ###Stichwörter";
+
+    // Zeichen-Zähler ohne maximale Anzahl an Zeichen
+    const textarea1 = document.getElementById('textarea1');
+    const charCounter = document.getElementById('charCounter');
+
+    textarea1.addEventListener('input', function() {
+        const textLength = textarea1.value.length;
+        charCounter.textContent = `Zeichen: ${textLength}`;
+    });
+
+    // Funktion für den "Text mit Prompt kopieren" Button
+    document.getElementById("copyButton").addEventListener("click", function() {
+        const button = this;
+        const textareaContent = document.getElementById("textarea1").value;
+        const sliderText = document.getElementById("textarea").value || promptText; // Slider-Text oder Standard-Text
+        const combinedText = `${textareaContent}\n\nPrompt-Text:\n${sliderText}`;
+
+        navigator.clipboard.writeText(combinedText).then(() => {
+            button.style.backgroundColor = "#228b22"; // Farbe auf #228b22 ändern
+            setTimeout(function() {
+                button.style.backgroundColor = ""; // Nach 0,25 Sekunden zurücksetzen
+            }, 250);
+        });
+    });
+
+    // Funktion für den "Textfeld leeren" Button mit Farbgebung aus Code 1
+    document.getElementById("clearButton").addEventListener("click", function() {
+        const textarea1 = document.getElementById("textarea1");
+        textarea1.value = "";
+        charCounter.textContent = `Zeichen: 0`;
+
+        const button = this;
+        button.style.backgroundColor = "#FF0000"; // Farbe auf Rot ändern
+        setTimeout(function() {
+            button.style.backgroundColor = ""; // Nach 0.25 Sekunden zurücksetzen
+        }, 250);
+    });
+
+    // Funktion für den "Prompt-Text editieren" Button mit Passwortabfrage und Slider
+    document.getElementById("editButton").addEventListener("click", function() {
+        const button = this;
+        button.style.backgroundColor = "#FF0000"; // Farbe auf #FF0000 ändern
+        setTimeout(function() {
+            button.style.backgroundColor = ""; // Nach 0.25 Sekunden zurücksetzen
+        }, 250);
+
+        // Kennwort-Popup
+        let password = prompt("Bitte geben Sie das Kennwort ein:");
+        if (password === "admin") {
+            alert("Kennwort korrekt. Sie können den Prompt-Text nun bearbeiten.");
+            
+            // Textarea einblenden (Slider-Effekt)
+            const textareaContainer = document.getElementById("textareaContainer");
+            textareaContainer.style.maxHeight = "500px"; // Die Höhe für das Einblenden festlegen
+
+            // Editierbarer Text in der Textarea
+            const textarea = document.getElementById("textarea");
+            textarea.value = promptText; // Den gespeicherten Prompt-Text anzeigen
+
+            // "Neuen Prompt-Text speichern" Button anzeigen
+            const saveButtonContainer = document.getElementById("saveButtonContainer");
+            saveButtonContainer.style.display = "flex";
+        } else {
+            alert("Falsches Kennwort!");
         }
+    });
 
-        // Funktion zum Bearbeiten der Überschrift
-        function editTitle(titleId) {
-            const newTitle = prompt("Geben Sie den neuen Titel ein:");
-            if (newTitle) {
-                document.getElementById(titleId).textContent = newTitle;
-            }
-        }
+    // Funktion für den "Neuen Prompt-Text speichern" Button
+    document.getElementById("saveButton").addEventListener("click", function() {
+        const button = this;
+        const originalColor = button.style.backgroundColor; // Ursprüngliche Farbe speichern
+        button.style.backgroundColor = "#228b22"; // Farbe auf #228b22 ändern
+        setTimeout(function() {
+            button.style.backgroundColor = originalColor; // Nach 2 Sekunden in den ursprünglichen Zustand zurückkehren
+        }, 500);
 
-        // Funktion zum Passwortschutz für die Promptbearbeitung
-        function promptPassword() {
-            const password = prompt("Bitte geben Sie das Kennwort ein:");
-            if (password === "admin") {
-                const currentPrompt = 
-T1.0 Fasse den Text nach folgenden Vorgaben zusammen.
-T1.1 - Schreibe wie ein Journalist
-T1.2 - Verwende einfache Sätze
-T1.3 - Verwende maximal 120 Zeichen.
-T1.4 - Korrigiere den Text anhand der Regeln für die deutsche Grammatik.
-T2.0 - Erstelle eine Liste mit maximal 15 Stichwörtern.
-T2.1 - Die Stichwörter sollen durch Kommas getrennt werden.
-T2.2 - Stichwörter sollen passende Themen sein, die sich aus dem Inhalt des Textes ergeben.
-T2.3 - Die Stichwörter sollen SEO-optimiert sein.
-T3.0 - Erstelle drei Überschriften.
-T3.1 - Die Überschriften sollen eine maximale Länge von 60 Zeichen haben.
-T3.2 - Die Überschriften sollen die Kernpunkte des Textes aus dem Textfeld beinhalten.
-T3.3 - Die Überschriften sollen zum Weiterlesen animieren.
-T4.0 - Gebe die Rückmeldungen zu T1.0, T2.0 und T3.0 getrennt aus.
-T4.1 - Unterteile die Antworten mit Überschriften:
-T4.1.1 - "Textzusammenfassung" für T1.0
-T4.1.2 - "Stichworte" für T2.0
-T4.1.3 - "Überschriften" für T3.0;
+        // Slider-Text speichern, oder Standard-Text, falls der Slider-Text leer ist
+        const textarea = document.getElementById("textarea");
+        promptText = textarea.value.trim() !== "" ? textarea.value : "Standard-Prompt-Text wurde gespeichert."; // Speichern oder Standard-Text
 
-                // Hier wird das große, erweiterbare Textfeld im neuen Popup erstellt
-                const editorWindow = window.open("", "", "width=800,height=600");
-                editorWindow.document.write(
-                    <html>
-                    <head>
-                        <title>Prompt bearbeiten</title>
-                        <style>
-                            textarea {
-                                width: 100%;
-                                height: 90%;
-                                font-family: Arial, sans-serif;
-                                font-size: 14px;
-                                resize: both;
-                            }
-                        </style>
-                    </head>
-                    <body>
-                        <textarea>${currentPrompt}</textarea>
-                    </body>
-                    </html>
-                );
-            } else {
-                alert("Falsches Kennwort!");
-            }
-        }
+        alert("Neuer Prompt-Text wurde gespeichert: " + promptText);
 
-        // Funktion zum Anzeigen der Vorschau
-        function displayPreview() {
-            const responseText = document.getElementById('chat-response').value;
+        // Slider zuklappen (Textarea ausblenden)
+        const textareaContainer = document.getElementById("textareaContainer");
+        textareaContainer.style.maxHeight = "0"; // Textarea wieder zuklappen
 
-            // Extrahieren der Textabschnitte anhand der festgelegten Überschriften
-            const headlineMatch = responseText.match(/### Überschriften([^#]*)/);
-            const summaryMatch = responseText.match(/### Textzusammenfassung([^#]*)/);
-            const keywordsMatch = responseText.match(/### Stichworte([^#]*)/);
+        // "Neuen Prompt-Text speichern" Button ausblenden
+        const saveButtonContainer = document.getElementById("saveButtonContainer");
+        saveButtonContainer.style.display = "none";
+    });
 
-            if (headlineMatch) {
-                const headlines = formatHeadlines(headlineMatch[1].trim());
-                document.getElementById('headline1').textContent = headlines[0] || '';
-                document.getElementById('headline2').textContent = headlines[1] || '';
-                document.getElementById('headline3').textContent = headlines[2] || '';
-            }
-
-            if (summaryMatch) {
-                document.getElementById('preview-summary').textContent = summaryMatch[1].trim();
-            }
-
-            if (keywordsMatch) {
-                document.getElementById('preview-keywords').textContent = keywordsMatch[1].trim();
-            }
-        }
-
-        // Funktion zum Formatieren der Überschriften, entfernt die "**"-Zeichen und nummeriert die Überschriften nicht
-        function formatHeadlines(text) {
-            return text
-                .split('\n')
-                .map(line => line.replace(/^\d+\.\s*/, "").replace(/\*\*/g, "").trim()) // Entfernt die Nummerierung und "**"
-                .filter(line => line); // Entfernt leere Zeilen
-        }
-
-        // Immer wenn der Text im Textfeld geändert wird, soll die Vorschau aktualisiert werden
-        document.getElementById('chat-response').addEventListener('input', displayPreview);
-    </script>
+</script>
 
 </body>
 </html>
