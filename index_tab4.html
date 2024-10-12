@@ -182,11 +182,15 @@
         if (summaryMatch) {
             const summaryText = summaryMatch[1].trim();
             outputSummary.textContent = summaryText;
+        } else {
+            outputSummary.textContent = ''; // Leeren, wenn kein Text vorhanden
         }
 
         if (keywordsMatch) {
             const keywordsText = keywordsMatch[1].trim();
             outputKeywords.textContent = keywordsText;
+        } else {
+            outputKeywords.textContent = ''; // Leeren, wenn kein Text vorhanden
         }
 
         if (titleMatch) {
@@ -195,6 +199,8 @@
             titleList[1] = titles[1] || '';
             titleList[2] = titles[2] || '';
             outputTitle.textContent = titleList[0]; // Standard erste Überschrift anzeigen
+        } else {
+            outputTitle.textContent = ''; // Leeren, wenn kein Text vorhanden
         }
 
         // Zähler aktualisieren und Hintergrundfarbe anpassen
