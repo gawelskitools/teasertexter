@@ -66,7 +66,7 @@
         .button-1 {
             width: 250px;
             height: 30px;
-	    font-size: 12px;
+            font-size: 12px;
             cursor: pointer;
             transition: background-color 0.5s;
         }
@@ -156,8 +156,27 @@
 <footer></footer>
 
 <script>
-    // Variable für den Standard-Text im Slider
-    let promptText = "Fasse den Text in maximal 120 Zeichen zusammen. Gebe mir drei Überschriften. Gebe mir 15 Stichwörter hintereinander mit Kommas getrennt. Zeige zuerst die Überschriften an, dann den Text, darunter die Stichwörter. Gebe den drei Teilen eigene Überschriften: ###Überschrift, ###Text, ###Stichwörter";
+    // Default Prompt-Text festlegen
+    const defaultPromptText = `T1.0 Fasse den Text nach folgenden Vorgaben zusammen.\n
+T1.1 - Schreibe wie ein Journalist\n
+T1.2 - Verwende einfache Sätze\n
+T1.3 - Verwende maximal 120 Zeichen.\n
+T1.4 - Korrigiere den Text anhand der Regeln für die deutsche Grammatik.\n
+T2.0 - Erstelle eine Liste mit maximal 15 Stichwörtern.\n
+T2.1 - Die Stichwörter sollen durch Kommas getrennt werden.\n
+T2.2 - Stichwörter sollen passende Themen sein, die sich aus dem Inhalt des Textes ergeben.\n
+T2.3 - Die Stichwörter sollen SEO-optimiert sein.\n
+T3.0 - Erstelle drei Überschriften.\n
+T3.1 - Die Überschriften sollen eine maximale Länge von 60 Zeichen haben.\n
+T3.2 - Die Überschriften sollen die Kernpunkte des Textes aus dem Textfeld beinhalten.\n
+T3.3 - Die Überschriften sollen zum Weiterlesen animieren.\n
+T4.0 - Gebe die Rückmeldungen zu T1.0, T2.0 und T3.0 getrennt aus.\n
+T4.1 - Unterteile die Antworten mit Überschriften:\n
+T4.1.1 - "Textzusammenfassung" für T1.0\n
+T4.1.2 - "Stichworte" für T2.0\n
+T4.1.3 - "Überschriften" für T3.0`;
+
+    let promptText = defaultPromptText; // Standard-Text für den Slider
 
     // Zeichen-Zähler ohne maximale Anzahl an Zeichen
     const textarea1 = document.getElementById('textarea1');
@@ -172,7 +191,7 @@
     document.getElementById("copyButton").addEventListener("click", function() {
         const button = this;
         const textareaContent = document.getElementById("textarea1").value;
-        const sliderText = document.getElementById("textarea").value || promptText; // Slider-Text oder Standard-Text
+        const sliderText = document.getElementById("textarea").value || promptText; // Slider-Text oder Default-Prompt
         const combinedText = `${textareaContent}\n\nPrompt-Text:\n${sliderText}`;
 
         navigator.clipboard.writeText(combinedText).then(() => {
@@ -183,7 +202,7 @@
         });
     });
 
-    // Funktion für den "Textfeld leeren" Button mit Farbgebung aus Code 1
+    // Funktion für den "Textfeld leeren" Button mit Farbgebung
     document.getElementById("clearButton").addEventListener("click", function() {
         const textarea1 = document.getElementById("textarea1");
         textarea1.value = "";
@@ -234,11 +253,15 @@
             button.style.backgroundColor = originalColor; // Nach 2 Sekunden in den ursprünglichen Zustand zurückkehren
         }, 500);
 
-        // Slider-Text speichern, oder Standard-Text, falls der Slider-Text leer ist
+        // Slider-Text speichern, oder Standard-Prompt-Text, falls der Slider-Text leer ist
         const textarea = document.getElementById("textarea");
-        promptText = textarea.value.trim() !== "" ? textarea.value : "Standard-Prompt-Text wurde gespeichert."; // Speichern oder Standard-Text
-
-        alert("Neuer Prompt-Text wurde gespeichert: " + promptText);
+        if (textarea.value.trim() === "") {
+            promptText = defaultPromptText; // Falls leer, Standard-Text speichern
+            alert("Das Textfeld war leer. Der Standard-Prompt-Text wurde gespeichert.");
+        } else {
+            promptText = textarea.value; // Ansonsten den eingegebenen Text speichern
+            alert("Neuer Prompt-Text wurde gespeichert: " + promptText);
+        }
 
         // Slider zuklappen (Textarea ausblenden)
         const textareaContainer = document.getElementById("textareaContainer");
