@@ -3,115 +3,276 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tab Navigation Beispiel</title>
+    <title>Kombinierte Textarea mit Buttons</title>
     <style>
-        html, body {
+        body {
+            font-family: Verdana, sans-serif;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            flex-direction: column;
+            min-height: 120vh; /* Erhöht die Höhe des Body für mehr Platz */
             margin: 0;
-            padding: 0;
-            height: 100%;
-            font-family: Arial, sans-serif;
+            padding-top: 40px; /* Platz über dem Header */
+            padding-bottom: 120px; /* Mehr Platz unter dem Slider */
         }
 
-        body {
+        header, footer {
+            width: 100%;
+            height: 5px;
+            background-color: black;
+            margin-bottom: 20px;
+        }
+
+        .textarea-container-1 {
             display: flex;
             flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
         }
 
-        h1 {
-            margin: 0;
-            padding: 20px;
-            background-color: #f1f1f1;
-            text-align: center;
+        .char-counter {
+            font-family: Verdana, sans-serif;
+            margin-bottom: 10px;
         }
 
-        .tabs {
-            display: flex;
-            cursor: pointer;
-            background-color: #f1f1f1;
+        .textarea-1 {
+            width: 600px;
+            height: 400px;
+            border: 1px solid black;
+            font-family: Verdana, sans-serif;
+            resize: none;
             padding: 10px;
+            box-sizing: border-box;
+            overflow: auto;
+            word-wrap: break-word;
+        }
+
+        .textarea-1::placeholder {
+            color: rgba(0, 0, 0, 0.4); /* 40% Transparenz */
+        }
+
+        .textarea-1:focus::placeholder {
+            color: transparent;
+        }
+
+        .button-container-1 {
+            display: flex;
             justify-content: center;
-            margin-bottom: 0;
+            gap: 10px;
+            margin-top: 20px;
         }
 
-        .tab {
-            padding: 10px 20px;
-            background-color: #f1f1f1;
-            border: 1px solid #ccc;
-            border-bottom: none;
-            transition: background-color 0.3s ease;
+        .button-1 {
+            width: 250px;
+            height: 30px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: background-color 0.5s;
         }
 
-        .tab:hover {
-            background-color: #ddd;
+        .button-container-lower {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
         }
 
-        .tab.active {
-            background-color: white;
-            font-weight: bold;
-            border-bottom: 1px solid white;
+        .button-2 {
+            width: 300px;
+            height: 30px;
+            margin: 10px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: background-color 0.5s;
         }
 
-        .tab-content {
-            flex: 1;
-            border: 1px solid #ccc;
-            display: none;
-            height: 100%;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        #tab1 iframe {
+        .textarea-container-2 {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
             width: 100%;
-            height: 100vh;
-            border: none;
-            display: block;
+            margin-top: 10px; /* 10px Abstand zu den Buttons */
+        }
+
+        .textarea-2 {
+            width: 600px;
+            height: 400px;
+            border: 1px solid black;
+            font-family: Verdana, sans-serif;
+            resize: none;
+            padding: 10px;
+            box-sizing: border-box;
+            overflow: auto;
+            word-wrap: break-word;
+        }
+
+        .save-button-container {
+            display: none; /* Button versteckt */
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
 
-    <h1>Meine Tabs Ansicht</h1>
+<!-- Header-Trennlinie -->
+<header></header>
 
-    <div class="tabs">
-        <div class="tab active" onclick="openTab(event, 'tab1')">Tab 1</div>
-        <div class="tab" onclick="openTab(event, 'tab2')">Tab 2</div>
-        <div class="tab" onclick="openTab(event, 'tab3')">Tab 3</div>
-    </div>
+<!-- Textarea und Buttons aus Code 1 -->
+<div class="textarea-container-1">
+    <div class="char-counter" id="charCounter">Zeichen: 0</div>
+    <textarea class="textarea-1" id="textarea1" placeholder="Bitte hier alle Textquellen hineinkopieren"></textarea>
+</div>
 
-    <div id="tab1" class="tab-content active">
-        <iframe src="index_tab1.html" title="Tab 1 Inhalt"></iframe>
-    </div>
+<!-- Button "Text mit Prompt kopieren" und "Textfeld leeren" nebeneinander -->
+<div class="button-container-1">
+    <button id="copyButton" class="button-1">Text mit Prompt kopieren</button>
+    <button id="clearButton" class="button-1">Textfeld leeren</button>
+</div>
 
-    <div id="tab2" class="tab-content">
-        <h2>Inhalt von Tab 2</h2>
-        <p>Hier ist der Inhalt von Tab 2.</p>
-    </div>
+<!-- Button "Prompt-Text editieren" unterhalb -->
+<div class="button-container-lower">
+    <button id="editButton" class="button-2">Prompt-Text editieren</button>
+</div>
 
-    <div id="tab3" class="tab-content">
-        <h2>Inhalt von Tab 3</h2>
-        <p>Hier ist der Inhalt von Tab 3.</p>
-    </div>
+<!-- Textarea im Slider -->
+<div class="textarea-container-2" id="textareaContainer">
+    <textarea id="textarea" class="textarea-2"></textarea>
+</div>
 
-    <script>
-        function openTab(event, tabId) {
-            // Alle Tabs und Inhalte deaktivieren
-            var tabs = document.getElementsByClassName("tab");
-            var contents = document.getElementsByClassName("tab-content");
+<!-- Speicher-Button unter der Slider-Textarea -->
+<div class="save-button-container" id="saveButtonContainer">
+    <button id="saveButton" class="button-2">Neuen Prompt-Text speichern</button>
+</div>
 
-            for (var i = 0; i < tabs.length; i++) {
-                tabs[i].classList.remove("active");
-            }
-            for (var i = 0; i < contents.length; i++) {
-                contents[i].classList.remove("active");
-            }
+<!-- Footer-Trennlinie -->
+<footer></footer>
 
-            // Den angeklickten Tab und den zugehörigen Inhalt aktivieren
-            event.currentTarget.classList.add("active");
-            document.getElementById(tabId).classList.add("active");
+<script>
+    // Default Prompt-Text festlegen
+    const defaultPromptText = `T1.0 Fasse den Text nach folgenden Vorgaben zusammen.\n
+T1.1 - Schreibe wie ein Journalist\n
+T1.2 - Verwende einfache Sätze\n
+T1.3 - Verwende maximal 120 Zeichen.\n
+T1.4 - Korrigiere den Text anhand der Regeln für die deutsche Grammatik.\n
+T2.0 - Erstelle eine Liste mit maximal 15 Stichwörtern.\n
+T2.1 - Die Stichwörter sollen durch Kommas getrennt werden.\n
+T2.2 - Stichwörter sollen passende Themen sein, die sich aus dem Inhalt des Textes ergeben.\n
+T2.3 - Die Stichwörter sollen SEO-optimiert sein.\n
+T3.0 - Erstelle drei Überschriften.\n
+T3.1 - Die Überschriften sollen eine maximale Länge von 60 Zeichen haben.\n
+T3.2 - Die Überschriften sollen die Kernpunkte des Textes aus dem Textfeld beinhalten.\n
+T3.3 - Die Überschriften sollen zum Weiterlesen animieren.\n
+T4.0 - Gebe die Rückmeldungen zu T1.0, T2.0 und T3.0 getrennt aus.\n
+T4.1 - Unterteile die Antworten mit Überschriften:\n
+T4.1.1 - "Textzusammenfassung" für T1.0\n
+T4.1.2 - "Stichworte" für T2.0\n
+T4.1.3 - "Überschriften" für T3.0`;
+
+    let promptText = defaultPromptText; // Standard-Text für den Slider
+
+    // Zeichen-Zähler ohne maximale Anzahl an Zeichen
+    const textarea1 = document.getElementById('textarea1');
+    const charCounter = document.getElementById('charCounter');
+
+    textarea1.addEventListener('input', function() {
+        const textLength = textarea1.value.length;
+        charCounter.textContent = `Zeichen: ${textLength}`;
+    });
+
+    // Funktion für den "Text mit Prompt kopieren" Button
+    document.getElementById("copyButton").addEventListener("click", function() {
+        const button = this;
+        const textareaContent = document.getElementById("textarea1").value;
+        const sliderText = document.getElementById("textarea").value || promptText; // Slider-Text oder Default-Prompt
+        const combinedText = `${textareaContent}\n\nPrompt-Text:\n${sliderText}`;
+
+        navigator.clipboard.writeText(combinedText).then(() => {
+            button.style.backgroundColor = "#228b22"; // Farbe auf #228b22 ändern
+            setTimeout(function() {
+                button.style.backgroundColor = ""; // Nach 0,25 Sekunden zurücksetzen
+            }, 250);
+        });
+    });
+
+    // Funktion für den "Textfeld leeren" Button mit Farbgebung
+    document.getElementById("clearButton").addEventListener("click", function() {
+        const textarea1 = document.getElementById("textarea1");
+        textarea1.value = "";
+        charCounter.textContent = `Zeichen: 0`;
+
+        const button = this;
+        button.style.backgroundColor = "#FF0000"; // Farbe auf Rot ändern
+        setTimeout(function() {
+            button.style.backgroundColor = ""; // Nach 0.25 Sekunden zurücksetzen
+        }, 250);
+    });
+
+    // Funktion für den "Prompt-Text editieren" Button mit Passwortabfrage und Slider
+    document.getElementById("editButton").addEventListener("click", function() {
+        const button = this;
+        button.style.backgroundColor = "#FF0000"; // Farbe auf #FF0000 ändern
+        setTimeout(function() {
+            button.style.backgroundColor = ""; // Nach 0.25 Sekunden zurücksetzen
+        }, 250);
+
+        // Kennwort-Popup
+        let password = prompt("Bitte geben Sie das Kennwort ein:");
+        if (password === "admin") {
+            alert("Kennwort korrekt. Sie können den Prompt-Text nun bearbeiten.");
+            
+            // Textarea einblenden (Slider-Effekt)
+            const textareaContainer = document.getElementById("textareaContainer");
+            textareaContainer.style.maxHeight = "500px"; // Die Höhe für das Einblenden festlegen
+
+            // Editierbarer Text in der Textarea
+            const textarea = document.getElementById("textarea");
+            textarea.value = promptText; // Den gespeicherten Prompt-Text anzeigen
+
+            // "Neuen Prompt-Text speichern" Button anzeigen
+            const saveButtonContainer = document.getElementById("saveButtonContainer");
+            saveButtonContainer.style.display = "flex";
+        } else {
+            alert("Falsches Kennwort!");
         }
-    </script>
+    });
+
+    // Funktion für den "Neuen Prompt-Text speichern" Button
+    document.getElementById("saveButton").addEventListener("click", function() {
+        const button = this;
+        const originalColor = button.style.backgroundColor; // Ursprüngliche Farbe speichern
+        button.style.backgroundColor = "#228b22"; // Farbe auf #228b22 ändern
+        setTimeout(function() {
+            button.style.backgroundColor = originalColor; // Nach 2 Sekunden in den ursprünglichen Zustand zurückkehren
+        }, 500);
+
+        // Slider-Text speichern, oder Standard-Prompt-Text, falls der Slider-Text leer ist
+        const textarea = document.getElementById("textarea");
+        if (textarea.value.trim() === "") {
+            promptText = defaultPromptText; // Falls leer, Standard-Text speichern
+            alert("Das Textfeld war leer. Der Standard-Prompt-Text wurde gespeichert.");
+        } else {
+            promptText = textarea.value; // Ansonsten den eingegebenen Text speichern
+            alert("Neuer Prompt-Text wurde gespeichert: " + promptText);
+        }
+
+        // Slider zuklappen (Textarea ausblenden)
+        const textareaContainer = document.getElementById("textareaContainer");
+        textareaContainer.style.maxHeight = "0"; // Textarea wieder zuklappen
+
+        // "Neuen Prompt-Text speichern" Button ausblenden
+        const saveButtonContainer = document.getElementById("saveButtonContainer");
+        saveButtonContainer.style.display = "none";
+    });
+
+</script>
 
 </body>
 </html>
