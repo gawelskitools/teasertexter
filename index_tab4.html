@@ -267,13 +267,14 @@
 
     // Funktion zum Öffnen eines neuen Tabs und Ausgabe der Texte aus den Bereichen
     function openNewTab() {
+        const newTabTitle = outputTitle.textContent || "Neuer Tab"; // Tab-Titel basierend auf Überschrift
         const newTab = window.open("", "_blank", "width=600,height=400");
         const combinedText = `Überschrift:\n${outputTitle.textContent}\n\nTextzusammenfassung:\n${outputSummary.textContent}\n\nStichworte:\n${outputKeywords.textContent}`;
         
         newTab.document.write(`
             <html>
             <head>
-                <title>Text Ausgabe</title>
+                <title>${newTabTitle}</title>
                 <style>
                     textarea {
                         width: 100%;
