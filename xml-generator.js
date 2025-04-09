@@ -2,30 +2,28 @@
 
 import { confirmKontextFallback } from './popup.js';
 
-export async function generateFinalXML() {
-  let art = document.getElementById("beitragsart").value;
+export async function generateFinalXML(input) {
+  let art = input.art;
   const confirmed = await confirmKontextFallback(art);
   if (!confirmed) return;
   if (!art) art = "#kontext";
 
   const isoTime = new Date().toISOString();
-  const titel = escapeXml(document.getElementById("beitragstitel").value);
-  const format = escapeXml(document.getElementById("beitragsformat").value);
-  const topTags = escapeXml(document.getElementById("topTags").value);
-  const thema = escapeXml(document.getElementById("themaTag").value);
-  const ort = escapeXml(document.getElementById("ortTag").value);
-  const ereignis = escapeXml(document.getElementById("ereignisTag").value);
-  const warnTags = [...document.querySelectorAll(".tag-button.active")].map(btn => `<tag>${escapeXml(btn.textContent)}</tag>`).join("\n");
-
-  const transcript = escapeXml(document.getElementById("transkript").value);
-  const zitatT = document.getElementById("zitateTranskript").value;
-  const weightT = document.getElementById("weightTranskript").value;
-  const anmoderation = escapeXml(document.getElementById("anmoderation").value);
-  const zitatA = document.getElementById("zitateAnmoderation").value;
-  const weightA = document.getElementById("weightAnmoderation").value;
-
-  const redaktion = escapeXml(document.getElementById("redaktionellesTextfeld").value);
-  const hintergrund = escapeXml(document.getElementById("hintergrundTextfeld").value);
+  const titel = input.titel;
+  const format = input.format;
+  const topTags = input.topTags;
+  const thema = input.thema;
+  const ort = input.ort;
+  const ereignis = input.ereignis;
+  const warnTags = input.warnTags;
+  const transcript = input.transcript;
+  const zitatT = input.zitatT;
+  const weightT = input.weightT;
+  const anmoderation = input.anmoderation;
+  const zitatA = input.zitatA;
+  const weightA = input.weightA;
+  const redaktion = input.redaktion;
+  const hintergrund = input.hintergrund;
 
   const videoFormatXml = await fetch(`videoformat/${art.replace('#','')}.xml`)
     .then(res => res.ok ? res.text() : fetch('videoformat/kontext.xml').then(r => r.text()))
