@@ -1,18 +1,16 @@
 // --- xml-generator.js ---
 
 import { confirmKontextFallback } from './popup.js';
+import {
+  getAllInputValues,
+  escapeXml
+} from './input-helper.js';
 
-function escapeXml(str) {
-  return str.replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/\"/g, "&quot;")
-            .replace(/'/g, "&apos;");
-}
-
-export async function generateFinalXML(input) {
+export async function generateFinalXML() {
+  const input = getAllInputValues();
   let art = input.art;
 
+  // Falls keine Beitragsart ausgewählt, Fallback abfragen
   if (!art) {
     const confirmed = await confirmKontextFallback();
     if (!confirmed) return;
@@ -20,21 +18,6 @@ export async function generateFinalXML(input) {
   }
 
   const isoTime = new Date().toISOString();
-  const titel = input.titel;
-  const format = input.format;
-  const topTags = input.topTags;
-  const thema = input.thema;
-  const ort = input.ort;
-  const ereignis = input.ereignis;
-  const warnTags = input.warnTags;
-  const transcript = input.transcript;
-  const zitatT = input.zitatT;
-  const weightT = input.weightT;
-  const anmoderation = input.anmoderation;
-  const zitatA = input.zitatA;
-  const weightA = input.weightA;
-  const redaktion = input.redaktion;
-  const hintergrund = input.hintergrund;
 
   const videoFormatXml = await fetch(`videoformat/${art.replace('#','')}.xml`)
     .then(res => res.ok ? res.text() : fetch('videoformat/kontext.xml').then(r => r.text()))
@@ -78,34 +61,34 @@ Keine Rückfragen. Nur diese Klartextstruktur.
   </anweisung-fuer-ki>
   <quelle>
     <zeitstempel>${isoTime}</zeitstempel>
-    <titel>${titel}</titel>
-    <beitragsformat>${format}</beitragsformat>
+    <titel>${input.titel}</titel>
+    <beitragsformat>${input.format}</beitragsformat>
     <beitragsart>${art}</beitragsart>
     <tags>
       <top-tags prioritaet="hoch">
-        ${topTags.split(',').map(tag => `<tag>${tag.trim()}</tag>`).join("\n")}
+        ${input.topTags.split(',').map(tag => `<tag>${tag.trim()}</tag>`).join("\n")}
       </top-tags>
       <warn-tags bedeutung="inhaltlich kritisch">
-        ${warnTags}
+        ${input.warnTags}
       </warn-tags>
       <kontext-tags>
-        <thema>${thema}</thema>
-        <ort>${ort}</ort>
-        <ereignis>${ereignis}</ereignis>
+        <thema>${input.thema}</thema>
+        <ort>${input.ort}</ort>
+        <ereignis>${input.ereignis}</ereignis>
       </kontext-tags>
     </tags>
     <analysearten>
-      <transkript gewichtung="${weightT}">
-        <zitate-erlaubt>${zitatT}</zitate-erlaubt>
-        <originaltext>${transcript}</originaltext>
+      <transkript gewichtung="${input.weightT}">
+        <zitate-erlaubt>${input.zitatT}</zitate-erlaubt>
+        <originaltext>${input.transcript}</originaltext>
       </transkript>
-      <anmoderation gewichtung="${weightA}">
-        <zitate-erlaubt>${zitatA}</zitate-erlaubt>
-        <originaltext>${anmoderation}</originaltext>
+      <anmoderation gewichtung="${input.weightA}">
+        <zitate-erlaubt>${input.zitatA}</zitate-erlaubt>
+        <originaltext>${input.anmoderation}</originaltext>
       </anmoderation>
       <kontextquelle>
-        <redaktionelle-anmerkungen>${redaktion}</redaktionelle-anmerkungen>
-        <hintergrundtext>${hintergrund}</hintergrundtext>
+        <redaktionelle-anmerkungen>${input.redaktion}</redaktionelle-anmerkungen>
+        <hintergrundtext>${input.hintergrund}</hintergrundtext>
       </kontextquelle>
     </analysearten>
     ${videoFormatXml.trim()}
