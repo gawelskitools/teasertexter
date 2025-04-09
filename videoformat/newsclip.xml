@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<videoFormat>
+  <formatgruppe>nachricht</formatgruppe>
+  <tags>#newsclip</tags>
+  <bearbeitungshinweise>
+    <ziel>Erstelle eine formatgerechte, strukturierte Nachrichtenauswertung.</ziel>
+    <struktur>
+      <ueberschrift>
+        <inhalt>max. 60 Zeichen, faktenbasiert</inhalt>
+        <stil>kurz, prägnant</stil>
+        <grammatik>Hauptsatzstruktur</grammatik>
+        <tonalitaet>neutral</tonalitaet>
+      </ueberschrift>
+      <kurzbeschreibung>
+        <inhalt>max. 150 Zeichen, informativer Satz</inhalt>
+        <stil>sachlich, kompakt</stil>
+        <grammatik>aktiv, klar</grammatik>
+        <tonalitaet>nachrichtlich</tonalitaet>
+      </kurzbeschreibung>
+      <keywords>
+        <ziel>10 Begriffe aus Thema, Ort, Ereignis</ziel>
+        <stil>SEO-orientiert</stil>
+      </keywords>
+      <themen>
+        <ziel>5 Hauptthemenbereiche</ziel>
+        <stil>übergeordnet, strategisch</stil>
+      </themen>
+      <schwerpunkte>
+        <aufbau>prägnante Stichpunkte</aufbau>
+        <fokus>Inhalt, Ort, Betroffene</fokus>
+        <stil>übersichtlich</stil>
+      </schwerpunkte>
+      <kontextHinweis>Bei fehlenden Quellen #kontext-Auswertung kennzeichnen</kontextHinweis>
+    </struktur>
+    <freitextHinweis>Bitte sachlich formulieren. Zielplattform: Website-Startseite.</freitextHinweis>
+  </bearbeitungshinweise>
+</videoFormat>
