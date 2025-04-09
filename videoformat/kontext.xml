@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<videoFormat>
+  <formatgruppe>kontext</formatgruppe>
+  <tags>#kontext</tags>
+  <bearbeitungshinweise>
+    <ziel>Erstelle eine inhaltlich tiefere, erklärende Online-Aufbereitung mit Einordnung und Relevanz.</ziel>
+    <struktur>
+      <ueberschrift>
+        <inhalt>max. 60 Zeichen, inhaltlicher Fokus</inhalt>
+        <stil>konkret, einordnend</stil>
+        <grammatik>Hauptsatz oder Fragesatz</grammatik>
+        <tonalitaet>analytisch, klar</tonalitaet>
+      </ueberschrift>
+      <kurzbeschreibung>
+        <inhalt>max. 150 Zeichen mit erklärendem Charakter</inhalt>
+        <stil>verständlich, einordnend</stil>
+        <grammatik>aktiv, ggf. mit Nebensatz</grammatik>
+        <tonalitaet>neutral bis erklärend</tonalitaet>
+      </kurzbeschreibung>
+      <keywords>
+        <ziel>10 erklärungsrelevante Begriffe aus Thema, Hintergrund und Wirkung</ziel>
+        <stil>strategisch, SEO-relevant</stil>
+      </keywords>
+      <themen>
+        <ziel>5 relevante Themenkomplexe</ziel>
+        <stil>fokussiert, analytisch</stil>
+      </themen>
+      <schwerpunkte>
+        <aufbau>Hintergrund, Ursachen, Auswirkungen</aufbau>
+        <fokus>Einordnung und Relevanz</fokus>
+        <stil>klar gegliedert</stil>
+      </schwerpunkte>
+      <kontextHinweis>Diese Beitragsart eignet sich besonders zur Vertiefung oder bei fehlenden Primärquellen.</kontextHinweis>
+    </struktur>
+    <freitextHinweis>Fokussiere auf erklärende Darstellung. Zielplattform: Online-Specials oder Hintergrundseite.</freitextHinweis>
+  </bearbeitungshinweise>
+</videoFormat>
