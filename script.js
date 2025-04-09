@@ -44,6 +44,14 @@ function downloadXML() {
   URL.revokeObjectURL(url);
 }
 
+// Bind event after DOM is ready
+document.addEventListener("DOMContentLoaded", () => {
+  const formatSelect = document.getElementById("beitragsformat");
+  if (formatSelect) {
+    formatSelect.addEventListener("change", updateBeitragsarten);
+  }
+});
+
 // Export Funktionen für Zugriff aus HTML
 window.updateBeitragsarten = updateBeitragsarten;
 window.toggleWarnTag = toggleWarnTag;
