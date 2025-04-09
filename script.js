@@ -30,11 +30,53 @@ function toggleWarnTag(elem) {
   elem.classList.toggle("active");
 }
 
-function copyToClipboard() {
-  navigator.clipboard.writeText(document.getElementById("finalXml").textContent);
+function getWarnTagsXml() {
+  return [...document.querySelectorAll(".tag-button.active")] 
+    .map(btn => `<tag>${escapeXml(btn.textContent)}</tag>`).join("\n");
 }
 
-function downloadXML() {
+function getFieldValue(id) {
+  return escapeXml(document.getElementById(id)?.value || "");
+}
+
+function getTextareaValue(id) {
+  return escapeXml(document.getElementById(id)?.value || "");
+}
+
+function getSelectedValue(id) {
+  const el = document.getElementById(id);
+  return el ? el.value : "";
+}
+
+function getAllInputValues() {
+  return {
+    titel: getFieldValue("beitragstitel"),
+    format: getSelectedValue("beitragsformat"),
+    art: getSelectedValue("beitragsart"),
+    topTags: getFieldValue("topTags"),
+    thema: getFieldValue("themaTag"),
+    ort: getFieldValue("ortTag"),
+    ereignis: getFieldValue("ereignisTag"),
+    warnTags: getWarnTagsXml(),
+    transcript: getTextareaValue("transkript"),
+    zitatT: getSelectedValue("zitateTranskript"),
+    weightT: getSelectedValue("weightTranskript"),
+    anmoderation: getTextareaValue("anmoderation"),
+    zitatA: getSelectedValue("zitateAnmoderation"),
+    weightA: getSelectedValue("weightAnmoderation"),
+    redaktion: getTextareaValue("redaktionstext"),
+    hintergrund: getTextareaValue("hintergrundtext")
+  };
+}
+
+// Export Funktionen für Zugriff aus HTML
+window.updateBeitragsarten = updateBeitragsarten;
+window.toggleWarnTag = toggleWarnTag;
+window.generateFinalXML = () => generateFinalXML(getAllInputValues());
+window.copyToClipboard = () => {
+  navigator.clipboard.writeText(document.getElementById("finalXml").textContent);
+};
+window.downloadXML = () => {
   const blob = new Blob([document.getElementById("finalXml").textContent], { type: "application/xml" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
@@ -42,19 +84,4 @@ function downloadXML() {
   a.download = "finale-online-ausgabe.xml";
   a.click();
   URL.revokeObjectURL(url);
-}
-
-// Bind event after DOM is ready
-document.addEventListener("DOMContentLoaded", () => {
-  const formatSelect = document.getElementById("beitragsformat");
-  if (formatSelect) {
-    formatSelect.addEventListener("change", updateBeitragsarten);
-  }
-});
-
-// Export Funktionen für Zugriff aus HTML
-window.updateBeitragsarten = updateBeitragsarten;
-window.toggleWarnTag = toggleWarnTag;
-window.generateFinalXML = generateFinalXML;
-window.copyToClipboard = copyToClipboard;
-window.downloadXML = downloadXML;
+};
