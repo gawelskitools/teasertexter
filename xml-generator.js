@@ -2,11 +2,13 @@
 
 import { confirmKontextFallback } from './popup.js';
 
-export async function generateFinalXML(input) {
-  let art = input.art;
-  const confirmed = await confirmKontextFallback(art);
-  if (!confirmed) return;
-  if (!art) art = "#kontext";
+  export async function generateFinalXML() {
+  let art = document.getElementById("beitragsart").value;
+  
+  if (!art) {
+    const confirmed = await confirmKontextFallback(); 
+    if (!confirmed) return;
+    art = "#kontext";
 
   const isoTime = new Date().toISOString();
   const titel = input.titel;
