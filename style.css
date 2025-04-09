@@ -1,3 +1,5 @@
+/* --- style.css --- */
+
 body {
   font-family: Arial, sans-serif;
   max-width: 960px;
@@ -71,4 +73,25 @@ h2 {
   white-space: pre-wrap;
   margin-top: 20px;
   font-family: monospace;
+}
+
+/* Optional: Popup-Style für Hinweisfenster */
+.popup-box {
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff;
+  border: 1px solid #ccc;
+  padding: 20px;
+  z-index: 9999;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.popup-box p {
+  margin-bottom: 15px;
+}
+
+.popup-box button {
+  margin-right: 10px;
 }
