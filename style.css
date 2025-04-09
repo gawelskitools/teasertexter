@@ -1,5 +1,3 @@
-/* --- style.css --- */
-
 body {
   font-family: Arial, sans-serif;
   max-width: 960px;
@@ -75,23 +73,22 @@ h2 {
   font-family: monospace;
 }
 
-/* Optional: Popup-Style für Hinweisfenster */
-.popup-box {
-  position: fixed;
-  top: 20%;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #fff;
-  border: 1px solid #ccc;
-  padding: 20px;
-  z-index: 9999;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+/* Neue Felder: Redaktionelle Anmerkungen & Hintergrundtext */
+.context-block {
+  background-color: #f5f5f5;
+  border: 1px dashed #aaa;
+  padding: 15px;
+  margin-top: 30px;
+  border-radius: 6px;
 }
 
-.popup-box p {
-  margin-bottom: 15px;
+.context-block h2 {
+  margin-top: 0;
+  font-size: 1.2em;
 }
 
-.popup-box button {
-  margin-right: 10px;
+textarea.context-input {
+  height: 120px;
+  background-color: #fffef9;
+  border: 1px solid #bbb;
 }
