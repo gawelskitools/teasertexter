@@ -1,6 +1,5 @@
 // --- xml-generator.js ---
 
-import { escapeXml } from './utils.js';
 import { confirmKontextFallback } from './popup.js';
 
 export async function generateFinalXML() {
@@ -105,4 +104,12 @@ Keine Rückfragen. Nur diese Klartextstruktur.
 </online-ausgabe>`;
 
   document.getElementById("finalXml").textContent = xml;
+}
+
+function escapeXml(str) {
+  return str.replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/\"/g, "&quot;")
+            .replace(/'/g, "&apos;");
 }
