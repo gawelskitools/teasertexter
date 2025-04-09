@@ -1,10 +1,19 @@
+/* Grundlayout */
 body {
   font-family: Arial, sans-serif;
   max-width: 960px;
   margin: auto;
   padding: 20px;
+  background: #fafafa;
+  color: #222;
 }
 
+h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+/* Formularfelder */
 label {
   display: block;
   margin-top: 20px;
@@ -19,12 +28,15 @@ input[type="text"] {
   padding: 8px;
   font-family: monospace;
   box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
 textarea {
   height: 180px;
 }
 
+/* Analyseblöcke */
 .analyse-block {
   margin-top: 30px;
   margin-bottom: 30px;
@@ -32,6 +44,7 @@ textarea {
   padding-top: 20px;
 }
 
+/* Tags */
 .tag-button {
   background: #eee;
   border: 1px solid #ccc;
@@ -48,8 +61,9 @@ textarea {
   font-weight: bold;
 }
 
+/* Hinweise */
 .highlight {
-  color: red;
+  color: darkred;
   font-weight: bold;
 }
 
@@ -60,10 +74,20 @@ textarea {
   gap: 10px;
 }
 
-h2 {
-  margin-top: 40px;
+button {
+  padding: 10px 15px;
+  border: none;
+  background-color: #005ea5;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
+button:hover {
+  background-color: #004a85;
+}
+
+/* XML-Ausgabe */
 .xml-box {
   background: #f8f8f8;
   border: 1px solid #ccc;
@@ -71,24 +95,18 @@ h2 {
   white-space: pre-wrap;
   margin-top: 20px;
   font-family: monospace;
+  font-size: 14px;
 }
 
-/* Neue Felder: Redaktionelle Anmerkungen & Hintergrundtext */
-.context-block {
-  background-color: #f5f5f5;
-  border: 1px dashed #aaa;
-  padding: 15px;
-  margin-top: 30px;
-  border-radius: 6px;
-}
-
-.context-block h2 {
-  margin-top: 0;
-  font-size: 1.2em;
-}
-
-textarea.context-input {
-  height: 120px;
-  background-color: #fffef9;
-  border: 1px solid #bbb;
+/* Popup */
+#popupContainer {
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff;
+  border: 1px solid #ccc;
+  padding: 20px;
+  z-index: 9999;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
