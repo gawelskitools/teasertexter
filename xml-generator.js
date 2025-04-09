@@ -2,13 +2,22 @@
 
 import { confirmKontextFallback } from './popup.js';
 
-  export async function generateFinalXML() {
-  let art = document.getElementById("beitragsart").value;
-  
+function escapeXml(str) {
+  return str.replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/\"/g, "&quot;")
+            .replace(/'/g, "&apos;");
+}
+
+export async function generateFinalXML(input) {
+  let art = input.art;
+
   if (!art) {
-    const confirmed = await confirmKontextFallback(); 
+    const confirmed = await confirmKontextFallback();
     if (!confirmed) return;
     art = "#kontext";
+  }
 
   const isoTime = new Date().toISOString();
   const titel = input.titel;
@@ -104,12 +113,4 @@ Keine Rückfragen. Nur diese Klartextstruktur.
 </online-ausgabe>`;
 
   document.getElementById("finalXml").textContent = xml;
-}
-
-function escapeXml(str) {
-  return str.replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/\"/g, "&quot;")
-            .replace(/'/g, "&apos;");
 }
