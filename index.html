@@ -86,6 +86,18 @@
     </select>
   </div>
 
+  <div class="analyse-block">
+    <h2>Redaktionelle Anmerkungen / Agenturmeldungen</h2>
+    <label for="redaktionstext">Zusatzinformationen (optional):</label>
+    <textarea id="redaktionstext" placeholder="Redaktionelle Zusatzinfos oder Agenturmeldungen eingeben..."></textarea>
+  </div>
+
+  <div class="analyse-block">
+    <h2>Hintergrundtext / Alt-Nachrichten</h2>
+    <label for="hintergrundtext">Kontextinfos aus der Vergangenheit (optional):</label>
+    <textarea id="hintergrundtext" placeholder="Ältere Nachrichten oder Hintergrundtext eingeben..."></textarea>
+  </div>
+
   <div class="button-group">
     <button onclick="generateFinalXML()">Finales XML erzeugen</button>
     <button onclick="copyToClipboard()">XML kopieren</button>
@@ -95,7 +107,7 @@
   <h2>XML zum Kopieren</h2>
   <div id="finalXml" class="xml-box"></div>
 
-  <!-- JavaScript (als Module) -->
+  <!-- SCRIPTS -->
   <script type="module" src="script.js"></script>
 </body>
 </html>
