@@ -69,19 +69,31 @@ function getAllInputValues() {
   };
 }
 
-// Export Funktionen für Zugriff aus HTML
-window.updateBeitragsarten = updateBeitragsarten;
+document.addEventListener("DOMContentLoaded", () => {
+  const formatSelect = document.getElementById("beitragsformat");
+  if (formatSelect) {
+    formatSelect.addEventListener("change", updateBeitragsarten);
+  }
+
+  // Events binden
+  document.getElementById("generateBtn")?.addEventListener("click", () => {
+    generateFinalXML(getAllInputValues());
+  });
+
+  document.getElementById("copyBtn")?.addEventListener("click", () => {
+    navigator.clipboard.writeText(document.getElementById("finalXml").textContent);
+  });
+
+  document.getElementById("downloadBtn")?.addEventListener("click", () => {
+    const blob = new Blob([document.getElementById("finalXml").textContent], { type: "application/xml" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "finale-online-ausgabe.xml";
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+});
+
+// Export optional für Debugging
 window.toggleWarnTag = toggleWarnTag;
-window.generateFinalXML = () => generateFinalXML(getAllInputValues());
-window.copyToClipboard = () => {
-  navigator.clipboard.writeText(document.getElementById("finalXml").textContent);
-};
-window.downloadXML = () => {
-  const blob = new Blob([document.getElementById("finalXml").textContent], { type: "application/xml" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "finale-online-ausgabe.xml";
-  a.click();
-  URL.revokeObjectURL(url);
-};
