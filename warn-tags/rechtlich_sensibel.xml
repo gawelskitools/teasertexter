@@ -1,4 +1,3 @@
-<!-- warn-tags/rechtlich_sensibel.xml -->
 <warn-tag name="rechtlich sensibel">
   <standard>Juristisch korrekte Begriffe verwenden. Keine Wertungen.</standard>
   <hinweis>Beziehe dich auf rechtlich geprüfte oder neutrale Begriffe, vor allem bei Vorwürfen oder Ermittlungen.</hinweis>
