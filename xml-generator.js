@@ -30,7 +30,7 @@ export async function generateFinalXML() {
     <schritt nummer="1" typ="analyse">Transkript und Anmoderation analysieren</schritt>
     <schritt nummer="2" typ="struktur">Analysefelder (2–6) befüllen</schritt>
     <schritt nummer="3" typ="redaktion">Online-Elemente erzeugen</schritt>
-    <schritt nummer="4" typ="vorschau">Klartextausgabe erzeugen</schritt>
+    <schritt nummer="4" typ="vorschau">Klartextausgabe für Finale redaktionelle Online-Ausgabe (3 Varianten) erzeugen</schritt>
   </verarbeitungskette>
   <anweisung-fuer-ki>
     <beschreibung>Verarbeite alle Inhalte gemäß Beitragsart. Nutze &lt;tags&gt; zur Kontextualisierung und Priorisierung. Keine Rückfragen. Kein CDATA. Direkte Klartextausgabe.</beschreibung>
@@ -41,7 +41,7 @@ export async function generateFinalXML() {
       <schritt>1. Inhalte analysieren</schritt>
       <schritt>2. Strukturierte Auswertung</schritt>
       <schritt>3. Redaktionelle Textbausteine erzeugen</schritt>
-      <schritt>4. Ausgabe erzeugen</schritt>
+      <schritt>4. Finale redaktionelle Online-Ausgabe (3 Varianten) erzeugen</schritt>
     </ablauf>
     <abschluss>
 Finale redaktionelle Online-Ausgabe (3 Varianten)
@@ -115,9 +115,6 @@ Keine Rückfragen. Nur diese Klartextstruktur.
       <keywords>...</keywords>
       <themen>...</themen>
     </text>
-    <html>
-      <!-- Optional: HTML-Ausgabe -->
-    </html>
   </vorschau>
 </online-ausgabe>`;
 
