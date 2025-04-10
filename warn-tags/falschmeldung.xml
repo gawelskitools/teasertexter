@@ -1,0 +1,10 @@
+<!-- warn-tags/falschmeldung.xml -->
+<warn-tag name="Falschmeldung">
+  <standard>Alte Inhalte nur mit Korrekturhinweis übernehmen.</standard>
+  <hinweis>Prüfe widersprüchliche Angaben im Kontext älterer Quellen. Markiere veraltete Infos ggf. als überholt.</hinweis>
+  <empfehlung>Setze klar formulierte Korrekturhinweise oder Zusätze wie „frühere Angaben waren unzutreffend“.</empfehlung>
+  <beispiele>
+    <beispiel>Eine frühere Version dieser Meldung enthielt eine falsche Ortsangabe.</beispiel>
+    <beispiel>Laut neuerer Quelle war das Ereignis weniger gravierend.</beispiel>
+  </beispiele>
+</warn-tag>
