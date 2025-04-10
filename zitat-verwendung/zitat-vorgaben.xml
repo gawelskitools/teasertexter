@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zitat-vorgaben>
+  <vorgaben>
+    <anzahl max="3" />
+    <quellen>
+      <quelle>anmoderation</quelle>
+      <quelle>transkript</quelle>
+      <quelle>redaktion</quelle>
+    </quellen>
+    <bedingungen>
+      <bedingung>Zitattext muss in Anführungszeichen stehen („...“ oder "...")</bedingung>
+      <bedingung>Zitattext darf maximal 60 Zeichen lang sein</bedingung>
+      <bedingung>Zitat muss einer Person mit vollständigem Namen zugeordnet sein</bedingung>
+      <bedingung>Wenn vorhanden, soll auch die Funktion/Titel der Person integriert werden</bedingung>
+      <bedingung>Zitat muss thematisch zur gewählten Variante passen</bedingung>
+    </bedingungen>
+    <einschraenkungen>
+      <nicht-erlaubt>Keine Zitate in Kurzbeschreibungen der regulären Varianten</nicht-erlaubt>
+      <nicht-erlaubt>Keine erfundenen oder ergänzten Zitate</nicht-erlaubt>
+      <nicht-erlaubt>Keine Nutzung ohne vollständige Zuordnung der Quelle</nicht-erlaubt>
+    </einschraenkungen>
+    <stil>
+      <kuerzung>Sinngemäße Kürzung ist erlaubt, sofern keine inhaltliche Verfälschung erfolgt</kuerzung>
+    </stil>
+  </vorgaben>
+
+  <struktur>
+    <zitat-variante>
+      <ueberschrift>Zitattext, ggf. gekürzt („...“)</ueberschrift>
+      <kurzbeschreibung>Muss vollständigen Namen und Funktion des Zitatgebers enthalten und inhaltlich zum Zitat passen</kurzbeschreibung>
+    </zitat-variante>
+  </struktur>
+
+  <beispiele>
+    <zitat>
+      <quelle>anmoderation</quelle>
+      <ueberschrift>„Wir schaffen das.“</ueberschrift>
+      <kurzbeschreibung>Angela Merkel kündigt entschlossenes Handeln in der Krise an.</kurzbeschreibung>
+      <name>Angela Merkel</name>
+      <funktion>Bundeskanzlerin</funktion>
+    </zitat>
+    <zitat>
+      <quelle>transkript</quelle>
+      <ueberschrift>„Wir stehen zusammen.“</ueberschrift>
+      <kurzbeschreibung>Ministerpräsident betont Geschlossenheit im Katastrophenfall.</kurzbeschreibung>
+      <name>Markus Söder</name>
+      <funktion>Bayerischer Ministerpräsident</funktion>
+    </zitat>
+  </beispiele>
+</zitat-vorgaben>
