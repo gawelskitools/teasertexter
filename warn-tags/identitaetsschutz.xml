@@ -1,0 +1,10 @@
+<!-- warn-tags/identitaetsschutz.xml -->
+<warn-tag name="Identitätsschutz">
+  <standard>Keine Details zur betroffenen Person.</standard>
+  <hinweis>Schütze persönliche Angaben. Verzichte auf Namen, Alter oder genaue Ortsangaben bei Betroffenen.</hinweis>
+  <empfehlung>Verallgemeinere Beschreibungen: z. B. „ein Jugendlicher“ statt „der 17-jährige Schüler aus Hamburg“.</empfehlung>
+  <beispiele>
+    <beispiel>Ein Anwohner berichtet über die Situation vor Ort.</beispiel>
+    <beispiel>Ein Kind wurde leicht verletzt.</beispiel>
+  </beispiele>
+</warn-tag>
