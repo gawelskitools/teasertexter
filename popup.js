@@ -25,7 +25,6 @@ export function confirmKontextFallback(currentArt) {
       document.body.removeChild(confirmBox);
       resolve(true);
     };
-
     document.getElementById("confirmCancel").onclick = () => {
       document.body.removeChild(confirmBox);
       resolve(false);
@@ -37,16 +36,11 @@ export function showWarnTagPopup(tagName) {
   return new Promise(resolve => {
     const tagInfo = window.warnTagDetails?.[tagName] || {};
     const standard = tagInfo.standard?.trim() || "-";
-    const hinweis = tagInfo.hinweis?.trim() || "";
-    const empfehlung = tagInfo.empfehlung?.trim() || "";
-    const beispiele = tagInfo.beispiele?.trim() || "";
-
-    const beispielList = beispiele
-      .split(/[\r\n]+/)
-      .map(b => b.trim())
-      .filter(b => b.length > 0)
-      .map(b => `&gt; ${b}`)
-      .join("<br>");
+    const hinweis = tagInfo.hinweis?.trim();
+    const empfehlung = tagInfo.empfehlung?.trim();
+    const beispiele = Array.isArray(tagInfo.beispiele)
+      ? tagInfo.beispiele.map(b => `&gt; ${b.trim()}`).join("<br>")
+      : "";
 
     const infoBox = document.createElement("div");
     infoBox.innerHTML = `
@@ -58,9 +52,7 @@ export function showWarnTagPopup(tagName) {
         <p>${standard}</p>
         ${hinweis ? `<p>&gt; ${hinweis}</p>` : ""}
         ${empfehlung ? `<p>&gt; ${empfehlung}</p>` : ""}
-        ${beispielList ? `
-          <p><strong>Beispiele zum besseren Verständnis:</strong><br>
-          ${beispielList}</p>` : ""}
+        ${beispiele ? `<p><strong>Beispiele zum besseren Verständnis:</strong><br>${beispiele}</p>` : ""}
         <p style="margin-top: 20px;"><em>Mit "OK" wird dieser Warn-Tag übernommen!</em></p>
         <div style="margin-top: 20px; text-align: right;">
           <button id="warnOk">OK</button>
