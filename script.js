@@ -63,10 +63,11 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   document.querySelectorAll(".tag-button").forEach(btn => {
-    btn.addEventListener("click", () => {
+     btn.addEventListener("click", async () => {
       const tagName = btn.textContent.trim();
-      showWarnTagPopup(tagName);
-      btn.classList.toggle("active");
+      const confirmed = await showWarnTagPopup(tagName);
+      if (confirmed) {
+     btn.classList.toggle("active");
     });
   });
 
