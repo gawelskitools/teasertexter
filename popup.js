@@ -1,6 +1,5 @@
 // --- popup.js ---
 
-// Popup zur Beitragsart-Wahl (#kontext als Fallback)
 export function confirmKontextFallback(currentArt) {
   return new Promise(resolve => {
     if (currentArt && currentArt.trim() !== "") {
@@ -34,26 +33,35 @@ export function confirmKontextFallback(currentArt) {
   });
 }
 
-// Popup zur Anzeige von Warn-Tag-Hinweisen (Standard + Custom)
 export function showWarnTagPopup(tagName) {
-  const hints = window.warnTagHints?.[tagName];
-  if (!hints) return;
+  const hints = window.warnTagHints || {};
+  const tagInfo = hints[tagName] || {};
 
-  const popupBox = document.createElement("div");
-  popupBox.innerHTML = `
+  const infoBox = document.createElement("div");
+  infoBox.innerHTML = `
     <div style="position:fixed;top:20%;left:50%;transform:translateX(-50%);
-      background:#fff;border:1px solid #ccc;padding:20px;z-index:10000;
-      box-shadow:0 0 15px rgba(0,0,0,0.3);width:400px;max-width:90%;">
-      <h3>Hinweise zu <code>${tagName}</code></h3>
-      <p><strong>Standard:</strong><br>${hints.standard || "–"}</p>
-      <p><strong>Custom:</strong><br>${hints.custom || "–"}</p>
+      background:#fff;border:1px solid #ccc;padding:20px;z-index:9999;
+      box-shadow:0 0 15px rgba(0,0,0,0.3);max-width:600px;">
+      <h3>Hinweise zum Warn-Tag: ${tagName}</h3>
+      <p><strong>Standard-Hinweis:</strong><br>${tagInfo.standard || "Keine Hinweise vorhanden."}</p>
+      ${tagInfo.custom ? `<p><strong>Custom-Hinweis:</strong><br>${tagInfo.custom}</p>` : ""}
       <div style="margin-top: 20px; text-align: right;">
-        <button id="warnHintOk">OK</button>
+        <button id="warnOk">OK</button>
+        <button id="warnCancel" style="margin-left: 10px;">Abbrechen</button>
       </div>
-    </div>
-  `;
-  document.body.appendChild(popupBox);
-  document.getElementById("warnHintOk").onclick = () => {
-    document.body.removeChild(popupBox);
-  };
+    </div>`;
+
+  document.body.appendChild(infoBox);
+
+  return new Promise(resolve => {
+    document.getElementById("warnOk").onclick = () => {
+      document.body.removeChild(infoBox);
+      resolve(true);
+    };
+
+    document.getElementById("warnCancel").onclick = () => {
+      document.body.removeChild(infoBox);
+      resolve(false);
+    };
+  });
 }
