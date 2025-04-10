@@ -12,7 +12,30 @@
       <bei-warn-tag name="rechtlich sensibel">Juristisch korrekte Begriffe verwenden. Keine Wertungen.</bei-warn-tag>
     </warn-tags-verarbeitung>
     <custom-warn-tags>
-      <!-- Hier können optional zusätzliche Tag-Verarbeitungsregeln ergänzt werden -->
+      <bei-warn-tag name="Mutmaßung">
+        <hinweis>Begründe Aussagen mit historischen oder redaktionellen Quellen, wenn keine aktuellen vorliegen.</hinweis>
+        <empfehlung>Verwende Formulierungen wie „laut früheren Angaben“, „nicht bestätigt“ oder „vermutlich“.</empfehlung>
+      </bei-warn-tag>
+
+      <bei-warn-tag name="Vorverurteilung">
+        <hinweis>Vermeide jegliche Bewertung der Schuldfrage, auch implizit.</hinweis>
+        <empfehlung>Ersetze Formulierungen wie „der Täter“ durch „der mutmaßliche Täter“.</empfehlung>
+      </bei-warn-tag>
+
+      <bei-warn-tag name="Falschmeldung">
+        <hinweis>Prüfe widersprüchliche Angaben im Kontext älterer Quellen. Markiere veraltete Infos ggf. als überholt.</hinweis>
+        <empfehlung>Setze klar formulierte Korrekturhinweise oder Zusätze wie „frühere Angaben waren unzutreffend“.</empfehlung>
+      </bei-warn-tag>
+
+      <bei-warn-tag name="Identitätsschutz">
+        <hinweis>Schütze persönliche Angaben. Verzichte auf Namen, Alter oder genaue Ortsangaben bei Betroffenen.</hinweis>
+        <empfehlung>Verallgemeinere Beschreibungen: z. B. „ein Jugendlicher“ statt „der 17-jährige Schüler aus Hamburg“.</empfehlung>
+      </bei-warn-tag>
+
+      <bei-warn-tag name="rechtlich sensibel">
+        <hinweis>Beziehe dich auf rechtlich geprüfte oder neutrale Begriffe, vor allem bei Vorwürfen oder Ermittlungen.</hinweis>
+        <empfehlung>Vermeide Begriffe mit negativer Konnotation wie „unfassbar“, „Skandal“, „massiv“.</empfehlung>
+      </bei-warn-tag>
     </custom-warn-tags>
     
     <struktur>
