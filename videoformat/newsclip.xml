@@ -4,6 +4,13 @@
   <tags>#newsclip</tags>
   <bearbeitungshinweise>
     <ziel>Erstelle eine formatgerechte, strukturierte Nachrichtenauswertung.</ziel>
+    <warn-tags-verarbeitung>
+      <bei-warn-tag name="Mutmaßung">Nutze Konjunktiv und vermeide Tatsachenbehauptungen ohne Quelle.</bei-warn-tag>
+      <bei-warn-tag name="Vorverurteilung">Keine Schuldzuweisungen. Neutralität wahren.</bei-warn-tag>
+      <bei-warn-tag name="Falschmeldung">Alte Inhalte nur mit Korrekturhinweis übernehmen.</bei-warn-tag>
+      <bei-warn-tag name="Identitätsschutz">Keine Details zur betroffenen Person.</bei-warn-tag>
+      <bei-warn-tag name="rechtlich sensibel">Juristisch korrekte Begriffe verwenden. Keine Wertungen.</bei-warn-tag>
+    </warn-tags-verarbeitung>
     <struktur>
       <ueberschrift>
         <inhalt>max. 60 Zeichen, faktenbasiert</inhalt>
