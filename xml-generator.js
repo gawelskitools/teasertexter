@@ -10,7 +10,6 @@ export async function generateFinalXML() {
   const input = getAllInputValues();
   let art = input.art;
 
-  // Falls keine Beitragsart ausgewählt, Fallback abfragen
   if (!art) {
     const confirmed = await confirmKontextFallback();
     if (!confirmed) return;
@@ -22,6 +21,18 @@ export async function generateFinalXML() {
   const videoFormatXml = await fetch(`videoformat/${art.replace('#','')}.xml`)
     .then(res => res.ok ? res.text() : fetch('videoformat/kontext.xml').then(r => r.text()))
     .catch(() => '<videoFormat><formatgruppe>kontext</formatgruppe><tags>#kontext</tags></videoFormat>');
+
+  // --- Strukturierter Warn-Tag-Block ---
+  const activeWarnTagNames = [...document.querySelectorAll(".tag-button.active")].map(btn => btn.textContent.trim());
+  const warnTagXmlBlocks = activeWarnTagNames.map(name => {
+    const tagData = window.warnTagDetails?.[name] || {};
+    return `  <tag name="${escapeXml(name)}">
+    <standard>${escapeXml(tagData.standard || "")}</standard>
+    <hinweis>${escapeXml(tagData.hinweis || "")}</hinweis>
+    <empfehlung>${escapeXml(tagData.empfehlung || "")}</empfehlung>
+    <beispiele>${escapeXml(tagData.beispiele || "")}</beispiele>
+  </tag>`;
+  }).join("\n");
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <online-ausgabe version="1.0">
@@ -36,7 +47,7 @@ export async function generateFinalXML() {
     <beschreibung>Verarbeite alle Inhalte gemäß Beitragsart. Nutze &lt;tags&gt; zur Kontextualisierung und Priorisierung. Keine Rückfragen. Kein CDATA. Direkte Klartextausgabe.</beschreibung>
     <hinweis>Berücksichtige die Struktur in &lt;videoFormat&gt; für alle redaktionellen Ausgaben.</hinweis>
     <hinweis>Beziehe alle gesetzten &lt;warn-tags&gt; in die inhaltliche, sprachliche und rechtliche Auswertung ein. Bei gesetzten Tags ist eine vorsichtige Tonalitaet verpflichtend.</hinweis>
-    <hinweis>Für redaktionelle Hinweise zu Warn-Tags beachte die Inhalte aus &lt;custom-warn-tags&gt; im Block &lt;videoFormat&gt;.</hinweis>
+    <hinweis>Für redaktionelle Hinweise zu Warn-Tags beachte die Inhalte aus &lt;custom-warn-tags&gt; im Block &lt;warn-tags&gt;.</hinweis>
     <ablauf>
       <schritt>1. Inhalte analysieren</schritt>
       <schritt>2. Strukturierte Auswertung</schritt>
@@ -73,9 +84,11 @@ Keine Rückfragen. Nur diese Klartextstruktur.
       <top-tags prioritaet="hoch">
         ${input.topTags.split(',').map(tag => `<tag>${tag.trim()}</tag>`).join("\n")}
       </top-tags>
-      <warn-tags bedeutung="inhaltlich kritisch">
-        ${input.warnTags}
-      </warn-tags>
+    </tags>
+    <warn-tags bedeutung="inhaltlich kritisch">
+${warnTagXmlBlocks}
+    </warn-tags>
+    <tags>
       <kontext-tags>
         <thema>${input.thema}</thema>
         <ort>${input.ort}</ort>
