@@ -1,0 +1,10 @@
+<!-- warn-tags/rechtlich_sensibel.xml -->
+<warn-tag name="rechtlich sensibel">
+  <standard>Juristisch korrekte Begriffe verwenden. Keine Wertungen.</standard>
+  <hinweis>Beziehe dich auf rechtlich geprüfte oder neutrale Begriffe, vor allem bei Vorwürfen oder Ermittlungen.</hinweis>
+  <empfehlung>Vermeide Begriffe mit negativer Konnotation wie „unfassbar“, „Skandal“, „massiv“.</empfehlung>
+  <beispiele>
+    <beispiel>Es wurden Ermittlungen aufgenommen.</beispiel>
+    <beispiel>Die Vorwürfe stehen im Raum.</beispiel>
+  </beispiele>
+</warn-tag>
