@@ -37,10 +37,8 @@ export function getAllInputValues() {
     ereignis: getFieldValue("ereignisTag"),
     warnTags: getWarnTagsXml(),
     transcript: getTextareaValue("transkript"),
-    zitatT: getSelectedValue("zitateTranskript"),
     weightT: getSelectedValue("weightTranskript"),
     anmoderation: getTextareaValue("anmoderation"),
-    zitatA: getSelectedValue("zitateAnmoderation"),
     weightA: getSelectedValue("weightAnmoderation"),
     redaktion: getTextareaValue("redaktionstext"),
     hintergrund: getTextareaValue("hintergrundtext")
