@@ -19,6 +19,29 @@ function updateBeitragsarten() {
   }
 }
 
+document.addEventListener("DOMContentLoaded", () => {
+  const formatSelect = document.getElementById("beitragsformat");
+  formatSelect.addEventListener("change", updateBeitragsarten);
+
+  const artSelect = document.getElementById("beitragsart");
+  artSelect.addEventListener("change", () => {
+    const art = artSelect.value || "kontext";
+    fetchVideoFormatHints(art);
+  });
+
+  document.querySelectorAll(".tag-button").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const tagName = btn.textContent.trim();
+      const confirmed = await showWarnTagPopup(tagName);
+      if (confirmed) {
+        btn.classList.toggle("active");
+      }
+    });
+  });
+
+  fetchVideoFormatHints("kontext");
+});
+
 function fetchVideoFormatHints(artValue) {
   const path = `videoformat/${artValue.replace('#', '')}.xml`;
   fetch(path)
@@ -52,29 +75,6 @@ function fetchVideoFormatHints(artValue) {
     });
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  const formatSelect = document.getElementById("beitragsformat");
-  formatSelect.addEventListener("change", updateBeitragsarten);
-
-  const artSelect = document.getElementById("beitragsart");
-  artSelect.addEventListener("change", () => {
-    const artValue = artSelect.value;
-    if (artValue) fetchVideoFormatHints(artValue);
-  });
-
-  document.querySelectorAll(".tag-button").forEach(btn => {
-     btn.addEventListener("click", async () => {
-      const tagName = btn.textContent.trim();
-      const confirmed = await showWarnTagPopup(tagName);
-      if (confirmed) {
-     btn.classList.toggle("active");
-    });
-  });
-
-  fetchVideoFormatHints("kontext");
-});
-
-// Exportierte Funktionen für HTML-Zugriff
 window.updateBeitragsarten = updateBeitragsarten;
 window.generateFinalXML = () => generateFinalXML(getAllInputValues());
 window.copyToClipboard = () => {
