@@ -1,0 +1,10 @@
+<!-- warn-tags/mutmassung.xml -->
+<warn-tag name="Mutmaßung">
+  <standard>Nutze Konjunktiv und vermeide Tatsachenbehauptungen ohne Quelle.</standard>
+  <hinweis>Begründe Aussagen mit historischen oder redaktionellen Quellen, wenn keine aktuellen vorliegen.</hinweis>
+  <empfehlung>Verwende Formulierungen wie „laut früheren Angaben“, „nicht bestätigt“ oder „vermutlich“.</empfehlung>
+  <beispiele>
+    <beispiel>Es könnte sich um ein technisches Versagen handeln.</beispiel>
+    <beispiel>Die Ursache ist bislang unklar.</beispiel>
+  </beispiele>
+</warn-tag>
