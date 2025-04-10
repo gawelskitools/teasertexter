@@ -42,19 +42,22 @@ export async function generateFinalXML() {
       <schritt>4. Ausgabe erzeugen</schritt>
     </ablauf>
     <abschluss>
-Finale redaktionelle Online-Ausgabe
+Finale redaktionelle Online-Ausgabe (3 Varianten)
 
-Überschrift (max. 60 Zeichen):
-"..."
+Variante 1
+Überschrift (max. 60 Zeichen): "..."
+Kurzbeschreibung (max. 150 Zeichen): "..."
 
-Kurzbeschreibung (max. 150 Zeichen):
-"..."
+Variante 2
+Überschrift (max. 60 Zeichen): "..."
+Kurzbeschreibung (max. 150 Zeichen): "..."
 
-SEO-Keywords (max. 10):
-...
+Variante 3
+Überschrift (max. 60 Zeichen): "..."
+Kurzbeschreibung (max. 150 Zeichen): "..."
 
-SEO-Themen (max. 5):
-...
+SEO-Keywords (max. 10): ...
+SEO-Themen (max. 5): ...
 
 Keine Rückfragen. Nur diese Klartextstruktur.
     </abschluss>
@@ -93,6 +96,27 @@ Keine Rückfragen. Nur diese Klartextstruktur.
     </analysearten>
     ${videoFormatXml.trim()}
   </quelle>
+  <vorschau>
+    <text>
+      <variante nummer="1">
+        <ueberschrift>...</ueberschrift>
+        <kurzbeschreibung>...</kurzbeschreibung>
+      </variante>
+      <variante nummer="2">
+        <ueberschrift>...</ueberschrift>
+        <kurzbeschreibung>...</kurzbeschreibung>
+      </variante>
+      <variante nummer="3">
+        <ueberschrift>...</ueberschrift>
+        <kurzbeschreibung>...</kurzbeschreibung>
+      </variante>
+      <keywords>...</keywords>
+      <themen>...</themen>
+    </text>
+    <html>
+      <!-- Optional: HTML-Ausgabe -->
+    </html>
+  </vorschau>
 </online-ausgabe>`;
 
   document.getElementById("finalXml").textContent = xml;
