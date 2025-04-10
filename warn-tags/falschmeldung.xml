@@ -1,4 +1,3 @@
-<!-- warn-tags/falschmeldung.xml -->
 <warn-tag name="Falschmeldung">
   <standard>Alte Inhalte nur mit Korrekturhinweis übernehmen.</standard>
   <hinweis>Prüfe widersprüchliche Angaben im Kontext älterer Quellen. Markiere veraltete Infos ggf. als überholt.</hinweis>
