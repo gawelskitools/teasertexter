@@ -22,7 +22,10 @@ export async function generateFinalXML() {
     .then(res => res.ok ? res.text() : fetch('videoformat/kontext.xml').then(r => r.text()))
     .catch(() => '<videoFormat><formatgruppe>kontext</formatgruppe><tags>#kontext</tags></videoFormat>');
 
-  // --- Strukturierter Warn-Tag-Block ---
+  const zitatVorgabenXml = await fetch(`zitat-verwendung/zitat-vorgaben.xml`)
+    .then(res => res.ok ? res.text() : Promise.resolve(""))
+    .catch(() => "");
+
   const activeWarnTagNames = [...document.querySelectorAll(".tag-button.active")].map(btn => btn.textContent.trim());
   const warnTagXmlBlocks = activeWarnTagNames.map(name => {
     const tagData = window.warnTagDetails?.[name] || {};
@@ -48,6 +51,7 @@ export async function generateFinalXML() {
     <hinweis>Berücksichtige die Struktur in &lt;videoFormat&gt; für alle redaktionellen Ausgaben.</hinweis>
     <hinweis>Beziehe alle gesetzten &lt;warn-tags&gt; in die inhaltliche, sprachliche und rechtliche Auswertung ein. Bei gesetzten Tags ist eine vorsichtige Tonalitaet verpflichtend.</hinweis>
     <hinweis>Für redaktionelle Hinweise zu Warn-Tags beachte die Inhalte aus &lt;custom-warn-tags&gt; im Block &lt;warn-tags&gt;.</hinweis>
+    <hinweis>Für Zitate beachte strikt die Regeln in &lt;zitat-vorgaben&gt;. Maximal 3 Zitat-Varianten als separater Block unterhalb der redaktionellen Varianten ausgeben. Nur wörtliche Zitate mit namentlich bekannter Quelle, maximal 60 Zeichen. Keine Rückfragen, keine Ergänzungen, keine erfundenen Inhalte.</hinweis>
     <ablauf>
       <schritt>1. Inhalte analysieren</schritt>
       <schritt>2. Strukturierte Auswertung</schritt>
@@ -68,6 +72,10 @@ Kurzbeschreibung (max. 150 Zeichen): "..."
 Variante 3
 Überschrift (max. 60 Zeichen): "..."
 Kurzbeschreibung (max. 150 Zeichen): "..."
+
+Zitat-Variante 1: "..."
+Zitat-Variante 2: "..."
+Zitat-Variante 3: "..."
 
 SEO-Keywords (max. 10): ...
 SEO-Themen (max. 5): ...
@@ -97,11 +105,9 @@ ${warnTagXmlBlocks}
     </tags>
     <analysearten>
       <transkript gewichtung="${input.weightT}">
-        <zitate-erlaubt>${input.zitatT}</zitate-erlaubt>
         <originaltext>${input.transcript}</originaltext>
       </transkript>
       <anmoderation gewichtung="${input.weightA}">
-        <zitate-erlaubt>${input.zitatA}</zitate-erlaubt>
         <originaltext>${input.anmoderation}</originaltext>
       </anmoderation>
       <kontextquelle>
@@ -110,6 +116,7 @@ ${warnTagXmlBlocks}
       </kontextquelle>
     </analysearten>
     ${videoFormatXml.trim()}
+    ${zitatVorgabenXml.trim()}
   </quelle>
   <vorschau>
     <text>
@@ -125,6 +132,11 @@ ${warnTagXmlBlocks}
         <ueberschrift>...</ueberschrift>
         <kurzbeschreibung>...</kurzbeschreibung>
       </variante>
+      <zitat-varianten>
+        <zitat nummer="1">...</zitat>
+        <zitat nummer="2">...</zitat>
+        <zitat nummer="3">...</zitat>
+      </zitat-varianten>
       <keywords>...</keywords>
       <themen>...</themen>
     </text>
