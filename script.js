@@ -86,11 +86,15 @@ function preloadWarnTagDetails() {
       .then(xml => {
         const parser = new DOMParser();
         const doc = parser.parseFromString(xml, "application/xml");
+
+        const beispiele = Array.from(doc.querySelectorAll("beispiele > beispiel"))
+          .map(b => b.textContent.trim());
+
         window.warnTagDetails[tag] = {
           standard: doc.querySelector("standard")?.textContent || "",
           hinweis: doc.querySelector("hinweis")?.textContent || "",
           empfehlung: doc.querySelector("empfehlung")?.textContent || "",
-          beispiele: doc.querySelector("beispiele")?.textContent || ""
+          beispiele
         };
       })
       .catch(() => {
