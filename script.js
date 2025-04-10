@@ -40,6 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   fetchVideoFormatHints("kontext");
+  preloadWarnTagDetails();
 });
 
 function fetchVideoFormatHints(artValue) {
@@ -73,6 +74,30 @@ function fetchVideoFormatHints(artValue) {
       console.warn("Hinweis: VideoFormat-Hinweise konnten nicht geladen werden.");
       window.warnTagHints = {};
     });
+}
+
+function preloadWarnTagDetails() {
+  const tags = ["Mutmaßung", "Vorverurteilung", "Falschmeldung", "Identitätsschutz", "rechtlich sensibel"];
+  window.warnTagDetails = {};
+
+  tags.forEach(tag => {
+    fetch(`warn-tags/${tag}.xml`)
+      .then(res => res.ok ? res.text() : Promise.reject("not found"))
+      .then(xml => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(xml, "application/xml");
+        window.warnTagDetails[tag] = {
+          standard: doc.querySelector("standard")?.textContent || "",
+          hinweis: doc.querySelector("hinweis")?.textContent || "",
+          empfehlung: doc.querySelector("empfehlung")?.textContent || "",
+          beispiele: doc.querySelector("beispiele")?.textContent || ""
+        };
+      })
+      .catch(() => {
+        console.warn(`Warn-Tag-Datei für '${tag}' nicht gefunden.`);
+        window.warnTagDetails[tag] = {};
+      });
+  });
 }
 
 window.updateBeitragsarten = updateBeitragsarten;
