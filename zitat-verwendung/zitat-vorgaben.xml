@@ -1,50 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zitat-vorgaben>
-  <vorgaben>
-    <anzahl max="3" />
-    <quellen>
-      <quelle>anmoderation</quelle>
-      <quelle>transkript</quelle>
-      <quelle>redaktion</quelle>
-    </quellen>
-    <bedingungen>
-      <bedingung>Zitattext muss in Anführungszeichen stehen („...“ oder "...")</bedingung>
-      <bedingung>Zitattext darf maximal 60 Zeichen lang sein</bedingung>
-      <bedingung>Zitat muss einer Person mit vollständigem Namen zugeordnet sein</bedingung>
-      <bedingung>Wenn vorhanden, soll auch die Funktion/Titel der Person integriert werden</bedingung>
-      <bedingung>Zitat muss thematisch zur gewählten Variante passen</bedingung>
-    </bedingungen>
-    <einschraenkungen>
-      <nicht-erlaubt>Keine Zitate in Kurzbeschreibungen der regulären Varianten</nicht-erlaubt>
-      <nicht-erlaubt>Keine erfundenen oder ergänzten Zitate</nicht-erlaubt>
-      <nicht-erlaubt>Keine Nutzung ohne vollständige Zuordnung der Quelle</nicht-erlaubt>
-    </einschraenkungen>
-    <stil>
-      <kuerzung>Sinngemäße Kürzung ist erlaubt, sofern keine inhaltliche Verfälschung erfolgt</kuerzung>
-    </stil>
-  </vorgaben>
-
   <struktur>
-    <zitat-variante>
-      <ueberschrift>Zitattext, ggf. gekürzt („...“)</ueberschrift>
-      <kurzbeschreibung>Muss vollständigen Namen und Funktion des Zitatgebers enthalten und inhaltlich zum Zitat passen</kurzbeschreibung>
-    </zitat-variante>
+    <anzahl>maximal 3 Zitate</anzahl>
+    <quelle>nur aus Transkript, Anmoderation oder Redaktionstext</quelle>
+    <bedingungen>
+      <bedingung>Nur zulässig mit vollständigem Namen der zitierenden Person</bedingung>
+      <bedingung>Funktion soll wenn möglich enthalten sein</bedingung>
+      <bedingung>Zitatlänge darf 60 Zeichen nicht überschreiten</bedingung>
+      <bedingung>Zitate dürfen nicht verfälscht werden</bedingung>
+      <bedingung>Sinngemäßes Kürzen nach journalistischen Regeln ist zulässig</bedingung>
+      <bedingung>Zitate nur verwenden, wenn sie sinnvoll zu Überschrift/Kurzbeschreibung passen</bedingung>
+      <bedingung>Zitate in Kurzbeschreibungen sind nicht erlaubt</bedingung>
+      <bedingung>Bei Zitaten in der Überschrift: vollständiger Name in der Kurzbeschreibung erforderlich</bedingung>
+    </bedingungen>
   </struktur>
+
+  <anweisung-fuer-ki>
+    <beschreibung>Wenn mindestens ein zulässiges Zitat erkannt wurde, generiere zusätzlich zur regulären Variante bis zu drei Zitat-Varianten.</beschreibung>
+    <ausgabe>
+      <zitat-variante>
+        <ueberschrift>Zitat in Anführungszeichen</ueberschrift>
+        <kurzbeschreibung>passend zur Aussage mit vollständigem Namen der Quelle</kurzbeschreibung>
+      </zitat-variante>
+    </ausgabe>
+    <hinweise>
+      <hinweis>Zitate nur übernehmen, wenn alle Bedingungen erfüllt sind.</hinweis>
+      <hinweis>Wenn nur ein Zitat vorhanden ist, dürfen daraus bis zu drei leicht abgewandelte Varianten erzeugt werden.</hinweis>
+      <hinweis>Zitate müssen vollständig erkennbar und eindeutig einer Person zuordenbar sein.</hinweis>
+    </hinweise>
+  </anweisung-fuer-ki>
 
   <beispiele>
     <zitat>
-      <quelle>anmoderation</quelle>
-      <ueberschrift>„Wir schaffen das.“</ueberschrift>
-      <kurzbeschreibung>Angela Merkel kündigt entschlossenes Handeln in der Krise an.</kurzbeschreibung>
-      <name>Angela Merkel</name>
-      <funktion>Bundeskanzlerin</funktion>
+      <quelle>Transkript</quelle>
+      <text>"Wir müssen jetzt gemeinsam handeln."</text>
+      <name>Anna Meier</name>
+      <funktion>Gesundheitssenatorin</funktion>
+      <ueberschrift>"Wir müssen jetzt gemeinsam handeln."</ueberschrift>
+      <kurzbeschreibung>Gesundheitssenatorin Anna Meier ruft zu gemeinsamen Maßnahmen auf.</kurzbeschreibung>
     </zitat>
     <zitat>
-      <quelle>transkript</quelle>
-      <ueberschrift>„Wir stehen zusammen.“</ueberschrift>
-      <kurzbeschreibung>Ministerpräsident betont Geschlossenheit im Katastrophenfall.</kurzbeschreibung>
-      <name>Markus Söder</name>
-      <funktion>Bayerischer Ministerpräsident</funktion>
+      <quelle>Redaktionelle Anmerkung</quelle>
+      <text>"Das war ein schwerer Rückschlag für uns."</text>
+      <name>Peter Schmitt</name>
+      <funktion>Trainer</funktion>
+      <ueberschrift>"Das war ein schwerer Rückschlag für uns."</ueberschrift>
+      <kurzbeschreibung>Trainer Peter Schmitt bewertet die Niederlage kritisch.</kurzbeschreibung>
     </zitat>
   </beispiele>
 </zitat-vorgaben>
