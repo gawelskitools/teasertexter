@@ -35,6 +35,7 @@ export async function generateFinalXML() {
   <anweisung-fuer-ki>
     <beschreibung>Verarbeite alle Inhalte gemäß Beitragsart. Nutze &lt;tags&gt; zur Kontextualisierung und Priorisierung. Keine Rückfragen. Kein CDATA. Direkte Klartextausgabe.</beschreibung>
     <hinweis>Berücksichtige die Struktur in &lt;videoFormat&gt; für alle redaktionellen Ausgaben.</hinweis>
+    <hinweis>Beziehe alle gesetzten &lt;warn-tags&gt; in die inhaltliche, sprachliche und rechtliche Auswertung ein. Bei gesetzten Tags ist eine vorsichtige Tonalitaet verpflichtend.</hinweis>
     <ablauf>
       <schritt>1. Inhalte analysieren</schritt>
       <schritt>2. Strukturierte Auswertung</schritt>
