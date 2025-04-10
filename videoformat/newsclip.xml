@@ -11,6 +11,10 @@
       <bei-warn-tag name="Identitätsschutz">Keine Details zur betroffenen Person.</bei-warn-tag>
       <bei-warn-tag name="rechtlich sensibel">Juristisch korrekte Begriffe verwenden. Keine Wertungen.</bei-warn-tag>
     </warn-tags-verarbeitung>
+    <custom-warn-tags>
+      <!-- Hier können optional zusätzliche Tag-Verarbeitungsregeln ergänzt werden -->
+    </custom-warn-tags>
+    
     <struktur>
       <ueberschrift>
         <inhalt>max. 60 Zeichen, faktenbasiert</inhalt>
