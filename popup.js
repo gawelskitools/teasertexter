@@ -34,26 +34,40 @@ export function confirmKontextFallback(currentArt) {
 }
 
 export function showWarnTagPopup(tagName) {
-  const hints = window.warnTagHints || {};
-  const tagInfo = hints[tagName] || {};
-
-  const infoBox = document.createElement("div");
-  infoBox.innerHTML = `
-    <div style="position:fixed;top:20%;left:50%;transform:translateX(-50%);
-      background:#fff;border:1px solid #ccc;padding:20px;z-index:9999;
-      box-shadow:0 0 15px rgba(0,0,0,0.3);max-width:600px;">
-      <h3>Hinweise zum Warn-Tag: ${tagName}</h3>
-      <p><strong>Standard-Hinweis:</strong><br>${tagInfo.standard || "Keine Hinweise vorhanden."}</p>
-      ${tagInfo.custom ? `<p><strong>Custom-Hinweis:</strong><br>${tagInfo.custom}</p>` : ""}
-      <div style="margin-top: 20px; text-align: right;">
-        <button id="warnOk">OK</button>
-        <button id="warnCancel" style="margin-left: 10px;">Abbrechen</button>
-      </div>
-    </div>`;
-
-  document.body.appendChild(infoBox);
-
   return new Promise(resolve => {
+    const tagInfo = window.warnTagDetails?.[tagName] || {};
+    const standard = tagInfo.standard || "–";
+    const hinweis = tagInfo.hinweis ? `> ${tagInfo.hinweis}` : "";
+    const empfehlung = tagInfo.empfehlung ? `> ${tagInfo.empfehlung}` : "";
+    const beispieleRaw = tagInfo.beispiele || "";
+    const beispieleList = beispieleRaw
+      .split(/[\n\r]+/)
+      .map(b => b.trim())
+      .filter(b => b.length > 0)
+      .map(b => `> ${b}`)
+      .join("<br>");
+
+    const infoBox = document.createElement("div");
+    infoBox.innerHTML = `
+      <div style="position:fixed;top:20%;left:50%;transform:translateX(-50%);
+        background:#fff;border:1px solid #ccc;padding:20px;z-index:9999;
+        box-shadow:0 0 15px rgba(0,0,0,0.3);max-width:700px;">
+        <h3>Warn-Tag: ${tagName}</h3>
+        <p><strong>Dieser Warn-Tag wird wie folgt bei der KI-Verarbeitung benutzt:</strong></p>
+        <p>${standard}</p>
+        ${hinweis ? `<p>${hinweis}</p>` : ""}
+        ${empfehlung ? `<p>${empfehlung}</p>` : ""}
+        ${beispieleList ? `<p><strong>Beispiele zum besseren Verständnis:</strong><br>${beispieleList}</p>` : ""}
+        <p style="margin-top: 20px;"><em>Mit "OK" wird dieser Warn-Tag übernommen!</em></p>
+        <div style="margin-top: 20px; text-align: right;">
+          <button id="warnOk">OK</button>
+          <button id="warnCancel" style="margin-left: 10px;">Abbrechen</button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(infoBox);
+
     document.getElementById("warnOk").onclick = () => {
       document.body.removeChild(infoBox);
       resolve(true);
