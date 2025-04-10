@@ -25,6 +25,7 @@ export function confirmKontextFallback(currentArt) {
       document.body.removeChild(confirmBox);
       resolve(true);
     };
+
     document.getElementById("confirmCancel").onclick = () => {
       document.body.removeChild(confirmBox);
       resolve(false);
@@ -36,11 +37,19 @@ export function showWarnTagPopup(tagName) {
   return new Promise(resolve => {
     const tagInfo = window.warnTagDetails?.[tagName] || {};
     const standard = tagInfo.standard?.trim() || "-";
-    const hinweis = tagInfo.hinweis?.trim();
-    const empfehlung = tagInfo.empfehlung?.trim();
-    const beispiele = Array.isArray(tagInfo.beispiele)
-      ? tagInfo.beispiele.map(b => `&gt; ${b.trim()}`).join("<br>")
-      : "";
+    const hinweis = tagInfo.hinweis?.trim() || "";
+    const empfehlung = tagInfo.empfehlung?.trim() || "";
+    const beispieleArray = Array.isArray(tagInfo.beispiele)
+      ? tagInfo.beispiele
+      : typeof tagInfo.beispiele === "string"
+        ? tagInfo.beispiele.split(/<beispiel>|<\/beispiel>/g).filter(Boolean)
+        : [];
+
+    const beispielList = beispieleArray
+      .map(b => b.trim())
+      .filter(b => b.length > 0)
+      .map(b => `&gt; ${b}`)
+      .join("<br>");
 
     const infoBox = document.createElement("div");
     infoBox.innerHTML = `
@@ -52,8 +61,10 @@ export function showWarnTagPopup(tagName) {
         <p>${standard}</p>
         ${hinweis ? `<p>&gt; ${hinweis}</p>` : ""}
         ${empfehlung ? `<p>&gt; ${empfehlung}</p>` : ""}
-        ${beispiele ? `<p><strong>Beispiele zum besseren Verständnis:</strong><br>${beispiele}</p>` : ""}
-        <p style="margin-top: 20px;"><em>Mit "OK" wird dieser Warn-Tag übernommen!</em></p>
+        ${beispielList ? `
+          <p><strong>Beispiele zum besseren Verständnis:</strong><br>
+          ${beispielList}</p>` : ""}
+        <p style="margin-top: 20px;"><em>Mit \"OK\" wird dieser Warn-Tag übernommen!</em></p>
         <div style="margin-top: 20px; text-align: right;">
           <button id="warnOk">OK</button>
           <button id="warnCancel" style="margin-left: 10px;">Abbrechen</button>
