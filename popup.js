@@ -37,13 +37,9 @@ export function showWarnTagPopup(tagName) {
   return new Promise(resolve => {
     const tagInfo = window.warnTagDetails?.[tagName] || {};
     const standard = tagInfo.standard?.trim() || "-";
-    const hinweis = tagInfo.hinweis?.trim() || "";
-    const empfehlung = tagInfo.empfehlung?.trim() || "";
     const beispieleArray = Array.isArray(tagInfo.beispiele)
       ? tagInfo.beispiele
-      : typeof tagInfo.beispiele === "string"
-        ? tagInfo.beispiele.split(/<beispiel>|<\/beispiel>/g).filter(Boolean)
-        : [];
+      : [];
 
     const beispielList = beispieleArray
       .map(b => b.trim())
@@ -59,12 +55,10 @@ export function showWarnTagPopup(tagName) {
         <h3>Warn-Tag: ${tagName}</h3>
         <p><strong>Dieser Warn-Tag wird wie folgt bei der KI-Verarbeitung benutzt:</strong></p>
         <p>${standard}</p>
-        ${hinweis ? `<p>&gt; ${hinweis}</p>` : ""}
-        ${empfehlung ? `<p>&gt; ${empfehlung}</p>` : ""}
         ${beispielList ? `
           <p><strong>Beispiele zum besseren Verständnis:</strong><br>
           ${beispielList}</p>` : ""}
-        <p style="margin-top: 20px;"><em>Mit \"OK\" wird dieser Warn-Tag übernommen!</em></p>
+        <p style="margin-top: 20px;"><em>Mit "OK" wird dieser Warn-Tag übernommen!</em></p>
         <div style="margin-top: 20px; text-align: right;">
           <button id="warnOk">OK</button>
           <button id="warnCancel" style="margin-left: 10px;">Abbrechen</button>
