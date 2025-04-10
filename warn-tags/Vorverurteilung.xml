@@ -1,0 +1,9 @@
+<warn-tag name="Vorverurteilung">
+  <standard>Keine Schuldzuweisungen. Neutralität wahren.</standard>
+  <hinweis>Vermeide jegliche Bewertung der Schuldfrage, auch implizit.</hinweis>
+  <empfehlung>Ersetze Formulierungen wie „der Täter“ durch „der mutmaßliche Täter“.</empfehlung>
+  <beispiele>
+    <beispiel>Die Polizei ermittelt gegen einen Verdächtigen.</beispiel>
+    <beispiel>Der Mann soll die Tat begangen haben.</beispiel>
+  </beispiele>
+</warn-tag>
