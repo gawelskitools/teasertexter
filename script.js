@@ -73,7 +73,8 @@ function addRedaktionTag(text, container) {
   const delBtn = chip.querySelector(".chip-delete");
   const altContainer = chip.querySelector(".chip-alternativen");
 
-  editBtn.onclick = () => {
+  editBtn.onclick = (e) => {
+    e.stopPropagation();
     const existingInput = altContainer.querySelector(".chip-alt-input");
     if (existingInput) {
       existingInput.remove();
@@ -118,17 +119,15 @@ window.getRedaktionTagsXml = () => {
 
 // --- Hilfsfunktion für sichere HTML-Ausgabe ---
 function escapeHtml(str) {
-  return str.replace(/[&<>"]/g, tag => (
+  return str.replace(/[&<>\"]/g, tag => (
     { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[tag]
   ));
 }
 
 // --- Globaler Click-Listener zum Schließen alternativer Eingabefelder ---
 document.addEventListener("click", (event) => {
-  const allAltContainer = document.querySelectorAll(".chip-alternativen");
-  allAltContainer.forEach(container => {
-    const isInside = container.contains(event.target) || container.previousSibling?.classList?.contains("chip-edit");
-    if (!isInside) {
+  document.querySelectorAll(".chip-alternativen").forEach(container => {
+    if (!container.contains(event.target) && !container.parentElement.querySelector(".chip-edit").contains(event.target)) {
       const input = container.querySelector(".chip-alt-input");
       if (input) input.remove();
       container.style.display = "none";
