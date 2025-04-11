@@ -37,6 +37,17 @@ export async function generateFinalXML() {
   </tag>`;
   }).join("\n");
 
+  const redaktionelleHinweise = escapeXml(input.redaktionHinweise || "");
+
+  const redaktionsTags = (input.redaktionsTags || []).map(tag => {
+    const alt = tag.alternativen && tag.alternativen.length
+      ? `\n      <alternativen>${tag.alternativen.map(a => `<alt>${escapeXml(a)}</alt>`).join("")}</alternativen>`
+      : "";
+    return `    <begriff>
+      <bezeichnung>${escapeXml(tag.name)}</bezeichnung>${alt}
+    </begriff>`;
+  }).join("\n");
+
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <online-ausgabe version="1.0">
   <verarbeitung automatisch="true" />
@@ -52,6 +63,7 @@ export async function generateFinalXML() {
     <hinweis>Beziehe alle gesetzten &lt;warn-tags&gt; in die inhaltliche, sprachliche und rechtliche Auswertung ein. Bei gesetzten Tags ist eine vorsichtige Tonalitaet verpflichtend.</hinweis>
     <hinweis>Für redaktionelle Hinweise zu Warn-Tags beachte die Inhalte aus &lt;custom-warn-tags&gt; im Block &lt;warn-tags&gt;.</hinweis>
     <hinweis>Für Zitate beachte strikt die Regeln in &lt;zitat-vorgaben&gt;. Maximal 3 Zitat-Varianten als separater Block unterhalb der redaktionellen Varianten ausgeben. Nur wörtliche Zitate mit namentlich bekannter Quelle, maximal 60 Zeichen. Keine Rückfragen, keine Ergänzungen, keine erfundenen Inhalte.</hinweis>
+    <hinweis>Berücksichtige &lt;redaktionelle-hinweise&gt; und &lt;redaktionelle-tags&gt; streng in der gesamten Auswertung und finalen Textgenerierung.</hinweis>
     <ablauf>
       <schritt>1. Inhalte analysieren</schritt>
       <schritt>2. Strukturierte Auswertung</schritt>
@@ -115,6 +127,10 @@ ${warnTagXmlBlocks}
         <hintergrundtext>${input.hintergrund}</hintergrundtext>
       </kontextquelle>
     </analysearten>
+    <redaktionelle-hinweise>${redaktionelleHinweise}</redaktionelle-hinweise>
+    <redaktionelle-tags>
+${redaktionsTags || "      <begriff><bezeichnung>–</bezeichnung></begriff>"}
+    </redaktionelle-tags>
     ${videoFormatXml.trim()}
     ${zitatVorgabenXml.trim()}
   </quelle>
