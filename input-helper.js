@@ -23,22 +23,23 @@ export function getSelectedValue(id) {
 
 export function getWarnTagsXml() {
   return [...document.querySelectorAll(".tag-button.active")]
-    .map(btn => `<tag>${escapeXml(btn.textContent)}</tag>`).join("\n");
+    .map(btn => `<tag>${escapeXml(btn.textContent)}</tag>`)
+    .join("\n");
 }
 
 export function getRedaktionelleTagsXml() {
-  const tagContainer = document.getElementById("redaktionTags");
-  if (!tagContainer) return "";
+  const chips = [...document.querySelectorAll("#redaktionstagChips .chip-tag")];
 
-  const tags = [...tagContainer.querySelectorAll(".chip")];
-  return tags.map(chip => {
-    const hauptbegriff = escapeXml(chip.dataset.value || "");
-    const aliasContainer = chip.querySelectorAll(".alias-tag");
-    const aliases = [...aliasContainer].map(aliasEl => escapeXml(aliasEl.textContent));
-    const aliasXml = aliases.length
-      ? `<alias>${aliases.join("</alias>\n<alias>")}</alias>`
-      : "";
-    return `<begriff>${hauptbegriff}${aliasXml ? "\n" + aliasXml : ""}</begriff>`;
+  return chips.map(chip => {
+    // Hauptbegriff (direkter Text im Chip, vor den Buttons)
+    const nameNode = chip.childNodes[0];
+    const name = nameNode?.nodeType === 3 ? nameNode.textContent.trim() : "";
+
+    // Alternative Begriffe
+    const altTags = [...chip.querySelectorAll(".chip-alt-tag")];
+    const alternativen = altTags.map(el => `<alternative>${escapeXml(el.textContent)}</alternative>`).join("");
+
+    return `<tag name="${escapeXml(name)}">${alternativen}</tag>`;
   }).join("\n");
 }
 
