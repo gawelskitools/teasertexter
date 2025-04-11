@@ -39,35 +39,29 @@
     <span class="tag-button" onclick="toggleWarnTag(this)">rechtlich sensibel</span>
   </div>
 
+  <!-- Redaktionelle Hinweise & Tags -->
   <div class="hinweis-block">
+    <label for="redaktionelleHinweise">
+      Redaktionelle Hinweise (für KI zwingend beachten)
+      <span class="help-icon" onclick="showHelp('hinweis')">❓</span>
+    </label>
+    <input type="text" id="redaktionelleHinweise" placeholder="z. B. Person X muss als mutmaßliche Ex-Terroristin bezeichnet werden" />
 
-  <label for="redaktionelleHinweise">
-    Redaktionelle Hinweise (für KI zwingend beachten)
-    <span class="help-icon" onclick="showHelp('hinweis')">❓</span>
-  </label>
-  <input type="text" id="redaktionelleHinweise" placeholder="z. B. Person X muss als mutmaßliche Ex-Terroristin bezeichnet werden" />
+    <label for="redaktionelleTagsInput">
+      Redaktionelle Tags (mit Alternativ-Bezeichnungen)
+      <span class="help-icon" onclick="showHelp('tags')">❓</span>
+    </label>
+    <input
+      type="text"
+      id="redaktionelleTagsInput"
+      class="redaktion-tag-input"
+      placeholder="z. B. HSH Nordbank (Enter drücken zur Übernahme)"
+      onkeydown="handleRedaktionTagInput(event)"
+    />
+    <div id="redaktionelleTagsContainer" class="redaktion-chip-container"></div>
+  </div>
 
-  <label for="redaktionelleTags">
-    Redaktionelle Tags (mit Alternativ-Bezeichnungen)
-    <span class="help-icon" onclick="showHelp('tags')">❓</span>
-  </label>
-  <input
-    type="text"
-    id="redaktionelleTagsInput"
-    class="redaktion-tag-input"
-    placeholder="z. B. HSH Nordbank (Enter drücken zur Übernahme)"
-    onkeydown="handleRedaktionTagInput(event)"
-  />
-  <div id="redaktionelleTagsContainer" class="redaktion-chip-container"></div>
-
-</div>
-
-  <label class="highlight" for="redaktionelleHinweise">Redaktionelle Hinweise <span class="help-icon" title="Pflichtvorgaben für Tonalität, Formulierungen oder Rollenbezeichnungen">❔</span></label>
-  <input type="text" id="redaktionelleHinweise" placeholder="z. B. Nur ‚mutmaßliche Ex-Terroristin‘ verwenden" />
-
-  <label class="highlight" for="redaktionelleTags">Redaktionelle Ersatzbegriffe <span class="help-icon" title="z. B. aus ‚HSH‘ wird ‚HSH Nordbank‘">❔</span></label>
-  <div id="redaktionelleTags" class="chip-input" contenteditable="true" data-placeholder="Begriff eingeben und Enter drücken..."></div>
-
+  <!-- Kontext -->
   <label class="highlight" for="themaTag">Kontext: Thema</label>
   <input type="text" id="themaTag" placeholder="Kontextthema eingeben..." />
 
@@ -77,6 +71,7 @@
   <label class="highlight" for="ereignisTag">Kontext: Ereignis</label>
   <input type="text" id="ereignisTag" placeholder="Ereignis eingeben..." />
 
+  <!-- Analysefelder -->
   <div class="analyse-block">
     <h2>Transkript</h2>
     <label for="transkript">Text:</label>
@@ -117,6 +112,7 @@
     <textarea id="hintergrundtext" placeholder="Ältere Nachrichten oder Hintergrundtext eingeben..."></textarea>
   </div>
 
+  <!-- Aktionen -->
   <div class="button-group">
     <button onclick="generateFinalXML()">Finales XML erzeugen</button>
     <button onclick="copyToClipboard()">XML kopieren</button>
