@@ -179,6 +179,34 @@ function preloadWarnTagDetails() {
   });
 }
 
+window.showHelp = function(type) {
+  let message = "";
+  switch (type) {
+    case "tags":
+      message = "Redaktionelle Tags sind feste Begriffe wie Institutionen oder Namen. Du kannst alternative Schreibweisen angeben.";
+      break;
+    case "hinweis":
+      message = "Hier kannst du redaktionelle Hinweise eingeben, z. B. Formulierungen, die zwingend verwendet werden sollen.";
+      break;
+    default:
+      message = "Keine Hilfe verfügbar.";
+  }
+
+  const helpBox = document.createElement("div");
+  helpBox.innerHTML = `
+    <div style="position:fixed;top:20%;left:50%;transform:translateX(-50%);
+      background:#fff;border:1px solid #ccc;padding:20px;z-index:9999;
+      box-shadow:0 0 15px rgba(0,0,0,0.3);max-width:600px;">
+      <p>${message}</p>
+      <div style="margin-top: 15px; text-align: right;">
+        <button onclick="this.parentNode.parentNode.remove()">Schließen</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(helpBox);
+};
+
+
 // --- Globale Methoden ---
 window.updateBeitragsarten = updateBeitragsarten;
 window.generateFinalXML = () => generateFinalXML(getAllInputValues());
