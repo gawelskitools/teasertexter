@@ -82,6 +82,38 @@ export function showWarnTagPopup(tagName) {
   });
 }
 
+export function showHelp(type) {
+  const helpTexts = {
+    "hinweis": `
+      <h3>Redaktionelle Hinweise</h3>
+      <p>Diese Hinweise werden bei der KI-Auswertung besonders berücksichtigt – auch wenn sie nicht in den Quelltexten stehen.</p>
+      <p><strong>Beispiel:</strong><br>„Die Angeklagte soll in allen Texten als ‚mutmaßliche Ex-Terroristin‘ bezeichnet werden.“</p>
+    `,
+    "tags": `
+      <h3>Redaktionelle Tags mit Alternativen</h3>
+      <p>Gib einen Begriff ein (z. B. HSH Nordbank) und optional Alternativen wie „HSH“ oder „HSH Bank“.</p>
+      <p>Diese Begriffe werden in der finalen Ausgabe gezielt ersetzt oder bevorzugt verwendet.</p>
+    `
+  };
+
+  const html = helpTexts[type] || "<p>Keine Hilfe verfügbar.</p>";
+
+  const box = document.createElement("div");
+  box.id = "popupContainer";
+  box.innerHTML = `
+    <div style="background:#fff;padding:20px;border:1px solid #ccc;max-width:600px;
+                box-shadow:0 0 10px rgba(0,0,0,0.3);position:fixed;top:20%;left:50%;
+                transform:translateX(-50%);z-index:9999;">
+      ${html}
+      <div style="margin-top:15px;text-align:right;">
+        <button onclick="document.body.removeChild(document.getElementById('popupContainer'))">OK</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(box);
+}
+
+
 // Sicherheitsfunktion zur HTML-Escapierung
 function escapeHtml(str) {
   return str.replace(/[&<>"']/g, tag => (
