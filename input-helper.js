@@ -26,6 +26,22 @@ export function getWarnTagsXml() {
     .map(btn => `<tag>${escapeXml(btn.textContent)}</tag>`).join("\n");
 }
 
+export function getRedaktionelleTagsXml() {
+  const tagContainer = document.getElementById("redaktionTags");
+  if (!tagContainer) return "";
+
+  const tags = [...tagContainer.querySelectorAll(".chip")];
+  return tags.map(chip => {
+    const hauptbegriff = escapeXml(chip.dataset.value || "");
+    const aliasContainer = chip.querySelectorAll(".alias-tag");
+    const aliases = [...aliasContainer].map(aliasEl => escapeXml(aliasEl.textContent));
+    const aliasXml = aliases.length
+      ? `<alias>${aliases.join("</alias>\n<alias>")}</alias>`
+      : "";
+    return `<begriff>${hauptbegriff}${aliasXml ? "\n" + aliasXml : ""}</begriff>`;
+  }).join("\n");
+}
+
 export function getAllInputValues() {
   return {
     titel: getFieldValue("beitragstitel"),
@@ -36,6 +52,8 @@ export function getAllInputValues() {
     ort: getFieldValue("ortTag"),
     ereignis: getFieldValue("ereignisTag"),
     warnTags: getWarnTagsXml(),
+    redaktionelleHinweise: getFieldValue("redaktionHinweise"),
+    redaktionelleTagsXml: getRedaktionelleTagsXml(),
     transcript: getTextareaValue("transkript"),
     weightT: getSelectedValue("weightTranskript"),
     anmoderation: getTextareaValue("anmoderation"),
