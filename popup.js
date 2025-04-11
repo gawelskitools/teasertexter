@@ -37,14 +37,16 @@ export function showWarnTagPopup(tagName) {
   return new Promise(resolve => {
     const tagInfo = window.warnTagDetails?.[tagName] || {};
     const standard = tagInfo.standard?.trim() || "-";
+
+    // Fallback: String oder Array
     const beispieleArray = Array.isArray(tagInfo.beispiele)
       ? tagInfo.beispiele
-      : [];
+      : typeof tagInfo.beispiele === "string"
+        ? tagInfo.beispiele.split(/[\r\n]+/).map(line => line.trim()).filter(Boolean)
+        : [];
 
     const beispielList = beispieleArray
-      .map(b => b.trim())
-      .filter(b => b.length > 0)
-      .map(b => `&gt; ${b}`)
+      .map(b => `&gt; ${escapeHtml(b)}`)
       .join("<br>");
 
     const infoBox = document.createElement("div");
@@ -52,9 +54,9 @@ export function showWarnTagPopup(tagName) {
       <div style="position:fixed;top:20%;left:50%;transform:translateX(-50%);
         background:#fff;border:1px solid #ccc;padding:20px;z-index:9999;
         box-shadow:0 0 15px rgba(0,0,0,0.3);max-width:700px;">
-        <h3>Warn-Tag: ${tagName}</h3>
+        <h3>Warn-Tag: ${escapeHtml(tagName)}</h3>
         <p><strong>Dieser Warn-Tag wird wie folgt bei der KI-Verarbeitung benutzt:</strong></p>
-        <p>${standard}</p>
+        <p>${escapeHtml(standard)}</p>
         ${beispielList ? `
           <p><strong>Beispiele zum besseren Verständnis:</strong><br>
           ${beispielList}</p>` : ""}
@@ -78,4 +80,11 @@ export function showWarnTagPopup(tagName) {
       resolve(false);
     };
   });
+}
+
+// Sicherheitsfunktion zur HTML-Escapierung
+function escapeHtml(str) {
+  return str.replace(/[&<>"']/g, tag => (
+    { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[tag]
+  ));
 }
