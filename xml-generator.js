@@ -26,13 +26,21 @@ export async function generateFinalXML() {
     .then(res => res.ok ? res.text() : Promise.resolve(""))
     .catch(() => "");
 
-  const redaktionelleHinweiseXml = await fetch(`hinweise/redaktionelle-hinweise.xml`)
+  const redaktionelleHinweiseXmlBase = await fetch(`hinweise/redaktionelle-hinweise.xml`)
     .then(res => res.ok ? res.text() : Promise.resolve(""))
     .catch(() => "");
 
-  const redaktionelleTagsXml = await fetch(`hinweise/redaktionelle-tags.xml`)
+  const redaktionelleTagsXmlBase = await fetch(`hinweise/redaktionelle-tags.xml`)
     .then(res => res.ok ? res.text() : Promise.resolve(""))
     .catch(() => "");
+
+  const redaktionelleHinweiseXmlCustom = input.redaktionelleHinweise
+    ? `<redaktionelle-hinweise><hinweis>${input.redaktionelleHinweise}</hinweis></redaktionelle-hinweise>`
+    : "";
+
+  const redaktionelleTagsXmlCustom = input.redaktionelleTagsXml
+    ? `<redaktionelle-tags>\n${input.redaktionelleTagsXml}\n</redaktionelle-tags>`
+    : "";
 
   const activeWarnTagNames = [...document.querySelectorAll(".tag-button.active")].map(btn => btn.textContent.trim());
   const warnTagXmlBlocks = activeWarnTagNames.map(name => {
@@ -126,8 +134,10 @@ ${warnTagXmlBlocks}
     </analysearten>
     ${videoFormatXml.trim()}
     ${zitatVorgabenXml.trim()}
-    ${redaktionelleHinweiseXml.trim()}
-    ${redaktionelleTagsXml.trim()}
+    ${redaktionelleHinweiseXmlBase.trim()}
+    ${redaktionelleTagsXmlBase.trim()}
+    ${redaktionelleHinweiseXmlCustom.trim()}
+    ${redaktionelleTagsXmlCustom.trim()}
   </quelle>
   <vorschau>
     <text>
