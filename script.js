@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   fetchVideoFormatHints("kontext");
   preloadWarnTagDetails();
-  initRedaktionTagInput(); // Chips aktivieren
+  initRedaktionTagInput();
 });
 
 // --- Redaktionelle Tags mit Chips ---
@@ -74,22 +74,28 @@ function addRedaktionTag(text, container) {
   const altContainer = chip.querySelector(".chip-alternativen");
 
   editBtn.onclick = () => {
-    const altInput = document.createElement("input");
-    altInput.type = "text";
-    altInput.placeholder = "Alternative eingeben und Enter drücken";
-    altInput.className = "chip-alt-input";
-    altInput.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" && altInput.value.trim()) {
-        const altTag = document.createElement("span");
-        altTag.className = "chip-alt-tag";
-        altTag.textContent = altInput.value.trim();
-        altContainer.appendChild(altTag);
-        altInput.value = "";
-      }
-    });
-    altContainer.appendChild(altInput);
-    altContainer.style.display = "block";
-    altInput.focus();
+    const existingInput = altContainer.querySelector(".chip-alt-input");
+    if (existingInput) {
+      existingInput.remove();
+      altContainer.style.display = "none";
+    } else {
+      const altInput = document.createElement("input");
+      altInput.type = "text";
+      altInput.placeholder = "Alternative eingeben und Enter drücken";
+      altInput.className = "chip-alt-input";
+      altInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" && altInput.value.trim()) {
+          const altTag = document.createElement("span");
+          altTag.className = "chip-alt-tag";
+          altTag.textContent = altInput.value.trim();
+          altContainer.appendChild(altTag);
+          altInput.value = "";
+        }
+      });
+      altContainer.appendChild(altInput);
+      altContainer.style.display = "block";
+      altInput.focus();
+    }
   };
 
   delBtn.onclick = () => {
@@ -112,10 +118,23 @@ window.getRedaktionTagsXml = () => {
 
 // --- Hilfsfunktion für sichere HTML-Ausgabe ---
 function escapeHtml(str) {
-  return str.replace(/[&<>"']/g, tag => (
+  return str.replace(/[&<>"]/g, tag => (
     { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[tag]
   ));
 }
+
+// --- Globaler Click-Listener zum Schließen alternativer Eingabefelder ---
+document.addEventListener("click", (event) => {
+  const allAltContainer = document.querySelectorAll(".chip-alternativen");
+  allAltContainer.forEach(container => {
+    const isInside = container.contains(event.target) || container.previousSibling?.classList?.contains("chip-edit");
+    if (!isInside) {
+      const input = container.querySelector(".chip-alt-input");
+      if (input) input.remove();
+      container.style.display = "none";
+    }
+  });
+});
 
 // --- Laden von Videoformaten / Warn-Tag-Details ---
 function fetchVideoFormatHints(artValue) {
@@ -205,7 +224,6 @@ window.showHelp = function(type) {
   `;
   document.body.appendChild(helpBox);
 };
-
 
 // --- Globale Methoden ---
 window.updateBeitragsarten = updateBeitragsarten;
