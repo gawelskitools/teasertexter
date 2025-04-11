@@ -41,7 +41,68 @@ document.addEventListener("DOMContentLoaded", () => {
 
   fetchVideoFormatHints("kontext");
   preloadWarnTagDetails();
+  initRedaktionTagInput(); // Initialisiere das neue Eingabefeld
 });
+
+// Redaktionelle Tags (Chips mit Alternativen)
+function initRedaktionTagInput() {
+  const input = document.getElementById("redaktionstagInput");
+  const container = document.getElementById("redaktionstagChips");
+
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && input.value.trim() !== "") {
+      e.preventDefault();
+      addRedaktionTag(input.value.trim(), container);
+      input.value = "";
+    }
+  });
+}
+
+function addRedaktionTag(text, container) {
+  const chip = document.createElement("span");
+  chip.className = "chip-tag";
+  chip.innerHTML = `
+    ${escapeHtml(text)}
+    <span class="chip-edit" title="Alternative hinzufügen">✏️</span>
+    <span class="chip-delete" title="Entfernen">✖</span>
+    <div class="chip-alternativen" style="display:none;"></div>
+  `;
+  container.appendChild(chip);
+
+  const editBtn = chip.querySelector(".chip-edit");
+  const delBtn = chip.querySelector(".chip-delete");
+  const altContainer = chip.querySelector(".chip-alternativen");
+
+  editBtn.onclick = () => {
+    const altInput = document.createElement("input");
+    altInput.type = "text";
+    altInput.placeholder = "Alternative eingeben und Enter drücken";
+    altInput.className = "chip-alt-input";
+    altInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && altInput.value.trim()) {
+        const altTag = document.createElement("span");
+        altTag.className = "chip-alt-tag";
+        altTag.textContent = altInput.value.trim();
+        altContainer.appendChild(altTag);
+        altInput.value = "";
+      }
+    });
+    altContainer.appendChild(altInput);
+    altContainer.style.display = "block";
+    altInput.focus();
+  };
+
+  delBtn.onclick = () => {
+    container.removeChild(chip);
+  };
+}
+
+// Hilfsfunktion für sichere Ausgabe
+function escapeHtml(str) {
+  return str.replace(/[&<>"']/g, tag => (
+    { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[tag]
+  ));
+}
 
 function fetchVideoFormatHints(artValue) {
   const path = `videoformat/${artValue.replace('#', '')}.xml`;
