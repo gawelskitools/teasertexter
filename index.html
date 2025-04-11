@@ -39,6 +39,29 @@
     <span class="tag-button" onclick="toggleWarnTag(this)">rechtlich sensibel</span>
   </div>
 
+  <div class="hinweis-block">
+
+  <label for="redaktionelleHinweise">
+    Redaktionelle Hinweise (für KI zwingend beachten)
+    <span class="help-icon" onclick="showHelp('hinweis')">❓</span>
+  </label>
+  <input type="text" id="redaktionelleHinweise" placeholder="z. B. Person X muss als mutmaßliche Ex-Terroristin bezeichnet werden" />
+
+  <label for="redaktionelleTags">
+    Redaktionelle Tags (mit Alternativ-Bezeichnungen)
+    <span class="help-icon" onclick="showHelp('tags')">❓</span>
+  </label>
+  <input
+    type="text"
+    id="redaktionelleTagsInput"
+    class="redaktion-tag-input"
+    placeholder="z. B. HSH Nordbank (Enter drücken zur Übernahme)"
+    onkeydown="handleRedaktionTagInput(event)"
+  />
+  <div id="redaktionelleTagsContainer" class="redaktion-chip-container"></div>
+
+</div>
+
   <label class="highlight" for="redaktionelleHinweise">Redaktionelle Hinweise <span class="help-icon" title="Pflichtvorgaben für Tonalität, Formulierungen oder Rollenbezeichnungen">❔</span></label>
   <input type="text" id="redaktionelleHinweise" placeholder="z. B. Nur ‚mutmaßliche Ex-Terroristin‘ verwenden" />
 
