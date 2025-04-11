@@ -41,10 +41,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   fetchVideoFormatHints("kontext");
   preloadWarnTagDetails();
-  initRedaktionTagInput(); // Initialisiere das neue Eingabefeld
+  initRedaktionTagInput(); // Chips aktivieren
 });
 
-// Redaktionelle Tags (Chips mit Alternativen)
+// --- Redaktionelle Tags mit Chips ---
 function initRedaktionTagInput() {
   const input = document.getElementById("redaktionstagInput");
   const container = document.getElementById("redaktionstagChips");
@@ -97,6 +97,19 @@ function addRedaktionTag(text, container) {
   };
 }
 
+// --- Exportfunktion für redaktionelle Tags + Alternativen als XML ---
+window.getRedaktionTagsXml = () => {
+  const chips = [...document.querySelectorAll("#redaktionstagChips .chip-tag")];
+  return chips.map(chip => {
+    const nameNode = chip.childNodes[0];
+    const name = nameNode?.nodeType === 3 ? nameNode.textContent.trim() : ""; // text node
+    const altContainer = chip.querySelector(".chip-alternativen");
+    const alternativen = [...altContainer.querySelectorAll(".chip-alt-tag")].map(alt => alt.textContent.trim());
+    const altXml = alternativen.map(alt => `<alternative>${escapeXml(alt)}</alternative>`).join("");
+    return `<tag name="${escapeXml(name)}">${altXml}</tag>`;
+  }).join("\n");
+};
+
 // Hilfsfunktion für sichere Ausgabe
 function escapeHtml(str) {
   return str.replace(/[&<>"']/g, tag => (
@@ -104,6 +117,7 @@ function escapeHtml(str) {
   ));
 }
 
+// --- Laden von Videoformaten / Warn-Tag-Details ---
 function fetchVideoFormatHints(artValue) {
   const path = `videoformat/${artValue.replace('#', '')}.xml`;
   fetch(path)
@@ -165,6 +179,7 @@ function preloadWarnTagDetails() {
   });
 }
 
+// --- Globale Methoden ---
 window.updateBeitragsarten = updateBeitragsarten;
 window.generateFinalXML = () => generateFinalXML(getAllInputValues());
 window.copyToClipboard = () => {
