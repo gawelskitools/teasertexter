@@ -39,6 +39,12 @@
     <span class="tag-button" onclick="toggleWarnTag(this)">rechtlich sensibel</span>
   </div>
 
+  <label class="highlight" for="redaktionelleHinweise">Redaktionelle Hinweise <span class="help-icon" title="Pflichtvorgaben für Tonalität, Formulierungen oder Rollenbezeichnungen">❔</span></label>
+  <input type="text" id="redaktionelleHinweise" placeholder="z. B. Nur ‚mutmaßliche Ex-Terroristin‘ verwenden" />
+
+  <label class="highlight" for="redaktionelleTags">Redaktionelle Ersatzbegriffe <span class="help-icon" title="z. B. aus ‚HSH‘ wird ‚HSH Nordbank‘">❔</span></label>
+  <div id="redaktionelleTags" class="chip-input" contenteditable="true" data-placeholder="Begriff eingeben und Enter drücken..."></div>
+
   <label class="highlight" for="themaTag">Kontext: Thema</label>
   <input type="text" id="themaTag" placeholder="Kontextthema eingeben..." />
 
@@ -77,9 +83,9 @@
   </div>
 
   <div class="analyse-block">
-    <h2>Redaktionelle Anmerkungen / Agenturmeldungen</h2>
+    <h2>Agenturmeldungen</h2>
     <label for="redaktionstext">Zusatzinformationen (optional):</label>
-    <textarea id="redaktionstext" placeholder="Redaktionelle Zusatzinfos oder Agenturmeldungen eingeben..."></textarea>
+    <textarea id="redaktionstext" placeholder="Agenturmeldungen eingeben..."></textarea>
   </div>
 
   <div class="analyse-block">
