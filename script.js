@@ -102,7 +102,7 @@ window.getRedaktionTagsXml = () => {
   const chips = [...document.querySelectorAll("#redaktionstagChips .chip-tag")];
   return chips.map(chip => {
     const nameNode = chip.childNodes[0];
-    const name = nameNode?.nodeType === 3 ? nameNode.textContent.trim() : ""; // text node
+    const name = nameNode?.nodeType === 3 ? nameNode.textContent.trim() : "";
     const altContainer = chip.querySelector(".chip-alternativen");
     const alternativen = [...altContainer.querySelectorAll(".chip-alt-tag")].map(alt => alt.textContent.trim());
     const altXml = alternativen.map(alt => `<alternative>${escapeXml(alt)}</alternative>`).join("");
@@ -110,7 +110,7 @@ window.getRedaktionTagsXml = () => {
   }).join("\n");
 };
 
-// Hilfsfunktion für sichere Ausgabe
+// --- Hilfsfunktion für sichere HTML-Ausgabe ---
 function escapeHtml(str) {
   return str.replace(/[&<>"']/g, tag => (
     { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[tag]
