@@ -110,3 +110,66 @@ button:hover {
   z-index: 9999;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
+
+/* Redaktionelle Hinweise */
+.hinweis-block {
+  margin-top: 30px;
+  border-top: 1px dashed #ccc;
+  padding-top: 20px;
+}
+
+.redaktion-chip-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.redaktion-chip {
+  display: inline-flex;
+  align-items: center;
+  background-color: #ffe0b2;
+  border: 1px solid #ffa726;
+  border-radius: 16px;
+  padding: 4px 10px;
+  font-size: 13px;
+  font-family: monospace;
+  color: #444;
+}
+
+.redaktion-chip .edit-icon {
+  margin-left: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #555;
+}
+
+.alternativen-container {
+  margin-top: 8px;
+  margin-left: 20px;
+  font-size: 12px;
+  color: #555;
+  font-style: italic;
+}
+
+input.redaktion-tag-input {
+  margin-top: 6px;
+  width: 100%;
+  padding: 6px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-family: monospace;
+}
+
+/* Hilfe-Button */
+.help-icon {
+  display: inline-block;
+  margin-left: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #888;
+}
+
+.help-icon:hover {
+  color: #000;
+}
