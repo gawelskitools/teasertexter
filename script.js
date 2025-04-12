@@ -119,8 +119,8 @@ window.getRedaktionTagsXml = () => {
 
 // --- Gewichtungs-Synchronisierung Transkript / Anmoderation ---
 function setupGewichtungSync() {
-  const tSelect = document.getElementById("weightTranskript");
-  const aSelect = document.getElementById("weightAnmoderation");
+  const tSelect = document.getElementById("weightTranskript").disabled = true;
+  const aSelect = document.getElementById("weightAnmoderation").disabled = true;
 
   function syncFromTranskript() {
     const tValue = parseInt(tSelect.value);
