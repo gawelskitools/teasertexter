@@ -42,6 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
   fetchVideoFormatHints("kontext");
   preloadWarnTagDetails();
   initRedaktionTagInput();
+  setupGewichtungSync();
 });
 
 // --- Redaktionelle Tags mit Chips ---
@@ -73,8 +74,7 @@ function addRedaktionTag(text, container) {
   const delBtn = chip.querySelector(".chip-delete");
   const altContainer = chip.querySelector(".chip-alternativen");
 
-  editBtn.onclick = (e) => {
-    e.stopPropagation();
+  editBtn.onclick = () => {
     const existingInput = altContainer.querySelector(".chip-alt-input");
     if (existingInput) {
       existingInput.remove();
@@ -117,6 +117,25 @@ window.getRedaktionTagsXml = () => {
   }).join("\n");
 };
 
+// --- Gewichtungs-Synchronisierung Transkript / Anmoderation ---
+function setupGewichtungSync() {
+  const tSelect = document.getElementById("weightTranskript");
+  const aSelect = document.getElementById("weightAnmoderation");
+
+  function syncFromTranskript() {
+    const tValue = parseInt(tSelect.value);
+    aSelect.value = (100 - tValue).toString();
+  }
+
+  function syncFromAnmoderation() {
+    const aValue = parseInt(aSelect.value);
+    tSelect.value = (100 - aValue).toString();
+  }
+
+  tSelect.addEventListener("change", syncFromTranskript);
+  aSelect.addEventListener("change", syncFromAnmoderation);
+}
+
 // --- Hilfsfunktion für sichere HTML-Ausgabe ---
 function escapeHtml(str) {
   return str.replace(/[&<>\"]/g, tag => (
@@ -126,8 +145,10 @@ function escapeHtml(str) {
 
 // --- Globaler Click-Listener zum Schließen alternativer Eingabefelder ---
 document.addEventListener("click", (event) => {
-  document.querySelectorAll(".chip-alternativen").forEach(container => {
-    if (!container.contains(event.target) && !container.parentElement.querySelector(".chip-edit").contains(event.target)) {
+  const allAltContainer = document.querySelectorAll(".chip-alternativen");
+  allAltContainer.forEach(container => {
+    const isInside = container.contains(event.target) || container.previousSibling?.classList?.contains("chip-edit");
+    if (!isInside) {
       const input = container.querySelector(".chip-alt-input");
       if (input) input.remove();
       container.style.display = "none";
@@ -197,6 +218,7 @@ function preloadWarnTagDetails() {
   });
 }
 
+// --- Hilfe-Popup ---
 window.showHelp = function(type) {
   let message = "";
   switch (type) {
